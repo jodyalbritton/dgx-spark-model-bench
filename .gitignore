@@ -1,0 +1,8 @@
+# generated apps: keep source, drop build output and fetched deps
+**/_build/
+**/deps/
+**/node_modules/
+**/priv/static/assets/
+**/.elixir_ls/
+**/erl_crash.dump
+.DS_Store

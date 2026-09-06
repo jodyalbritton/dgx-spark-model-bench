@@ -1,0 +1,12 @@
+03:44:01 warmup
+03:44:21 size=    256 c=1 prompt=    273 ttft=    8.54s prefill=     32.0 tok/s decode=  59.7 tok/s agg=  12.0 tok/s
+03:44:36 size=   2048 c=1 prompt=   2062 ttft=   12.49s prefill=    165.0 tok/s decode=  62.0 tok/s agg=   8.8 tok/s
+03:44:43 size=   8192 c=1 prompt=   8224 ttft=    4.49s prefill=   1832.7 tok/s decode=  51.7 tok/s agg=  18.4 tok/s
+03:45:03 size=  32768 c=1 prompt=  32800 ttft=   17.80s prefill=   1842.8 tok/s decode=  51.4 tok/s agg=   6.3 tok/s
+03:45:43 size=  65536 c=1 prompt=  65569 ttft=   37.38s prefill=   1754.0 tok/s decode=  47.7 tok/s agg=   3.2 tok/s
+03:46:44 size= 102400 c=1 prompt= 102433 ttft=   58.14s prefill=   1761.9 tok/s decode=  64.4 tok/s agg=   2.1 tok/s
+03:48:18 size= 153600 c=1 prompt= 153634 ttft=   92.29s prefill=   1664.7 tok/s decode=  73.1 tok/s agg=   1.4 tok/s
+03:48:30 size=    256 c=4 prompt=    273 ttft=    6.59s prefill=     41.8 tok/s decode=  25.2 tok/s agg=  43.1 tok/s
+03:48:58 size=   8192 c=4 prompt=   8224 ttft=   17.23s prefill=    486.6 tok/s decode=  13.5 tok/s agg=  18.2 tok/s
+03:49:05 probe correct=True reasoning_tokens=217 answer_tokens=191 total=410 time=7.0s decode=60.5 tok/s finish=stop
+03:49:05 done

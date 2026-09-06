@@ -1,0 +1,5 @@
+{"round":1,"seq":1,"tools":["read"],"content":null,"reasoning":null}
+{"round":2,"seq":3,"tools":["edit"],"content":"The bug: `get` doesn't count a hit as a use (no recency refresh). `order` is MRU-at-head, LRU-at-tail, so refresh means moving the key to the head.","reasoning":"Bug: get doesn't refresh recency. Also `order` list: MRU at head, LRU at tail — pop_at(order, -1) evicts tail, correct. Fix get."}
+{"round":3,"seq":5,"tools":["bash"],"content":null,"reasoning":null}
+{"round":4,"seq":7,"tools":["bash"],"content":null,"reasoning":null}
+{"round":5,"seq":9,"tools":[],"content":"Fixed: `get/2` now moves a hit key to the MRU head of `order` (so LRU eviction ignores refreshed entries); all behavior verified.","reasoning":null}

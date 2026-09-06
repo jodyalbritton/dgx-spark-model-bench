@@ -1,0 +1,16 @@
+blissful_elion
+paused head download: blissful_elion
+03:11:35 warmup
+03:11:42 size=    256 c=1 prompt=    285 ttft=    1.26s prefill=    225.7 tok/s decode=  55.1 tok/s agg=  35.7 tok/s
+03:11:45 size=   2048 c=1 prompt=   2074 ttft=    1.27s prefill=   1632.9 tok/s decode=  57.5 tok/s agg=  36.6 tok/s
+03:11:51 size=   8192 c=1 prompt=   8248 ttft=    3.44s prefill=   2396.6 tok/s decode=  63.8 tok/s agg=  23.5 tok/s
+03:12:05 size=  32768 c=1 prompt=  32825 ttft=   12.07s prefill=   2718.8 tok/s decode=  64.9 tok/s agg=   9.1 tok/s
+03:12:31 size=  65536 c=1 prompt=  65594 ttft=   23.83s prefill=   2753.1 tok/s decode=  55.4 tok/s agg=   4.9 tok/s
+03:13:13 size= 102400 c=1 prompt= 102459 ttft=   38.88s prefill=   2635.6 tok/s decode=  60.5 tok/s agg=   3.1 tok/s
+03:14:16 size= 153600 c=1 prompt= 153660 ttft=   60.79s prefill=   2527.8 tok/s decode=  59.4 tok/s agg=   2.0 tok/s
+03:14:21 size=    256 c=4 prompt=    285 ttft=    1.62s prefill=    462.4 tok/s decode=  38.9 tok/s agg=  92.5 tok/s
+03:14:37 size=   8192 c=4 prompt=   8248 ttft=   12.40s prefill=    665.5 tok/s decode=  40.7 tok/s agg=  32.7 tok/s
+03:14:51 probe correct=True reasoning_tokens=378 answer_tokens=334 total=716 time=13.4s decode=57.0 tok/s finish=stop
+03:14:51 done
+blissful_elion
+resumed head download

@@ -1,0 +1,150 @@
+{
+  "label": "dsv4-flash-vision-exp",
+  "kind": "coding-regrade",
+  "app": {
+    "render": {
+      "mobile": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "connected": true,
+        "countdown": "100",
+        "height": 2878,
+        "nav": true,
+        "nav_links_visible": true,
+        "theme": "light",
+        "theme_toggle": true,
+        "title": "Home · JobyKit",
+        "toggle_visible": true
+      },
+      "after": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "connected": true,
+        "countdown": "98",
+        "height": 1842,
+        "nav": true,
+        "nav_links_visible": true,
+        "theme": "light",
+        "theme_toggle": true,
+        "title": "Home · JobyKit",
+        "toggle_visible": false
+      },
+      "light": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "connected": true,
+        "countdown": "100",
+        "height": 1817,
+        "nav": true,
+        "nav_links_visible": true,
+        "theme": "light",
+        "theme_toggle": true,
+        "title": "Home · JobyKit",
+        "toggle_visible": false
+      },
+      "dark": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "connected": true,
+        "countdown": "100",
+        "height": 1817,
+        "nav": true,
+        "nav_links_visible": true,
+        "theme": "dark",
+        "theme_toggle": true,
+        "title": "Home · JobyKit",
+        "toggle_visible": false
+      }
+    },
+    "checks": {
+      "compile": {
+        "pass": true,
+        "detail": ""
+      },
+      "generated": {
+        "pass": true
+      },
+      "lint": {
+        "pass": true,
+        "detail": "JobyKit lint — BenchappWeb.DesignManifest |  |   ✓ Clean. Wrapper contract holds across the manifest."
+      },
+      "stats": {
+        "pass": true,
+        "detail": "hidden LiveView test passed"
+      },
+      "tick": {
+        "pass": true,
+        "detail": "hidden LiveView test passed"
+      },
+      "test": {
+        "pass": true,
+        "detail": "............. | Finished in 0.1 seconds (0.1s async, 0.00s sync) | 13 tests, 0 failures"
+      },
+      "activity": {
+        "pass": true,
+        "detail": "hidden LiveView test passed"
+      },
+      "boots": {
+        "pass": true,
+        "detail": "GET / 200 with a nav"
+      },
+      "countdown": {
+        "pass": true,
+        "detail": "HomeLive: start 100, 5 s tick, timer message"
+      },
+      "layout_replaced": {
+        "pass": true,
+        "detail": "the generator's stock nav+footer markers are gone from Layouts.app"
+      },
+      "nav": {
+        "pass": true,
+        "detail": "a nav element or JobyKit nav in layouts.ex or home_live.ex"
+      },
+      "composite_registered": {
+        "pass": true,
+        "detail": "2 app component(s) registered beyond the generator's"
+      },
+      "tests_added": {
+        "pass": true,
+        "detail": "13 tests ran, 4 are the generator's"
+      },
+      "dark_theme": {
+        "pass": true,
+        "detail": "data-theme \"light\" → \"dark\", body bg rgba(0, 0, 0, 0) → rgba(0, 0, 0, 0)"
+      },
+      "mobile_nav": {
+        "pass": true,
+        "detail": "at 390 px: nav-toggle visible true, nav links visible true"
+      },
+      "tick_rendered": {
+        "pass": true,
+        "detail": "countdown \"100\" at load, \"98\" after 12 s (connected true)"
+      },
+      "signup": {
+        "pass": true,
+        "detail": "hidden LiveView test passed"
+      },
+      "about": {
+        "pass": true,
+        "detail": "hidden LiveView test passed"
+      }
+    },
+    "checks_passed": 18,
+    "checks_total": 18,
+    "screenshots": {
+      "dsv4-flash-vision-exp-regrade-desktop-dark.png": "/Users/jody/benchmarks/results/current/screenshots/dsv4-flash-vision-exp-regrade-desktop-dark.png",
+      "dsv4-flash-vision-exp-regrade-desktop-light-after-12s.png": "/Users/jody/benchmarks/results/current/screenshots/dsv4-flash-vision-exp-regrade-desktop-light-after-12s.png",
+      "dsv4-flash-vision-exp-regrade-desktop-light.png": "/Users/jody/benchmarks/results/current/screenshots/dsv4-flash-vision-exp-regrade-desktop-light.png",
+      "dsv4-flash-vision-exp-regrade-full-light.png": "/Users/jody/benchmarks/results/current/screenshots/dsv4-flash-vision-exp-regrade-full-light.png",
+      "dsv4-flash-vision-exp-regrade-mobile-full-light.png": "/Users/jody/benchmarks/results/current/screenshots/dsv4-flash-vision-exp-regrade-mobile-full-light.png",
+      "dsv4-flash-vision-exp-regrade-mobile-light.png": "/Users/jody/benchmarks/results/current/screenshots/dsv4-flash-vision-exp-regrade-mobile-light.png"
+    },
+    "scores": {
+      "tests_added": 9,
+      "components_added": 2,
+      "lint_warnings": 0,
+      "page_height": 1817,
+      "tests_total": 13
+    }
+  },
+  "helm_sha": "ed0c6d8",
+  "helm_dirty": false,
+  "hidden_tests_sha": "2924139b",
+  "graded_utc": "2026-09-05T03:17:43Z"
+}

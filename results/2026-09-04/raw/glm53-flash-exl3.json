@@ -1,0 +1,506 @@
+{
+ "label": "glm53-flash-exl3",
+ "model": "Mia-AiLab/GLM-5.3-Flash-EXL3-TR3-4bpw:exl3",
+ "base_url": "http://127.0.0.1:8081",
+ "started_utc": "2026-09-04T09:24:45Z",
+ "server": {
+  "models": {
+   "object": "list",
+   "data": [
+    {
+     "id": "Mia-AiLab/GLM-5.3-Flash-EXL3-TR3-4bpw:exl3",
+     "object": "model",
+     "created": 1788513885,
+     "owned_by": "vllm",
+     "root": "/home/jody/.cache/huggingface/hub/models--Mia-AiLab--GLM-5.3-Flash-EXL3-TR3-4bpw/snapshots/25a44fdbf16862a46b7cc9921142c6c81350af2f",
+     "parent": null,
+     "max_model_len": 524288,
+     "permission": [
+      {
+       "id": "modelperm-9a215053ef159c0b",
+       "object": "model_permission",
+       "created": 1788513885,
+       "allow_create_engine": false,
+       "allow_sampling": true,
+       "allow_logprobs": true,
+       "allow_search_indices": false,
+       "allow_view": true,
+       "allow_fine_tuning": false,
+       "organization": "*",
+       "group": null,
+       "is_blocking": false
+      }
+     ]
+    }
+   ]
+  },
+  "version": {
+   "version": "0.1.dev20051+g487ecf187"
+  }
+ },
+ "agent_slots": {
+  "slots": [
+   {
+    "port": 8081,
+    "profile": {
+     "image": "glm53-flash-sm121:eb0469fb",
+     "parallel": 4,
+     "extra_argv": [
+      "--max-num-batched-tokens",
+      "2048",
+      "--long-prefill-token-threshold",
+      "1024",
+      "--enable-prefix-caching",
+      "--no-enable-flashinfer-autotune",
+      "--cudagraph-capture-sizes",
+      "1",
+      "2",
+      "4",
+      "8",
+      "16",
+      "24",
+      "32",
+      "--chat-template",
+      "/opt/glm53/chat_template.jinja",
+      "--limit-mm-per-prompt",
+      "{\"image\":4,\"video\":1}",
+      "--skip-mm-profiling",
+      "--tool-call-parser",
+      "glm47",
+      "--enable-auto-tool-choice",
+      "--reasoning-parser",
+      "glm45",
+      "--speculative-config",
+      "{\"method\":\"dflash\",\"model\":\"/home/jody/.cache/huggingface/hub/models--incoai--GLM-5.3-Flash-DFlash2/snapshots/dc77ff1c99eeb2df044ee3d4f0094eb033fee410\",\"num_speculative_tokens\":7,\"kv_cache_dtype\":\"auto\",\"draft_sample_method\":\"probabilistic\",\"rejection_sample_method\":\"standard\",\"draft_tensor_parallel_size\":1}"
+     ],
+     "ctx": 524288,
+     "nnodes": 2,
+     "cmd_prefix": "/opt/glm53/airo-entry.sh",
+     "container_env": {
+      "DO_NOT_TRACK": "1",
+      "EXL3_FAT_KERNEL": "1",
+      "EXL3_FUSED_MOE": "1",
+      "EXL3_MOE_ROW_TILE": "0",
+      "EXL3_TEMP_ROWS_FUSED": "128",
+      "FLASHINFER_CUDA_ARCH_LIST": "12.1a",
+      "FLASHINFER_DISABLE_VERSION_CHECK": "1",
+      "GLM53_INDEXER_WORKSPACE": "rightsize",
+      "GLM53_MIXED_PREFILL_CHUNK": "1024",
+      "GLM53_SPINWAIT_MS": "16",
+      "GLM53_SUPPRESS_STOPS_IN_REASONING": "1",
+      "NCCL_CROSS_NIC": "0",
+      "NCCL_CUMEM_ENABLE": "0",
+      "NCCL_DEBUG": "WARN",
+      "NCCL_IB_ADDR_FAMILY": "AF_INET",
+      "NCCL_IB_DISABLE": "0",
+      "NCCL_IB_MERGE_NICS": "0",
+      "NCCL_IB_ROCE_VERSION_NUM": "2",
+      "NCCL_IGNORE_CPU_AFFINITY": "1",
+      "NCCL_NET": "IB",
+      "NCCL_NET_PLUGIN": "none",
+      "NCCL_NVLS_ENABLE": "0",
+      "PYTORCH_CUDA_ALLOC_CONF": "expandable_segments:True",
+      "TORCH_CUDA_ARCH_LIST": "12.1a",
+      "TRANSFORMERS_OFFLINE": "1",
+      "VLLM_ENGINE_READY_TIMEOUT_S": "3600",
+      "VLLM_EXECUTE_MODEL_TIMEOUT_SECONDS": "1800",
+      "VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS": "1",
+      "VLLM_NO_USAGE_STATS": "1"
+     },
+     "dtype": "auto",
+     "tensor_parallel_size": 2,
+     "trust_remote_code": false,
+     "gpu_memory_utilization": 0.87,
+     "quantization": "exl3",
+     "kv_cache_dtype": "fp8",
+     "overlay_files": {
+      "/home/jody/airo-agent-overlays/glm53/airo-entry.sh": "/opt/glm53/airo-entry.sh",
+      "/home/jody/airo-agent-overlays/glm53/chat_template.jinja": "/opt/glm53/chat_template.jinja",
+      "/home/jody/airo-agent-overlays/glm53/patch_glm5_drafter_group.py": "/opt/glm53/patch_glm5_drafter_group.py",
+      "/home/jody/airo-agent-overlays/glm53/patch_glm_video_placeholders.py": "/opt/glm53/patch_glm_video_placeholders.py",
+      "/home/jody/airo-agent-overlays/glm53/patch_hybrid_prefix_hit.py": "/opt/glm53/patch_hybrid_prefix_hit.py",
+      "/home/jody/airo-agent-overlays/glm53/patch_indexer_workspace.py": "/opt/glm53/patch_indexer_workspace.py",
+      "/home/jody/airo-agent-overlays/glm53/patch_kpool_tail_slotmap.py": "/opt/glm53/patch_kpool_tail_slotmap.py",
+      "/home/jody/airo-agent-overlays/glm53/patch_scheduler_decode_floor.py": "/opt/glm53/patch_scheduler_decode_floor.py",
+      "/home/jody/airo-agent-overlays/glm53/patch_spinwait.py": "/opt/glm53/patch_spinwait.py",
+      "/home/jody/airo-agent-overlays/glm53/patch_suppress_stops_in_reasoning.py": "/opt/glm53/patch_suppress_stops_in_reasoning.py",
+      "/home/jody/airo-agent-overlays/glm53/patch_xgrammar_termination.py": "/opt/glm53/patch_xgrammar_termination.py"
+     },
+     "entrypoint": "bash"
+    },
+    "status": "up",
+    "started_at": "2026-09-02T11:40:31.843919Z",
+    "parallel": 4,
+    "revision": "25a44fdbf16862a46b7cc9921142c6c81350af2f",
+    "base_url": "http://192.168.68.93:8081/v1",
+    "ctx_total": null,
+    "ctx": 524288,
+    "engine_build": "0.1.dev20051+g487ecf187",
+    "tp_rank": 0,
+    "tp_size": 2,
+    "resident_model": "Mia-AiLab/GLM-5.3-Flash-EXL3-TR3-4bpw:exl3",
+    "deployment_id": "dep-f56d2969"
+   }
+  ]
+ },
+ "out_tokens": 128,
+ "cases": [
+  {
+   "target_prompt_tokens": 256,
+   "concurrency": 1,
+   "wall_s": 3.388319015968591,
+   "actual_prompt_tokens": [
+    281
+   ],
+   "median_ttft_s": 0.8502988461405039,
+   "median_prefill_tok_s": 330.47204671093647,
+   "median_decode_tok_s": 50.454959742999364,
+   "aggregate_decode_tok_s": 37.77684432804497,
+   "requests": [
+    {
+     "ttft_s": 0.8502988461405039,
+     "elapsed_s": 3.387214952148497,
+     "prompt_tokens": 281,
+     "completion_tokens": 128,
+     "decode_tok_s": 50.454959742999364,
+     "prefill_tok_s": 330.47204671093647,
+     "finish_reason": "length",
+     "usage": {
+      "prompt_tokens": 281,
+      "total_tokens": 409,
+      "completion_tokens": 128
+     }
+    }
+   ]
+  },
+  {
+   "target_prompt_tokens": 2048,
+   "concurrency": 1,
+   "wall_s": 5.1953997819218785,
+   "actual_prompt_tokens": [
+    2073
+   ],
+   "median_ttft_s": 2.3438358549028635,
+   "median_prefill_tok_s": 884.4476014238259,
+   "median_decode_tok_s": 44.9002675960023,
+   "aggregate_decode_tok_s": 24.637180077150933,
+   "requests": [
+    {
+     "ttft_s": 2.3438358549028635,
+     "elapsed_s": 5.194598374888301,
+     "prompt_tokens": 2073,
+     "completion_tokens": 128,
+     "decode_tok_s": 44.9002675960023,
+     "prefill_tok_s": 884.4476014238259,
+     "finish_reason": "length",
+     "usage": {
+      "prompt_tokens": 2073,
+      "total_tokens": 2201,
+      "completion_tokens": 128
+     }
+    }
+   ]
+  },
+  {
+   "target_prompt_tokens": 8192,
+   "concurrency": 1,
+   "wall_s": 10.424142003059387,
+   "actual_prompt_tokens": [
+    8238
+   ],
+   "median_ttft_s": 8.117001053877175,
+   "median_prefill_tok_s": 1014.9068535681696,
+   "median_decode_tok_s": 55.514469717187225,
+   "aggregate_decode_tok_s": 12.27918805810907,
+   "requests": [
+    {
+     "ttft_s": 8.117001053877175,
+     "elapsed_s": 10.422706226818264,
+     "prompt_tokens": 8238,
+     "completion_tokens": 128,
+     "decode_tok_s": 55.514469717187225,
+     "prefill_tok_s": 1014.9068535681696,
+     "finish_reason": "length",
+     "usage": {
+      "prompt_tokens": 8238,
+      "total_tokens": 8366,
+      "completion_tokens": 128
+     }
+    }
+   ]
+  },
+  {
+   "target_prompt_tokens": 32768,
+   "concurrency": 1,
+   "wall_s": 32.02730806404725,
+   "actual_prompt_tokens": [
+    32815
+   ],
+   "median_ttft_s": 29.284459673101082,
+   "median_prefill_tok_s": 1120.5602004035559,
+   "median_decode_tok_s": 46.69075548029166,
+   "aggregate_decode_tok_s": 3.9965894025195454,
+   "requests": [
+    {
+     "ttft_s": 29.284459673101082,
+     "elapsed_s": 32.02590171410702,
+     "prompt_tokens": 32815,
+     "completion_tokens": 128,
+     "decode_tok_s": 46.69075548029166,
+     "prefill_tok_s": 1120.5602004035559,
+     "finish_reason": "length",
+     "usage": {
+      "prompt_tokens": 32815,
+      "total_tokens": 32943,
+      "completion_tokens": 128
+     }
+    }
+   ]
+  },
+  {
+   "target_prompt_tokens": 65536,
+   "concurrency": 1,
+   "wall_s": 60.76077752513811,
+   "actual_prompt_tokens": [
+    65584
+   ],
+   "median_ttft_s": 58.01933219190687,
+   "median_prefill_tok_s": 1130.3818489856442,
+   "median_decode_tok_s": 46.72804221047048,
+   "aggregate_decode_tok_s": 2.106622153527306,
+   "requests": [
+    {
+     "ttft_s": 58.01933219190687,
+     "elapsed_s": 60.75858669402078,
+     "prompt_tokens": 65584,
+     "completion_tokens": 128,
+     "decode_tok_s": 46.72804221047048,
+     "prefill_tok_s": 1130.3818489856442,
+     "finish_reason": "length",
+     "usage": {
+      "prompt_tokens": 65584,
+      "total_tokens": 65712,
+      "completion_tokens": 128
+     }
+    }
+   ]
+  },
+  {
+   "target_prompt_tokens": 102400,
+   "concurrency": 1,
+   "wall_s": 93.00594350183383,
+   "actual_prompt_tokens": [
+    102446
+   ],
+   "median_ttft_s": 90.71091093914583,
+   "median_prefill_tok_s": 1129.3679992776915,
+   "median_decode_tok_s": 55.85381597793833,
+   "aggregate_decode_tok_s": 1.3762561313888093,
+   "requests": [
+    {
+     "ttft_s": 90.71091093914583,
+     "elapsed_s": 93.00260753603652,
+     "prompt_tokens": 102446,
+     "completion_tokens": 128,
+     "decode_tok_s": 55.85381597793833,
+     "prefill_tok_s": 1129.3679992776915,
+     "finish_reason": "length",
+     "usage": {
+      "prompt_tokens": 102446,
+      "total_tokens": 102574,
+      "completion_tokens": 128
+     }
+    }
+   ]
+  },
+  {
+   "target_prompt_tokens": 153600,
+   "concurrency": 1,
+   "wall_s": 139.7173970080912,
+   "actual_prompt_tokens": [
+    153648
+   ],
+   "median_ttft_s": 137.5123428341467,
+   "median_prefill_tok_s": 1117.33970081009,
+   "median_decode_tok_s": 58.15758912470352,
+   "aggregate_decode_tok_s": 0.916135017835949,
+   "requests": [
+    {
+     "ttft_s": 137.5123428341467,
+     "elapsed_s": 139.71325937705114,
+     "prompt_tokens": 153648,
+     "completion_tokens": 128,
+     "decode_tok_s": 58.15758912470352,
+     "prefill_tok_s": 1117.33970081009,
+     "finish_reason": "length",
+     "usage": {
+      "prompt_tokens": 153648,
+      "total_tokens": 153776,
+      "completion_tokens": 128
+     }
+    }
+   ]
+  },
+  {
+   "target_prompt_tokens": 256,
+   "concurrency": 4,
+   "wall_s": 6.322861498221755,
+   "actual_prompt_tokens": [
+    280,
+    281,
+    281,
+    280
+   ],
+   "median_ttft_s": 1.513976776972413,
+   "median_prefill_tok_s": 185.3026644337479,
+   "median_decode_tok_s": 30.876009573124755,
+   "aggregate_decode_tok_s": 80.97599483145332,
+   "requests": [
+    {
+     "ttft_s": 1.5142544968985021,
+     "elapsed_s": 6.3214325869921595,
+     "prompt_tokens": 280,
+     "completion_tokens": 128,
+     "decode_tok_s": 26.62684793471136,
+     "prefill_tok_s": 184.90947233341313,
+     "finish_reason": "length",
+     "usage": {
+      "prompt_tokens": 280,
+      "total_tokens": 408,
+      "completion_tokens": 128
+     }
+    },
+    {
+     "ttft_s": 1.513958449009806,
+     "elapsed_s": 5.776579650817439,
+     "prompt_tokens": 281,
+     "completion_tokens": 128,
+     "decode_tok_s": 30.028471670370227,
+     "prefill_tok_s": 185.60615067328044,
+     "finish_reason": "length",
+     "usage": {
+      "prompt_tokens": 281,
+      "total_tokens": 409,
+      "completion_tokens": 128
+     }
+    },
+    {
+     "ttft_s": 1.5139951049350202,
+     "elapsed_s": 5.548852811101824,
+     "prompt_tokens": 281,
+     "completion_tokens": 128,
+     "decode_tok_s": 31.723547475879286,
+     "prefill_tok_s": 185.6016568904695,
+     "finish_reason": "length",
+     "usage": {
+      "prompt_tokens": 281,
+      "total_tokens": 409,
+      "completion_tokens": 128
+     }
+    },
+    {
+     "ttft_s": 1.5134834730997682,
+     "elapsed_s": 5.548183147097006,
+     "prompt_tokens": 280,
+     "completion_tokens": 128,
+     "decode_tok_s": 31.724790032064135,
+     "prefill_tok_s": 185.0036719770263,
+     "finish_reason": "length",
+     "usage": {
+      "prompt_tokens": 280,
+      "total_tokens": 408,
+      "completion_tokens": 128
+     }
+    }
+   ]
+  },
+  {
+   "target_prompt_tokens": 8192,
+   "concurrency": 4,
+   "wall_s": 33.99048895598389,
+   "actual_prompt_tokens": [
+    8238,
+    8238,
+    8239,
+    8237
+   ],
+   "median_ttft_s": 24.503635579603724,
+   "median_prefill_tok_s": 349.3838925386955,
+   "median_decode_tok_s": 19.412013552982764,
+   "aggregate_decode_tok_s": 15.063037212057063,
+   "requests": [
+    {
+     "ttft_s": 14.186886083101854,
+     "elapsed_s": 32.04229211201891,
+     "prompt_tokens": 8238,
+     "completion_tokens": 128,
+     "decode_tok_s": 7.168697244560127,
+     "prefill_tok_s": 580.6771092503778,
+     "finish_reason": "length",
+     "usage": {
+      "prompt_tokens": 8238,
+      "total_tokens": 8366,
+      "completion_tokens": 128
+     }
+    },
+    {
+     "ttft_s": 19.745769683038816,
+     "elapsed_s": 32.670624994905666,
+     "prompt_tokens": 8238,
+     "completion_tokens": 128,
+     "decode_tok_s": 9.903399064164212,
+     "prefill_tok_s": 417.20328618419273,
+     "finish_reason": "length",
+     "usage": {
+      "prompt_tokens": 8238,
+      "total_tokens": 8366,
+      "completion_tokens": 128
+     }
+    },
+    {
+     "ttft_s": 29.261501476168633,
+     "elapsed_s": 33.68740812712349,
+     "prompt_tokens": 8239,
+     "completion_tokens": 128,
+     "decode_tok_s": 28.920628041801315,
+     "prefill_tok_s": 281.56449889319816,
+     "finish_reason": "length",
+     "usage": {
+      "prompt_tokens": 8239,
+      "total_tokens": 8367,
+      "completion_tokens": 128
+     }
+    },
+    {
+     "ttft_s": 30.456643940880895,
+     "elapsed_s": 33.98797613987699,
+     "prompt_tokens": 8237,
+     "completion_tokens": 128,
+     "decode_tok_s": 36.24694386905554,
+     "prefill_tok_s": 270.45002121667653,
+     "finish_reason": "length",
+     "usage": {
+      "prompt_tokens": 8237,
+      "total_tokens": 8365,
+      "completion_tokens": 128
+     }
+    }
+   ]
+  }
+ ],
+ "probe": {
+  "question": "What is the smallest positive integer that leaves a remainder of 1 when divided by each of 2, 3, 4, 5 and 6, and is exactly divisible by 7? Show your reasoning, then give the final answer on its own line as 'ANSWER: <number>'.",
+  "expected": "301",
+  "correct": true,
+  "reasoning_tokens": 361,
+  "answer_tokens": 465,
+  "completion_tokens": 828,
+  "ttft_s": 0.4616461847908795,
+  "elapsed_s": 16.62608523480594,
+  "decode_tok_s": 51.22355297564307,
+  "finish_reason": "stop",
+  "reasoning_text": "We need the smallest positive integer N such that:\n- N \u2261 1 (mod 2)\n- N \u2261 1 (mod 3)\n- N \u2261 1 (mod 4)\n- N \u2261 1 (mod 5)\n- N \u2261 1 (mod 6)\n- N \u2261 0 (mod 7)\n\nN \u2261 1 mod each of 2,3,4,5,6 means N - 1 is divisible by lcm(2,3,4,5,6) = 60.\n\nSo N = 60k + 1 for some integer k \u2265 0.\n\nWe need 60k + 1 \u2261 0 (mod 7).\n\n60 mod 7 = 4 (since 56 = 8\u00b77). So 4k + 1 \u2261 0 (mod 7), i.e., 4k \u2261 -1 \u2261 6 (mod 7).\n\nFind inverse of 4 mod 7: 4\u00b72 = 8 \u2261 1, so inverse is 2. Thus k \u2261 2\u00b76 = 12 \u2261 5 (mod 7).\n\nSmallest k \u2265 0 is k = 5. Then N = 60\u00b75 + 1 = 301.\n\nCheck: 301 / 7 = 43, exactly divisible. 301 mod 2 = 1, mod 3: 3\u00b7100=300, remainder 1. mod 4: 4\u00b775=300, remainder 1. mod 5: remainder 1. mod 6: 6\u00b750=300, remainder 1. Yes.\n\nSo answer: 301.",
+  "answer_text": "## Setting Up the Problem\n\nI need a number N such that:\n- N \u2261 1 (mod 2), (mod 3), (mod 4), (mod 5), (mod 6)\n- N \u2261 0 (mod 7)\n\n**Step 1: Use the remainder conditions.**\n\nIf N leaves remainder 1 when divided by each of 2, 3, 4, 5, and 6, then N \u2212 1 must be divisible by all of them. So N \u2212 1 must be a multiple of:\n\n$$\\text{lcm}(2, 3, 4, 5, 6) = 60$$\n\nTherefore N has the form:\n$$N = 60k + 1 \\quad \\text{for some integer } k \\geq 0$$\n\n**Step 2: Apply the divisibility-by-7 condition.**\n\nI need 60k + 1 \u2261 0 (mod 7). Since 60 = 56 + 4, we have 60 \u2261 4 (mod 7), so:\n\n$$4k + 1 \\equiv 0 \\pmod{7} \\implies 4k \\equiv 6 \\pmod{7}$$\n\n**Step 3: Solve for k.**\n\nThe inverse of 4 mod 7 is 2, since 4 \u00d7 2 = 8 \u2261 1 (mod 7). Multiplying both sides by 2:\n\n$$k \\equiv 12 \\equiv 5 \\pmod{7}$$\n\nThe smallest non-negative solution is k = 5.\n\n**Step 4: Compute N.**\n\n$$N = 60(5) + 1 = 301$$\n\n**Verification:**\n- 301 \u00f7 2 = 150 r 1 \u2713\n- 301 \u00f7 3 = 100 r 1 \u2713\n- 301 \u00f7 4 = 75 r 1 \u2713\n- 301 \u00f7 5 = 60 r 1 \u2713\n- 301 \u00f7 6 = 50 r 1 \u2713\n- 301 \u00f7 7 = 43 exactly \u2713\n\nANSWER: 301"
+ },
+ "finished_utc": "2026-09-04T09:31:29Z"
+}

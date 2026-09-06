@@ -1,0 +1,5 @@
+{"round":1,"seq":1,"tools":["read"],"content":null,"reasoning":null}
+{"round":2,"seq":3,"tools":["edit"],"content":null,"reasoning":"Bug: when full, should drop oldest instead of returning unchanged. Minimal fix: drop head."}
+{"round":3,"seq":5,"tools":["bash"],"content":null,"reasoning":null}
+{"round":4,"seq":7,"tools":["bash"],"content":null,"reasoning":null}
+{"round":5,"seq":9,"tools":[],"content":"Fixed `push/3` to drop the oldest value when full (instead of returning the buffer unchanged); verified FIFO overflow behavior works.","reasoning":null}

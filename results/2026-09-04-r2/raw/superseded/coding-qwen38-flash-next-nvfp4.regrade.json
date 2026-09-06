@@ -1,0 +1,94 @@
+{
+  "label": "qwen38-flash-next-nvfp4",
+  "kind": "coding-regrade",
+  "app": {
+    "render": {},
+    "checks": {
+      "compile": {
+        "pass": false,
+        "detail": "exit 1:     lib/benchapp_web/components/layouts.ex:19: BenchappWeb.Layouts (module) |     (elixir 1.19.5) expanding macro: Kernel.@/1 |     lib/benchapp_web/components/layouts.ex:18: BenchappWeb.Layouts (module)"
+      },
+      "generated": {
+        "pass": true
+      },
+      "lint": {
+        "pass": false,
+        "detail": "exit 1:     lib/benchapp_web/components/layouts.ex:19: BenchappWeb.Layouts (module) |     (elixir 1.19.5) expanding macro: Kernel.@/1 |     lib/benchapp_web/components/layouts.ex:18: BenchappWeb.Layouts (module)"
+      },
+      "stats": {
+        "pass": false,
+        "detail": "hidden tests did not run:     lib/benchapp_web/components/layouts.ex:19: BenchappWeb.Layouts (module) |     (elixir 1.19.5) expanding macro: Kernel.@/1 |     lib/benchapp_web/components/layouts.ex:18: BenchappWeb.Layouts (module)"
+      },
+      "tick": {
+        "pass": false,
+        "detail": "hidden tests did not run:     lib/benchapp_web/components/layouts.ex:19: BenchappWeb.Layouts (module) |     (elixir 1.19.5) expanding macro: Kernel.@/1 |     lib/benchapp_web/components/layouts.ex:18: BenchappWeb.Layouts (module)"
+      },
+      "test": {
+        "pass": false,
+        "detail": "exit 1:     lib/benchapp_web/components/layouts.ex:19: BenchappWeb.Layouts (module) |     (elixir 1.19.5) expanding macro: Kernel.@/1 |     lib/benchapp_web/components/layouts.ex:18: BenchappWeb.Layouts (module)"
+      },
+      "activity": {
+        "pass": false,
+        "detail": "hidden tests did not run:     lib/benchapp_web/components/layouts.ex:19: BenchappWeb.Layouts (module) |     (elixir 1.19.5) expanding macro: Kernel.@/1 |     lib/benchapp_web/components/layouts.ex:18: BenchappWeb.Layouts (module)"
+      },
+      "boots": {
+        "pass": true,
+        "detail": "GET / 200 with a nav"
+      },
+      "countdown": {
+        "pass": true,
+        "detail": "HomeLive: start 100, 5 s tick, timer message"
+      },
+      "layout_replaced": {
+        "pass": true,
+        "detail": "the generator's stock nav+footer markers are gone from Layouts.app"
+      },
+      "nav": {
+        "pass": true,
+        "detail": "a nav element or JobyKit nav in layouts.ex or home_live.ex"
+      },
+      "composite_registered": {
+        "pass": true,
+        "detail": "1 app component(s) registered beyond the generator's"
+      },
+      "tests_added": {
+        "pass": false,
+        "detail": "no test count in the mix test output"
+      },
+      "dark_theme": {
+        "pass": false,
+        "detail": "chrome: no match of right hand side value:\n\n    {:error, \"chrome wrote no DevToolsActivePort\"}\n"
+      },
+      "mobile_nav": {
+        "pass": false,
+        "detail": "chrome: no match of right hand side value:\n\n    {:error, \"chrome wrote no DevToolsActivePort\"}\n"
+      },
+      "tick_rendered": {
+        "pass": false,
+        "detail": "chrome: no match of right hand side value:\n\n    {:error, \"chrome wrote no DevToolsActivePort\"}\n"
+      },
+      "signup": {
+        "pass": false,
+        "detail": "hidden tests did not run:     lib/benchapp_web/components/layouts.ex:19: BenchappWeb.Layouts (module) |     (elixir 1.19.5) expanding macro: Kernel.@/1 |     lib/benchapp_web/components/layouts.ex:18: BenchappWeb.Layouts (module)"
+      },
+      "about": {
+        "pass": false,
+        "detail": "hidden tests did not run:     lib/benchapp_web/components/layouts.ex:19: BenchappWeb.Layouts (module) |     (elixir 1.19.5) expanding macro: Kernel.@/1 |     lib/benchapp_web/components/layouts.ex:18: BenchappWeb.Layouts (module)"
+      }
+    },
+    "checks_passed": 6,
+    "checks_total": 18,
+    "screenshots": {},
+    "scores": {
+      "tests_added": 0,
+      "components_added": 1,
+      "lint_warnings": 0,
+      "page_height": null,
+      "tests_total": null
+    }
+  },
+  "helm_sha": "ed0c6d8",
+  "helm_dirty": false,
+  "hidden_tests_sha": "2924139b",
+  "graded_utc": "2026-09-05T03:16:54Z"
+}

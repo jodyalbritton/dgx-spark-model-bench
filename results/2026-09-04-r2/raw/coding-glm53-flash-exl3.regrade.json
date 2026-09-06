@@ -1,0 +1,150 @@
+{
+  "label": "glm53-flash-exl3",
+  "kind": "coding-regrade",
+  "app": {
+    "render": {
+      "mobile": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "connected": true,
+        "countdown": "100",
+        "height": 3093,
+        "nav": true,
+        "nav_links_visible": true,
+        "theme": "light",
+        "theme_toggle": true,
+        "title": "LumenLab — Instruments for curious teams · JobyKit",
+        "toggle_visible": true
+      },
+      "after": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "connected": true,
+        "countdown": "98",
+        "height": 2060,
+        "nav": true,
+        "nav_links_visible": true,
+        "theme": "light",
+        "theme_toggle": true,
+        "title": "LumenLab — Instruments for curious teams · JobyKit",
+        "toggle_visible": false
+      },
+      "light": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "connected": true,
+        "countdown": "100",
+        "height": 2060,
+        "nav": true,
+        "nav_links_visible": true,
+        "theme": "light",
+        "theme_toggle": true,
+        "title": "LumenLab — Instruments for curious teams · JobyKit",
+        "toggle_visible": false
+      },
+      "dark": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "connected": true,
+        "countdown": "100",
+        "height": 2060,
+        "nav": true,
+        "nav_links_visible": true,
+        "theme": "dark",
+        "theme_toggle": true,
+        "title": "LumenLab — Instruments for curious teams · JobyKit",
+        "toggle_visible": false
+      }
+    },
+    "checks": {
+      "compile": {
+        "pass": true,
+        "detail": ""
+      },
+      "generated": {
+        "pass": true
+      },
+      "lint": {
+        "pass": true,
+        "detail": " |  | Summary: 1 warning."
+      },
+      "stats": {
+        "pass": false,
+        "detail": "test/benchapp_web/live/benchmark_hidden_test.exs:37 | ** (EXIT from #PID<0.431.0>) an exception was raised: | ** (FunctionClauseError) no function clause matching in anonymous fn/1 in Benchapp.Signups.signup_count/0 | The following arguments were given to anonymous fn/1 in Benchapp.Signups.signup_co"
+      },
+      "tick": {
+        "pass": true,
+        "detail": "hidden LiveView test passed"
+      },
+      "test": {
+        "pass": false,
+        "detail": "exit 2:  | Finished in 0.1 seconds (0.04s async, 0.1s sync) | 19 tests, 6 failures"
+      },
+      "activity": {
+        "pass": false,
+        "detail": "test/benchapp_web/live/benchmark_hidden_test.exs:51 | ** (EXIT from #PID<0.439.0>) an exception was raised: | ** (FunctionClauseError) no function clause matching in anonymous fn/1 in Benchapp.Signups.signup_count/0 | The following arguments were given to anonymous fn/1 in Benchapp.Signups.signup_co"
+      },
+      "boots": {
+        "pass": true,
+        "detail": "GET / 200 with a nav"
+      },
+      "countdown": {
+        "pass": true,
+        "detail": "HomeLive: start 100, 5 s tick, timer message"
+      },
+      "layout_replaced": {
+        "pass": true,
+        "detail": "the generator's stock nav+footer markers are gone from Layouts.app"
+      },
+      "nav": {
+        "pass": true,
+        "detail": "a nav element or JobyKit nav in layouts.ex or home_live.ex"
+      },
+      "composite_registered": {
+        "pass": true,
+        "detail": "1 app component(s) registered beyond the generator's"
+      },
+      "tests_added": {
+        "pass": true,
+        "detail": "19 tests ran, 4 are the generator's"
+      },
+      "dark_theme": {
+        "pass": true,
+        "detail": "data-theme \"light\" → \"dark\", body bg rgba(0, 0, 0, 0) → rgba(0, 0, 0, 0)"
+      },
+      "mobile_nav": {
+        "pass": true,
+        "detail": "at 390 px: nav-toggle visible true, nav links visible true"
+      },
+      "tick_rendered": {
+        "pass": true,
+        "detail": "countdown \"100\" at load, \"98\" after 12 s (connected true)"
+      },
+      "signup": {
+        "pass": false,
+        "detail": "test/benchapp_web/live/benchmark_hidden_test.exs:19 | ** (EXIT from #PID<0.419.0>) an exception was raised: | ** (FunctionClauseError) no function clause matching in anonymous fn/1 in Benchapp.Signups.signup_count/0 | The following arguments were given to anonymous fn/1 in Benchapp.Signups.signup_co"
+      },
+      "about": {
+        "pass": true,
+        "detail": "hidden LiveView test passed"
+      }
+    },
+    "checks_passed": 14,
+    "checks_total": 18,
+    "screenshots": {
+      "glm53-flash-exl3-regrade-desktop-dark.png": "/Users/jody/benchmarks/results/current/screenshots/glm53-flash-exl3-regrade-desktop-dark.png",
+      "glm53-flash-exl3-regrade-desktop-light-after-12s.png": "/Users/jody/benchmarks/results/current/screenshots/glm53-flash-exl3-regrade-desktop-light-after-12s.png",
+      "glm53-flash-exl3-regrade-desktop-light.png": "/Users/jody/benchmarks/results/current/screenshots/glm53-flash-exl3-regrade-desktop-light.png",
+      "glm53-flash-exl3-regrade-full-light.png": "/Users/jody/benchmarks/results/current/screenshots/glm53-flash-exl3-regrade-full-light.png",
+      "glm53-flash-exl3-regrade-mobile-full-light.png": "/Users/jody/benchmarks/results/current/screenshots/glm53-flash-exl3-regrade-mobile-full-light.png",
+      "glm53-flash-exl3-regrade-mobile-light.png": "/Users/jody/benchmarks/results/current/screenshots/glm53-flash-exl3-regrade-mobile-light.png"
+    },
+    "scores": {
+      "tests_added": 15,
+      "components_added": 1,
+      "lint_warnings": 1,
+      "page_height": 2060,
+      "tests_total": 19
+    }
+  },
+  "helm_sha": "ed0c6d8",
+  "helm_dirty": false,
+  "hidden_tests_sha": "2924139b",
+  "graded_utc": "2026-09-05T03:14:38Z"
+}

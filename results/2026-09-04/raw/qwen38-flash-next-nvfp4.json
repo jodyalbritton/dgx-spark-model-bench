@@ -1,0 +1,521 @@
+{
+ "label": "qwen38-flash-next-nvfp4",
+ "model": "RadixArk/Qwen3.8-Flash-Next-NVFP4:modelopt",
+ "base_url": "http://127.0.0.1:8081",
+ "started_utc": "2026-09-04T10:11:35Z",
+ "server": {
+  "models": {
+   "object": "list",
+   "data": [
+    {
+     "id": "RadixArk/Qwen3.8-Flash-Next-NVFP4:modelopt",
+     "object": "model",
+     "created": 1788516695,
+     "owned_by": "vllm",
+     "root": "/home/jody/.cache/huggingface/hub/models--RadixArk--Qwen3.8-Flash-Next-NVFP4/snapshots/7b719225242aacd3dbd3f9407468c2ee9a9d2594",
+     "parent": null,
+     "max_model_len": 1000000,
+     "permission": [
+      {
+       "id": "modelperm-817aa86ce41e7157",
+       "object": "model_permission",
+       "created": 1788516695,
+       "allow_create_engine": false,
+       "allow_sampling": true,
+       "allow_logprobs": true,
+       "allow_search_indices": false,
+       "allow_view": true,
+       "allow_fine_tuning": false,
+       "organization": "*",
+       "group": null,
+       "is_blocking": false
+      }
+     ]
+    }
+   ]
+  },
+  "version": {
+   "version": "0.1.dev20073+g8e685d198"
+  }
+ },
+ "agent_slots": {
+  "slots": [
+   {
+    "port": 8081,
+    "profile": {
+     "image": "vllm/vllm-openai:qwen38-flash-next",
+     "parallel": 8,
+     "ctx": 1000000,
+     "extra_argv": [
+      "--enable-expert-parallel",
+      "--all2all-backend",
+      "allgather_reducescatter",
+      "--max-num-batched-tokens",
+      "8192",
+      "--load-format",
+      "safetensors",
+      "--safetensors-load-strategy",
+      "lazy",
+      "--enable-chunked-prefill",
+      "--reasoning-parser",
+      "qwen3",
+      "--enable-auto-tool-choice",
+      "--tool-call-parser",
+      "qwen3_coder",
+      "--speculative-config",
+      "{\"method\":\"mtp\",\"num_speculative_tokens\":3}",
+      "--compilation-config",
+      "{\"mode\":0,\"cudagraph_mode\":\"FULL_DECODE_ONLY\"}",
+      "--hf-overrides",
+      "{\"rope_parameters\":{\"rope_type\":\"yarn\",\"factor\":4.0,\"original_max_position_embeddings\":262144}}"
+     ],
+     "nnodes": 2,
+     "cmd_prefix": "",
+     "container_env": {
+      "NCCL_CROSS_NIC": "0",
+      "NCCL_CUMEM_ENABLE": "0",
+      "NCCL_DEBUG": "WARN",
+      "NCCL_IB_ADDR_FAMILY": "AF_INET",
+      "NCCL_IB_DISABLE": "0",
+      "NCCL_IB_ROCE_VERSION_NUM": "2",
+      "NCCL_IGNORE_CPU_AFFINITY": "1",
+      "NCCL_NET": "IB",
+      "NCCL_NVLS_ENABLE": "0",
+      "PLE_QUANT_OVERRIDE": "fp8",
+      "PYTORCH_CUDA_ALLOC_CONF": "expandable_segments:True",
+      "TRANSFORMERS_OFFLINE": "1",
+      "VLLM_ALLOW_LONG_MAX_MODEL_LEN": "1",
+      "VLLM_ENGINE_READY_TIMEOUT_S": "3600",
+      "VLLM_NO_USAGE_STATS": "1"
+     },
+     "dtype": "auto",
+     "tensor_parallel_size": 2,
+     "trust_remote_code": false,
+     "gpu_memory_utilization": 0.835,
+     "kv_cache_dtype": "auto",
+     "overlay_files": {
+      "/home/jody/airo-agent-overlays/qwen38/ple_layer.py": "/usr/local/lib/python3.12/dist-packages/vllm/models/qwen3_8_flash_next/nvidia/ple_layer.py"
+     },
+     "entrypoint": "vllm"
+    },
+    "status": "up",
+    "started_at": "2026-09-04T09:58:25.205899Z",
+    "parallel": 8,
+    "revision": "7b719225242aacd3dbd3f9407468c2ee9a9d2594",
+    "base_url": "http://192.168.68.93:8081/v1",
+    "resident_model": "RadixArk/Qwen3.8-Flash-Next-NVFP4:modelopt",
+    "ctx": 1000000,
+    "ctx_total": null,
+    "engine_build": "0.1.dev20073+g8e685d198",
+    "deployment_id": "dep-f56d2969",
+    "tp_rank": 0,
+    "tp_size": 2
+   }
+  ]
+ },
+ "out_tokens": 128,
+ "cases": [
+  {
+   "target_prompt_tokens": 256,
+   "concurrency": 1,
+   "wall_s": 3.5865909529384226,
+   "actual_prompt_tokens": [
+    285
+   ],
+   "median_ttft_s": 1.2627482800744474,
+   "median_prefill_tok_s": 225.69818901926942,
+   "median_decode_tok_s": 55.09687557358523,
+   "aggregate_decode_tok_s": 35.68848571793004,
+   "requests": [
+    {
+     "ttft_s": 1.2627482800744474,
+     "elapsed_s": 3.585929017048329,
+     "prompt_tokens": 285,
+     "completion_tokens": 128,
+     "decode_tok_s": 55.09687557358523,
+     "prefill_tok_s": 225.69818901926942,
+     "finish_reason": "length",
+     "usage": {
+      "prompt_tokens": 285,
+      "total_tokens": 413,
+      "completion_tokens": 128,
+      "completion_tokens_details": {
+       "reasoning_tokens": 0
+      }
+     }
+    }
+   ]
+  },
+  {
+   "target_prompt_tokens": 2048,
+   "concurrency": 1,
+   "wall_s": 3.4955956109333783,
+   "actual_prompt_tokens": [
+    2074
+   ],
+   "median_ttft_s": 1.2700942158699036,
+   "median_prefill_tok_s": 1632.949724583614,
+   "median_decode_tok_s": 57.53589917320868,
+   "aggregate_decode_tok_s": 36.61750792901986,
+   "requests": [
+    {
+     "ttft_s": 1.2700942158699036,
+     "elapsed_s": 3.4947922190185636,
+     "prompt_tokens": 2074,
+     "completion_tokens": 128,
+     "decode_tok_s": 57.53589917320868,
+     "prefill_tok_s": 1632.949724583614,
+     "finish_reason": "length",
+     "usage": {
+      "prompt_tokens": 2074,
+      "total_tokens": 2202,
+      "completion_tokens": 128,
+      "completion_tokens_details": {
+       "reasoning_tokens": 0
+      }
+     }
+    }
+   ]
+  },
+  {
+   "target_prompt_tokens": 8192,
+   "concurrency": 1,
+   "wall_s": 5.449401158839464,
+   "actual_prompt_tokens": [
+    8248
+   ],
+   "median_ttft_s": 3.4416066121775657,
+   "median_prefill_tok_s": 2396.555135271937,
+   "median_decode_tok_s": 63.79134657809496,
+   "aggregate_decode_tok_s": 23.488819462735172,
+   "requests": [
+    {
+     "ttft_s": 3.4416066121775657,
+     "elapsed_s": 5.448148359078914,
+     "prompt_tokens": 8248,
+     "completion_tokens": 128,
+     "decode_tok_s": 63.79134657809496,
+     "prefill_tok_s": 2396.555135271937,
+     "finish_reason": "length",
+     "usage": {
+      "prompt_tokens": 8248,
+      "total_tokens": 8376,
+      "completion_tokens": 128,
+      "completion_tokens_details": {
+       "reasoning_tokens": 0
+      }
+     }
+    }
+   ]
+  },
+  {
+   "target_prompt_tokens": 32768,
+   "concurrency": 1,
+   "wall_s": 14.04727992694825,
+   "actual_prompt_tokens": [
+    32825
+   ],
+   "median_ttft_s": 12.073279240867123,
+   "median_prefill_tok_s": 2718.8139481517082,
+   "median_decode_tok_s": 64.88826013209435,
+   "aggregate_decode_tok_s": 9.112084379727158,
+   "requests": [
+    {
+     "ttft_s": 12.073279240867123,
+     "elapsed_s": 14.045901094796136,
+     "prompt_tokens": 32825,
+     "completion_tokens": 128,
+     "decode_tok_s": 64.88826013209435,
+     "prefill_tok_s": 2718.8139481517082,
+     "finish_reason": "length",
+     "usage": {
+      "prompt_tokens": 32825,
+      "total_tokens": 32953,
+      "completion_tokens": 128,
+      "completion_tokens_details": {
+       "reasoning_tokens": 0
+      }
+     }
+    }
+   ]
+  },
+  {
+   "target_prompt_tokens": 65536,
+   "concurrency": 1,
+   "wall_s": 26.13671632600017,
+   "actual_prompt_tokens": [
+    65594
+   ],
+   "median_ttft_s": 23.825633478118107,
+   "median_prefill_tok_s": 2753.0852457813016,
+   "median_decode_tok_s": 55.436769212978376,
+   "aggregate_decode_tok_s": 4.897325218802207,
+   "requests": [
+    {
+     "ttft_s": 23.825633478118107,
+     "elapsed_s": 26.134570341091603,
+     "prompt_tokens": 65594,
+     "completion_tokens": 128,
+     "decode_tok_s": 55.436769212978376,
+     "prefill_tok_s": 2753.0852457813016,
+     "finish_reason": "length",
+     "usage": {
+      "prompt_tokens": 65594,
+      "total_tokens": 65722,
+      "completion_tokens": 128,
+      "completion_tokens_details": {
+       "reasoning_tokens": 0
+      }
+     }
+    }
+   ]
+  },
+  {
+   "target_prompt_tokens": 102400,
+   "concurrency": 1,
+   "wall_s": 40.991807020967826,
+   "actual_prompt_tokens": [
+    102459
+   ],
+   "median_ttft_s": 38.875470088096336,
+   "median_prefill_tok_s": 2635.569416082069,
+   "median_decode_tok_s": 60.54820805399345,
+   "aggregate_decode_tok_s": 3.122575199832649,
+   "requests": [
+    {
+     "ttft_s": 38.875470088096336,
+     "elapsed_s": 40.98948806012049,
+     "prompt_tokens": 102459,
+     "completion_tokens": 128,
+     "decode_tok_s": 60.54820805399345,
+     "prefill_tok_s": 2635.569416082069,
+     "finish_reason": "length",
+     "usage": {
+      "prompt_tokens": 102459,
+      "total_tokens": 102587,
+      "completion_tokens": 128,
+      "completion_tokens_details": {
+       "reasoning_tokens": 0
+      }
+     }
+    }
+   ]
+  },
+  {
+   "target_prompt_tokens": 153600,
+   "concurrency": 1,
+   "wall_s": 62.944231512025,
+   "actual_prompt_tokens": [
+    153660
+   ],
+   "median_ttft_s": 60.7877907177899,
+   "median_prefill_tok_s": 2527.810242576072,
+   "median_decode_tok_s": 59.43210868500623,
+   "aggregate_decode_tok_s": 2.03354615546536,
+   "requests": [
+    {
+     "ttft_s": 60.7877907177899,
+     "elapsed_s": 62.941508679883555,
+     "prompt_tokens": 153660,
+     "completion_tokens": 128,
+     "decode_tok_s": 59.43210868500623,
+     "prefill_tok_s": 2527.810242576072,
+     "finish_reason": "length",
+     "usage": {
+      "prompt_tokens": 153660,
+      "total_tokens": 153788,
+      "completion_tokens": 128,
+      "completion_tokens_details": {
+       "reasoning_tokens": 0
+      }
+     }
+    }
+   ]
+  },
+  {
+   "target_prompt_tokens": 256,
+   "concurrency": 4,
+   "wall_s": 5.532376007875428,
+   "actual_prompt_tokens": [
+    285,
+    285,
+    285,
+    285
+   ],
+   "median_ttft_s": 1.624683301546611,
+   "median_prefill_tok_s": 462.438673372308,
+   "median_decode_tok_s": 38.88395656205981,
+   "aggregate_decode_tok_s": 92.54613194604988,
+   "requests": [
+    {
+     "ttft_s": 0.34471968305297196,
+     "elapsed_s": 5.1789648360572755,
+     "prompt_tokens": 285,
+     "completion_tokens": 128,
+     "decode_tok_s": 26.47776352849064,
+     "prefill_tok_s": 826.7587086293677,
+     "finish_reason": "length",
+     "usage": {
+      "prompt_tokens": 285,
+      "total_tokens": 413,
+      "completion_tokens": 128,
+      "completion_tokens_details": {
+       "reasoning_tokens": 0
+      }
+     }
+    },
+    {
+     "ttft_s": 2.905108390841633,
+     "elapsed_s": 5.400714291958138,
+     "prompt_tokens": 285,
+     "completion_tokens": 128,
+     "decode_tok_s": 51.290149595628975,
+     "prefill_tok_s": 98.10305216096712,
+     "finish_reason": "length",
+     "usage": {
+      "prompt_tokens": 285,
+      "total_tokens": 413,
+      "completion_tokens": 128,
+      "completion_tokens_details": {
+       "reasoning_tokens": 0
+      }
+     }
+    },
+    {
+     "ttft_s": 0.34370508999563754,
+     "elapsed_s": 5.5307295909151435,
+     "prompt_tokens": 285,
+     "completion_tokens": 128,
+     "decode_tok_s": 24.67696074643746,
+     "prefill_tok_s": 829.1992417209107,
+     "finish_reason": "length",
+     "usage": {
+      "prompt_tokens": 285,
+      "total_tokens": 413,
+      "completion_tokens": 128,
+      "completion_tokens_details": {
+       "reasoning_tokens": 0
+      }
+     }
+    },
+    {
+     "ttft_s": 2.90464692004025,
+     "elapsed_s": 5.326466313097626,
+     "prompt_tokens": 285,
+     "completion_tokens": 128,
+     "decode_tok_s": 52.85282641923559,
+     "prefill_tok_s": 98.11863811524836,
+     "finish_reason": "length",
+     "usage": {
+      "prompt_tokens": 285,
+      "total_tokens": 413,
+      "completion_tokens": 128,
+      "completion_tokens_details": {
+       "reasoning_tokens": 0
+      }
+     }
+    }
+   ]
+  },
+  {
+   "target_prompt_tokens": 8192,
+   "concurrency": 4,
+   "wall_s": 15.656169245950878,
+   "actual_prompt_tokens": [
+    8248,
+    8248,
+    8248,
+    8248
+   ],
+   "median_ttft_s": 12.396050257026218,
+   "median_prefill_tok_s": 665.4830966330398,
+   "median_decode_tok_s": 40.68303899069166,
+   "aggregate_decode_tok_s": 32.70276348937768,
+   "requests": [
+    {
+     "ttft_s": 5.565069084987044,
+     "elapsed_s": 15.165865334914997,
+     "prompt_tokens": 8248,
+     "completion_tokens": 128,
+     "decode_tok_s": 13.332227522374568,
+     "prefill_tok_s": 1482.1019962269168,
+     "finish_reason": "length",
+     "usage": {
+      "prompt_tokens": 8248,
+      "total_tokens": 8376,
+      "completion_tokens": 128,
+      "completion_tokens_details": {
+       "reasoning_tokens": 0
+      }
+     }
+    },
+    {
+     "ttft_s": 12.236775289988145,
+     "elapsed_s": 15.536973980022594,
+     "prompt_tokens": 8248,
+     "completion_tokens": 128,
+     "decode_tok_s": 38.785543545156635,
+     "prefill_tok_s": 674.0337878679793,
+     "finish_reason": "length",
+     "usage": {
+      "prompt_tokens": 8248,
+      "total_tokens": 8376,
+      "completion_tokens": 128,
+      "completion_tokens_details": {
+       "reasoning_tokens": 0
+      }
+     }
+    },
+    {
+     "ttft_s": 12.55532522406429,
+     "elapsed_s": 15.392025175038725,
+     "prompt_tokens": 8248,
+     "completion_tokens": 128,
+     "decode_tok_s": 45.12285480035727,
+     "prefill_tok_s": 656.9324053981005,
+     "finish_reason": "length",
+     "usage": {
+      "prompt_tokens": 8248,
+      "total_tokens": 8376,
+      "completion_tokens": 128,
+      "completion_tokens_details": {
+       "reasoning_tokens": 0
+      }
+     }
+    },
+    {
+     "ttft_s": 12.647456533974037,
+     "elapsed_s": 15.653524956898764,
+     "prompt_tokens": 8248,
+     "completion_tokens": 128,
+     "decode_tok_s": 42.580534436226685,
+     "prefill_tok_s": 652.1469338790718,
+     "finish_reason": "length",
+     "usage": {
+      "prompt_tokens": 8248,
+      "total_tokens": 8376,
+      "completion_tokens": 128,
+      "completion_tokens_details": {
+       "reasoning_tokens": 0
+      }
+     }
+    }
+   ]
+  }
+ ],
+ "probe": {
+  "question": "What is the smallest positive integer that leaves a remainder of 1 when divided by each of 2, 3, 4, 5 and 6, and is exactly divisible by 7? Show your reasoning, then give the final answer on its own line as 'ANSWER: <number>'.",
+  "expected": "301",
+  "correct": true,
+  "reasoning_tokens": 378,
+  "answer_tokens": 334,
+  "completion_tokens": 716,
+  "ttft_s": 0.8107198469806463,
+  "elapsed_s": 13.382129139034078,
+  "decode_tok_s": 56.954632799410476,
+  "finish_reason": "stop",
+  "reasoning_text": "We need answer math problem. Need solve carefully. Problem: smallest positive integer leaves remainder 1 when divided by 2,3,4,5,6, and divisible by 7. Need reasoning and final ANSWER line.\n\nLet n \u22611 mod lcm(2,3,4,5,6)=60? Check lcm: 2,3,4=2^2,5,6=2*3 => 2^2*3*5=60. So n=60k+1. Need divisible by 7: 60k+1 \u22610 mod7. 60 \u22614 mod7 (56). So 4k+1\u22610 =>4k\u22616 mod7. Inverse of 4 mod7 is 2 (8\u22611). k\u226112\u22615 mod7. Smallest positive k=5. n=60*5+1=301. Check divisible by 7? 7*43=301. Remainder 1 for 2..6? 301 mod2=1, mod3=1? 300 divisible by3 yes, mod4=1? 300 divisible by4? 4*75=300 yes, mod5=1, mod6=1. Smallest positive? k=5 minimal nonnegative? k=0 gives 1 not divisible by7. k=5. Could there be smaller positive not of form 60k+1? No. Answer 301.\n\nNeed final with reasoning and final line. Ensure no extra after final? It says give final answer on its own line as 'ANSWER: <number>'. We can include reasoning then final line.\n",
+  "answer_text": "\n\nA number that leaves a remainder of 1 when divided by 2, 3, 4, 5, and 6 must be 1 more than a common multiple of these numbers.\n\nThe least common multiple of 2, 3, 4, 5, and 6 is:\n\n\\[\n\\text{lcm}(2,3,4,5,6)=60\n\\]\n\nSo the number has the form:\n\n\\[\nn = 60k + 1\n\\]\n\nWe also need \\(n\\) to be divisible by 7:\n\n\\[\n60k + 1 \\equiv 0 \\pmod{7}\n\\]\n\nSince \\(60 \\equiv 4 \\pmod{7}\\), this becomes:\n\n\\[\n4k + 1 \\equiv 0 \\pmod{7}\n\\]\n\n\\[\n4k \\equiv 6 \\pmod{7}\n\\]\n\nThe inverse of 4 modulo 7 is 2, so:\n\n\\[\nk \\equiv 12 \\equiv 5 \\pmod{7}\n\\]\n\nThe smallest positive such \\(k\\) is 5. Therefore:\n\n\\[\nn = 60(5) + 1 = 301\n\\]\n\nCheck:\n\n\\[\n301 \\div 7 = 43\n\\]\n\nand 301 leaves remainder 1 when divided by 2, 3, 4, 5, and 6.\n\nANSWER: 301"
+ },
+ "finished_utc": "2026-09-04T10:14:51Z"
+}
