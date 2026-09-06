@@ -1,8 +1,9 @@
 # benchmarks
 
 Model benchmarks for the DGX Spark cluster (sparky + sparky2). **Start with
-`COMPARISON.md`**, the cross-round comparison of the three models written
-for people deciding what to run. Test design and test results are kept
+`COMPARISON.md`**, the comparison of the three models written for people
+deciding what to run, and `REALWORLD.md`, what throughput looks like inside
+a real working session rather than in a decode benchmark. Test design and test results are kept
 apart:
 
 ```

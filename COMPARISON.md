@@ -102,7 +102,8 @@ prompt, points the other way from the finish times and is worth knowing:
 
 **Qwen's NVFP4 build is the fastest engine on this hardware**, by more
 than two to one over GLM's EXL3 build on prefill, which is what an agent
-loop spends most of its time doing. GLM's finish-line speed comes from
+loop spends most of its time doing. What those figures turn into inside a
+working session, round by round, is on `REALWORLD.md`. GLM's finish-line speed comes from
 brevity, not from the engine, and would shrink on tasks with much longer
 contexts. Decode is a near tie for all three at the Spark's bandwidth
 ceiling.
