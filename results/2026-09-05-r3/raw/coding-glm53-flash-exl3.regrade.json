@@ -1,0 +1,158 @@
+{
+  "label": "glm53-flash-exl3",
+  "kind": "coding-regrade",
+  "app": {
+    "render": {
+      "mobile": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "connected": true,
+        "countdown": "100",
+        "height": 3646,
+        "nav": true,
+        "nav_links_visible": true,
+        "theme": "light",
+        "theme_toggle": true,
+        "theme_toggle_visible": true,
+        "title": "Windrose — offline-first trail maps · Windrose",
+        "toggle_visible": true
+      },
+      "after": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "connected": true,
+        "countdown": "98",
+        "height": 2470,
+        "nav": true,
+        "nav_links_visible": true,
+        "theme": "light",
+        "theme_toggle": true,
+        "theme_toggle_visible": true,
+        "title": "Windrose — offline-first trail maps · Windrose",
+        "toggle_visible": false
+      },
+      "light": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "connected": true,
+        "countdown": "100",
+        "height": 2424,
+        "nav": true,
+        "nav_links_visible": true,
+        "theme": "light",
+        "theme_toggle": true,
+        "theme_toggle_visible": true,
+        "title": "Windrose — offline-first trail maps · Windrose",
+        "toggle_visible": false
+      },
+      "dark": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "connected": true,
+        "countdown": "100",
+        "height": 2424,
+        "nav": true,
+        "nav_links_visible": true,
+        "theme": "dark",
+        "theme_toggle": true,
+        "theme_toggle_visible": true,
+        "title": "Windrose — offline-first trail maps · Windrose",
+        "toggle_visible": false
+      }
+    },
+    "screenshots": {
+      "glm53-flash-exl3-regrade-desktop-dark.png": "/Users/jody/benchmarks/results/2026-09-05-r3/screenshots/glm53-flash-exl3-regrade-desktop-dark.png",
+      "glm53-flash-exl3-regrade-desktop-light-after-12s.png": "/Users/jody/benchmarks/results/2026-09-05-r3/screenshots/glm53-flash-exl3-regrade-desktop-light-after-12s.png",
+      "glm53-flash-exl3-regrade-desktop-light.png": "/Users/jody/benchmarks/results/2026-09-05-r3/screenshots/glm53-flash-exl3-regrade-desktop-light.png",
+      "glm53-flash-exl3-regrade-full-light.png": "/Users/jody/benchmarks/results/2026-09-05-r3/screenshots/glm53-flash-exl3-regrade-full-light.png",
+      "glm53-flash-exl3-regrade-mobile-full-light.png": "/Users/jody/benchmarks/results/2026-09-05-r3/screenshots/glm53-flash-exl3-regrade-mobile-full-light.png",
+      "glm53-flash-exl3-regrade-mobile-light.png": "/Users/jody/benchmarks/results/2026-09-05-r3/screenshots/glm53-flash-exl3-regrade-mobile-light.png"
+    },
+    "checks": {
+      "compile": {
+        "pass": true,
+        "detail": ""
+      },
+      "generated": {
+        "pass": true
+      },
+      "lint": {
+        "pass": true,
+        "detail": "JobyKit lint — BenchappWeb.DesignManifest |  |   ✓ Clean. Wrapper contract holds across the manifest."
+      },
+      "stats": {
+        "pass": true,
+        "detail": "hidden LiveView test passed"
+      },
+      "tick": {
+        "pass": true,
+        "detail": "hidden LiveView test passed"
+      },
+      "test": {
+        "pass": true,
+        "detail": "..................... | Finished in 0.1 seconds (0.1s async, 0.00s sync) | 21 tests, 0 failures"
+      },
+      "activity": {
+        "pass": true,
+        "detail": "hidden LiveView test passed"
+      },
+      "tests_added": {
+        "pass": true,
+        "detail": "21 tests ran, 4 are the generator's"
+      },
+      "boots": {
+        "pass": true,
+        "detail": "GET / 200 with a nav"
+      },
+      "countdown": {
+        "pass": true,
+        "detail": "HomeLive: start 100, 5 s tick, timer message"
+      },
+      "nav": {
+        "pass": true,
+        "detail": "a nav element or JobyKit nav in a source under lib/benchapp_web"
+      },
+      "layout_replaced": {
+        "pass": true,
+        "detail": "the generator's stock nav+footer markers are gone from Layouts.app"
+      },
+      "composite_registered": {
+        "pass": true,
+        "detail": "2 app component(s) registered beyond the generator's"
+      },
+      "theme_toggle_mobile": {
+        "pass": true,
+        "detail": "at 390 px: theme-toggle present true, visible true"
+      },
+      "mobile_nav": {
+        "pass": true,
+        "detail": "at 390 px: nav-toggle visible true, nav links visible true"
+      },
+      "dark_theme": {
+        "pass": true,
+        "detail": "data-theme \"light\" → \"dark\", body bg rgba(0, 0, 0, 0) → rgba(0, 0, 0, 0)"
+      },
+      "tick_rendered": {
+        "pass": true,
+        "detail": "countdown \"100\" at load, \"98\" after 12 s (connected true)"
+      },
+      "signup": {
+        "pass": true,
+        "detail": "hidden LiveView test passed"
+      },
+      "about": {
+        "pass": true,
+        "detail": "hidden LiveView test passed"
+      }
+    },
+    "scores": {
+      "tests_total": 21,
+      "tests_added": 17,
+      "lint_warnings": 0,
+      "components_added": 2,
+      "page_height": 2424
+    },
+    "checks_passed": 19,
+    "checks_total": 19
+  },
+  "hidden_tests_sha": "6ed2e858",
+  "helm_sha": "a2b0d51",
+  "helm_dirty": false,
+  "graded_utc": "2026-09-06T05:57:27Z"
+}

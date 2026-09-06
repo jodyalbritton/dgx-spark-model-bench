@@ -26,8 +26,22 @@ def load():
 def load_coding():
     runs = {}
     for f in sorted(glob.glob(f"{RAW}/coding-*.json")):
-        if f.endswith(".regrade.json"): continue  # sibling re-grade files render in their own table
+        if f.endswith(".regrade.json"): continue  # sibling re-grade files overlay the row below
         r = json.load(open(f)); runs[r["label"]] = r
+    # A re-grade is the same app under the current oracle. When one exists it *is*
+    # the score: the run-time grade was the harness's mistake, not the model's, so
+    # the row carries the re-graded checks/scores (rounds, wall, tools stay the
+    # run's own) and the provenance note below the table says what the oracle fix
+    # changed. The as-graded file is never modified.
+    for label, r in runs.items():
+        f = f"{RAW}/coding-{label}.regrade.json"
+        if not os.path.exists(f) or not r.get("app"): continue
+        rg = json.load(open(f)); a = rg["app"]
+        r["as_graded"] = {"checks": r["app"].get("checks", {}), "hidden_tests_sha": (r.get("harness") or {}).get("hidden_tests_sha")}
+        r["regrade"] = rg
+        r["app"].update(checks=a["checks"], scores=a.get("scores"), checks_passed=a["checks_passed"], checks_total=a["checks_total"],
+                        screenshots=a.get("screenshots") or r["app"].get("screenshots"))
+        r["summary"]["app_checks_passed"] = a["checks_passed"]; r["summary"]["app_checks_total"] = a["checks_total"]
     return [runs[k] for k in ORDER if k in runs] + [r for k, r in runs.items() if k not in ORDER]
 
 
@@ -77,22 +91,20 @@ def coding_section(L):
         L.append(f"| {r['label']} | {s['fixtures_passed']}/{s['fixtures_total']} | {band('easy')} | {band('medium')} | {band('hard')} | {appc} | {glyphs(SOURCE)} | {glyphs(BEHAVIOUR)} | {scores} |")
     L.append("")
     L.append("Checks with `—` did not exist on that run's harness. Screenshots per app: `screenshots/<label>-{desktop-light,desktop-dark,full-light,mobile-light,mobile-full-light,desktop-light-after-12s}.png`.")
-    # re-grades: a sibling file per label, the as-graded row above untouched
-    regrades = {}
-    for f in sorted(glob.glob(f"{RAW}/coding-*.regrade.json")):
-        rg = json.load(open(f)); regrades[rg["label"]] = rg
-    if regrades:
+    # provenance for re-graded rows: which oracle, and what its fix changed
+    regraded = [r for r in runs if r.get("regrade")]
+    if regraded:
         L.append("")
-        L.append("#### Re-graded under a later oracle\n")
-        L.append("The rows above are as graded during the run. A re-grade re-runs the app checklist on the stored app under the current hidden tests and rendered checks and writes `raw/coding-<label>.regrade.json`; the as-graded file is never modified.\n")
-        L.append("| model | as graded | re-graded | oracle (hidden tests sha) | helm | checks that changed |")
-        L.append("|---|---:|---:|---|---|---|")
-        for r in runs:
-            rg = regrades.get(r["label"])
-            if not rg: continue
-            app = r.get("app") or {}; before = app.get("checks", {}); after = rg["app"]["checks"]
-            changed = [f"{k} {'❌→✅' if after[k]['pass'] else '✅→❌'}" for k in sorted(after) if k in before and before[k].get("pass") != after[k].get("pass")]
-            L.append(f"| {r['label']} | {app.get('checks_passed','—')}/{app.get('checks_total','—')} | {rg['app']['checks_passed']}/{rg['app']['checks_total']} | `{rg.get('hidden_tests_sha','?')}` | `{rg.get('helm_sha','?')}` | {', '.join(changed) or 'none'} |")
+        L.append("Oracle provenance — a later oracle fixed a harness mistake, and the row above is the app under that oracle (`raw/coding-<label>.regrade.json`; the run-time file is untouched):\n")
+        for r in regraded:
+            rg = r["regrade"]; before = r["as_graded"]["checks"]; after = rg["app"]["checks"]
+            fixed = [k for k in sorted(after) if k in before and not before[k].get("pass") and after[k].get("pass")]
+            broke = [k for k in sorted(after) if k in before and before[k].get("pass") and not after[k].get("pass")]
+            note = f"- **{r['label']}** — graded under hidden tests `{rg.get('hidden_tests_sha','?')}` on helm `{rg.get('helm_sha','?')}` (run-time oracle `{r['as_graded'].get('hidden_tests_sha','?')}`)"
+            if fixed: note += f"; the oracle fix corrected: {', '.join(fixed)}"
+            if broke: note += f"; regressed under the new oracle: {', '.join(broke)}"
+            if not fixed and not broke: note += "; no check changed"
+            L.append(note)
     L.append("")
     L.append("### Speed\n")
     L.append("| model | fixtures wall (s) | median fixture (s) | app wall (s) | app rounds | app tool calls | app TTFT (s) | app completion tok/s |")
@@ -134,6 +146,8 @@ def coding_section(L):
         fr = sum(f.get("refused", 0) for f in fx); ff = sum(f.get("failed", 0) for f in fx)
         capped = f"{s.get('fixtures_capped', '—')}/{s.get('fixtures_timed_out', '—')}/{s.get('fixtures_abandoned', '—')}"
         outcome = app.get('outcome', '—') + (f" ({app['ending']}, {app.get('nudges', 0)} nudge{'s' if app.get('nudges', 0) != 1 else ''})" if app.get('ending') else "")
+        if app.get('last_call'):  # T26: the short turn after the cap — its ending is the row's ending
+            lc = app['last_call']; outcome += f"; last call {lc.get('outcome')} in {lc.get('rounds')} round{'s' if lc.get('rounds') != 1 else ''}"
         tools = ", ".join(f"{k} {v}" for k, v in sorted((app.get("tools") or {}).items(), key=lambda kv: -kv[1]))
         fails = "; ".join(f"{f['tool']} ({f['class']}): {' '.join(f['text'].split())[:60]}" for f in app.get("failures", [])) or "—"
         L.append(f"| {r['label']} | {fr}/{ff} | {capped} | {outcome} | {app.get('refused', '—')}/{app.get('failed', '—')} | {tools or '—'} | {fails} |")

@@ -39,4 +39,5 @@ Rounds so far:
 | `2026-09-04-r2` | same three | second-edition coding bench only (17 fixtures, hidden LiveView tests, rendered checks); DeepSeek 17/17 + 18/18 (oracle v2), Qwen 17/17 but app does not compile, GLM 15/17 + 14/18 at the cap; see its `REPORT.md` |
 | `2026-09-05` | same three | round 3: effort explicit (`low`), endings classified, reasoning counted; DeepSeek 17/17 + 19/19, GLM 15/17 + 15/19 at the cap, Qwen 17/17 and app abandoned (helm discarded reasoning between rounds); DeepSeek `high` row superseded |
 | `2026-09-05-r2` | same three | round 4: T25 helm echoes reasoning within the turn; GLM's thinking turned on for the first time; all three 19/19 on the app, GLM and DeepSeek 17/17, Qwen 16/17; see its `REPORT.md` and `DESIGN_REVIEW.md` |
+| `2026-09-05-r3` | same three | round 5: all three at maximum effort (`max`; Qwen's ceiling `xhigh`), 150-round / 90-min app cap with a last call and a stopping instruction; all 19/19, GLM and DeepSeek 17/17, Qwen 16/17; see its `REPORT.md` and `DESIGN_REVIEW.md` |
 | `dryrun` | qwen38-flash-next-nvfp4 | unscored harness dry run before r2; found the narrated-ending case that led to the nudge |

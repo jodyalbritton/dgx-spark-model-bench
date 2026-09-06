@@ -1,0 +1,133 @@
+/* See the Tailwind configuration guide for advanced usage
+   https://tailwindcss.com/docs/configuration */
+
+@import "tailwindcss" source(none);
+@import "phoenix-colocated/benchapp/colocated.css";
+@source "../css";
+@source "../js";
+@source "../../lib/benchapp_web";
+/* Required for Tailwind to automatically pick up changes in colocated CSS files in dev */
+@source "../../_build/dev/phoenix-colocated/benchapp/*/";
+@source "/Users/jody/dgx-spark-model-bench/results/2026-09-05-r3/work/dsv4-flash-vision-exp/benchapp/deps/joby_kit/lib";
+
+/* A Tailwind plugin that makes "hero-#{ICON}" classes available.
+   The heroicons installation itself is managed by your mix.exs */
+@plugin "../vendor/heroicons";
+
+/* daisyUI Tailwind Plugin. */
+@plugin "daisyui/packages/bundle/daisyui" {
+  themes: false;
+}
+
+/* daisyUI theme plugin.
+  We ship with two themes, a light one inspired on Phoenix colors and a dark one inspired
+  on Elixir colors. Build your own at: https://daisyui.com/theme-generator/ */
+@plugin "daisyui/packages/bundle/daisyui-theme" {
+  name: "dark";
+  default: false;
+  prefersdark: true;
+  color-scheme: "dark";
+  --color-base-100: oklch(23% 0.016 45);
+  --color-base-200: oklch(19% 0.015 45);
+  --color-base-300: oklch(15% 0.013 45);
+  --color-base-content: oklch(94% 0.018 85);
+  --color-primary: oklch(68% 0.17 35);
+  --color-primary-content: oklch(20% 0.03 45);
+  --color-secondary: oklch(62% 0.06 240);
+  --color-secondary-content: oklch(18% 0.02 240);
+  --color-accent: oklch(78% 0.14 80);
+  --color-accent-content: oklch(22% 0.05 60);
+  --color-neutral: oklch(30% 0.02 55);
+  --color-neutral-content: oklch(94% 0.01 85);
+  --color-info: oklch(66% 0.15 240);
+  --color-info-content: oklch(18% 0.02 240);
+  --color-success: oklch(68% 0.15 155);
+  --color-success-content: oklch(18% 0.02 155);
+  --color-warning: oklch(74% 0.16 75);
+  --color-warning-content: oklch(24% 0.05 60);
+  --color-error: oklch(62% 0.22 20);
+  --color-error-content: oklch(18% 0.02 20);
+  --radius-selector: 0.5rem;
+  --radius-field: 0.75rem;
+  --radius-box: 1.25rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+}
+
+@plugin "daisyui/packages/bundle/daisyui-theme" {
+  name: "light";
+  default: true;
+  prefersdark: false;
+  color-scheme: "light";
+  --color-base-100: oklch(98.4% 0.006 85);
+  --color-base-200: oklch(96% 0.009 85);
+  --color-base-300: oklch(91% 0.013 85);
+  --color-base-content: oklch(26% 0.022 45);
+  --color-primary: oklch(58% 0.17 30);
+  --color-primary-content: oklch(98.5% 0.01 85);
+  --color-secondary: oklch(50% 0.05 240);
+  --color-secondary-content: oklch(98% 0.008 240);
+  --color-accent: oklch(76% 0.15 75);
+  --color-accent-content: oklch(26% 0.06 60);
+  --color-neutral: oklch(32% 0.025 55);
+  --color-neutral-content: oklch(98% 0.005 85);
+  --color-info: oklch(62% 0.16 240);
+  --color-info-content: oklch(98% 0.01 240);
+  --color-success: oklch(64% 0.14 155);
+  --color-success-content: oklch(98% 0.014 155);
+  --color-warning: oklch(68% 0.16 75);
+  --color-warning-content: oklch(24% 0.05 60);
+  --color-error: oklch(58% 0.24 20);
+  --color-error-content: oklch(98% 0.01 20);
+  --radius-selector: 0.5rem;
+  --radius-field: 0.75rem;
+  --radius-box: 1.25rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+}
+
+/* Add variants based on LiveView classes */
+@custom-variant phx-click-loading (.phx-click-loading&, .phx-click-loading &);
+@custom-variant phx-submit-loading (.phx-submit-loading&, .phx-submit-loading &);
+@custom-variant phx-change-loading (.phx-change-loading&, .phx-change-loading &);
+
+/* Use the data attribute for dark mode  */
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+/* Make LiveView wrapper divs transparent for layout */
+[data-phx-session], [data-phx-teleported-src] { display: contents }
+
+/* This file is for your main application CSS */
+
+/* Hearth glow: warm ember light spilling from the top of the hero */
+.hero-glow {
+  background-image:
+    radial-gradient(
+      55rem 26rem at 50% -8rem,
+      color-mix(in oklab, var(--color-primary) 18%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      38rem 20rem at 88% 12rem,
+      color-mix(in oklab, var(--color-accent) 12%, transparent),
+      transparent 70%
+    );
+}
+
+/* Warm headline gradient for the hero */
+.text-gradient {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-primary),
+    var(--color-accent)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
