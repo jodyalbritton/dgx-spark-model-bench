@@ -1,0 +1,32 @@
+{
+ "qwen38-flash-next-nvfp4": {
+  "Identity": 5.0,
+  "Hierarchy and rhythm": 4.0,
+  "Type": 4.33,
+  "Colour and themes": 5.0,
+  "Phone": 4.0,
+  "Copy": 4.0,
+  "Restraint": 5.0,
+  "Composite": 5.0
+ },
+ "glm53-flash-exl3": {
+  "Identity": 3.33,
+  "Hierarchy and rhythm": 3.0,
+  "Type": 4.0,
+  "Colour and themes": 4.33,
+  "Phone": 4.33,
+  "Copy": 4.0,
+  "Restraint": 3.67,
+  "Composite": 3.33
+ },
+ "dsv4-flash-vision-exp": {
+  "Identity": 4.33,
+  "Hierarchy and rhythm": 3.33,
+  "Type": 4.33,
+  "Colour and themes": 4.33,
+  "Phone": 4.0,
+  "Copy": 4.33,
+  "Restraint": 4.0,
+  "Composite": 4.0
+ }
+}

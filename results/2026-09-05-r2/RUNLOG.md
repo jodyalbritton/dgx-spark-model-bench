@@ -58,3 +58,7 @@ Finished 2026-09-06T01:21:36Z.
 | GLM 5.3 Flash | 17/17 | 19/19 done | 93 | 18:23 | 193k | 20k | 5.9k | 9 |
 
 All three complete the app at `low` on the T25 helm. `RESULTS.md` rendered via `design/make_report.py`.
+
+## Re-graded under oracle v3 (2026-09-06, helm `a2b0d51`, hidden tests `6ed2e858`)
+
+Round 5 changed the oracle (nav check reads every web source; activity "newest first" and "at most 10" ignore `<li>` present at mount). All three round-4 apps re-graded under v3 after `mix deps.get` (their `deps/` had been cleared): GLM 19/19, DeepSeek 19/19, Qwen 19/19 — unchanged. Files: `raw/coding-<label>.regrade.json`.

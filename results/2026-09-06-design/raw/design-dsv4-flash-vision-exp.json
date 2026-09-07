@@ -1,0 +1,543 @@
+{
+  "label": "dsv4-flash-vision-exp",
+  "root": "/Users/jody/benchmarks/results/2026-09-06-design",
+  "kind": "design",
+  "summary": {
+    "rounds": 139,
+    "outcome": "done",
+    "wall_ms": 3626595,
+    "gates_passed": 19,
+    "gates_total": 19
+  },
+  "model": "deepseek-ai/DeepSeek-V4-Flash-Vision-Exp:fp8",
+  "harness": {
+    "memory": "off",
+    "port": "4099",
+    "tools": "native",
+    "system_prompt": "You are helm, an agent at the conn of the JobyCorp fleet. Be direct and concise.\n\nWorking method: survey before you read. `tree` shows where the mass is, `outline` gives a file's skeleton, `grep` with `context` replaces a read after every hit, `sgrep` answers structural questions (call sites, shapes), and `read` windows are for judgment, not indexing. Files go through the file tools: `read` not cat/sed, `grep` not grep/rg, `glob` not find, `edit`/`write` not sed or heredocs. Bash runs things: builds, tests, mix tasks. Dev servers and long commands run with `bash(background: true)`; `job` polls and kills them. Never signal a process you did not start. Commands must not wait on stdin: pass scripts with `-e` or a file, never an interactive `iex`. Read enough to act, act, verify, and stop.",
+    "effort": "max",
+    "mcp": false,
+    "nudge": "Continue until every requirement in the task is done, then reply with the one-line summary.",
+    "nudge_policy": "once, only after a narrated or blank ending; otherwise abandoned",
+    "wire_tools": [
+      "read",
+      "edit",
+      "write",
+      "bash",
+      "grep",
+      "sgrep",
+      "glob",
+      "tree",
+      "outline",
+      "changes",
+      "read_artifact",
+      "proc",
+      "proc_logs",
+      "job",
+      "preview",
+      "project_docs",
+      "web_search",
+      "todo",
+      "session_search",
+      "consult",
+      "agent"
+    ],
+    "prompt_sha": "b0ff216c",
+    "vision_model": "deepseek-ai/DeepSeek-V4-Flash-Vision-Exp:fp8",
+    "last_call_rounds": 4,
+    "last_call": "Round cap reached — this is the last call. Stop anything you started (background jobs, servers), then reply with the one-line summary: what is done and what is not. No further work.",
+    "last_call_grace_ms": 180000,
+    "joby_kit_version": "0.3.3",
+    "forbidden_words": [
+      "JobyKit",
+      "daisyUI",
+      "Phoenix",
+      "LiveView",
+      "Tailwind",
+      "component",
+      "wrapper",
+      "composite",
+      "manifest",
+      "this task",
+      "benchmark app",
+      "benchapp"
+    ],
+    "brief": "# JobyCorp website — design brief\n\nJobyKit is already installed and `benchapp` is a generated JobyKit app that\ncompiles, boots, and passes its tests. Work inside `benchapp`. Follow the\nguidelines in `benchapp/AGENTS.md` and the design direction in\n`benchapp/DESIGN.md`; where `DESIGN.md` and this brief differ, this brief\nwins.\n\n## The client\n\nJobyCorp is a local AI research company. It runs analysis and benchmarks of\nlocal LLMs on its own hardware and shares the research openly with the\ncommunity. The site is JobyCorp's public home: it should tell a visitor\nwhat JobyCorp does, show that the work is real and rigorous, and invite\nthem to read and follow it.\n\nUse only the facts above. Do not invent statistics, customer names, team\nmembers, awards, dates, or product names. Where a section wants a number\nor a name you have not been given, write copy that does not need one.\n\n## Scope\n\nThis is a design task. Build the visual identity, the layout, the copy, and\nthe components. Do not add application features: no forms that submit, no\nlive data, no countdowns. Static content and navigation only. The app's\ndatabases already exist so the dev server boots; do not add tables,\nmigrations, schemas, or any use of the Repo — the site has no data.\n\n1. Remove every trace of the generator's demo: the stock `simple_nav`\n   header, the \"built with\" footer, the welcome content of HomeLive, and\n   every link to `/design`, `/custom-designs`, and `/design.json`. Those\n   pages exist for inspecting the kit and are not part of the product;\n   leave their routes in place but nothing on the site may link to or\n   mention them.\n2. Three pages, all on the same layout: `/` (the landing page),\n   `/research` (what JobyCorp publishes and how it tests), and `/about`\n   (who JobyCorp is and why the work is shared).\n3. A top navigation bar in `Layouts.app` with id `main-nav` that marks the\n   current page's link with `aria-current=\"page\"`, collapses behind a\n   toggle button with id `nav-toggle` at phone widths, and carries the\n   kit's theme toggle with id `theme-toggle`, usable at both widths.\n4. A footer that belongs to JobyCorp.\n5. The landing page: a hero that says what JobyCorp does in one sentence, a\n   section on the research (what is measured and how), a section on the\n   hardware and method (local models, local hardware, results published in\n   full), and a closing call to action to read the research. Sections are\n   yours to add or merge; every section must earn its place.\n6. At least one composite component of your own, registered in the\n   DesignManifest with a `/design` preview, used on more than one page.\n\n## Design requirements\n\n- Light and dark themes, both finished, with the palette `DESIGN.md`\n  defines applied to the `light` and `dark` themes in `app.css` (keep\n  those two names; the theme toggle switches by them). Phone and desktop,\n  both finished. No horizontal overflow at 390 px. Body text contrast at\n  least 4.5:1 and large text at least 3:1 in both themes.\n- Every icon name you use must exist in the installed heroicon set; check\n  before you use it. A blank icon is a defect.\n- Copy is concise: headings of a few words, sentences a visitor can read\n  at a glance. Copy is about JobyCorp and its research, never about the\n  component kit, the framework, or this task.\n- Compose the kit's registered wrappers; raw HTML primitives are a lint\n  failure. Lint must be clean.\n\n## Tests\n\n7. Existing tests must pass; update any test that referred to removed\n   demo content. No new features. Add a render test for each new page.\n\n## Constraints\n\n- The dev server must run on port 4099; `PORT` is already set. Do not use\n  any other port. Do not stop or kill processes you did not start.\n- When `mix precommit` and `mix joby_kit.lint` both pass, reply with a\n  one-line summary. Do not re-verify: green precommit and clean lint are the\n  finish line.\n",
+    "site_rounds_cap": 150,
+    "site_deadline_ms": 5400000,
+    "base_sha": "65eeaf1baa98",
+    "design_sha": "896b5475"
+  },
+  "helm_sha": "f667027",
+  "helm_dirty": false,
+  "started_utc": "2026-09-06T23:18:29Z",
+  "finished_utc": "2026-09-07T00:19:47Z",
+  "site": {
+    "refused": 1,
+    "wall_ms": 3626595,
+    "session_id": "c78f6e97-eadc-438c-b1ad-48710700ec24",
+    "cached_tokens": 18461952,
+    "prompt_tokens": 18682799,
+    "ttft_ms": 7057,
+    "pass": true,
+    "reasoning_reported": false,
+    "tool_calls": 158,
+    "failures": [
+      {
+        "text": "add needs items; set/remove need an integer id",
+        "class": "failed",
+        "tool": "todo"
+      },
+      {
+        "text": "exit 1\nsed: 1: \"lib/benchapp_web/compon ...\": extra characters at the end of l command\n",
+        "class": "failed",
+        "tool": "bash"
+      },
+      {
+        "text": "this session has no project — procs belong to projects; a server of your own runs with bash(background: true) and job(action: \"kill\") stops it",
+        "class": "refused",
+        "tool": "proc"
+      }
+    ],
+    "checks": {
+      "compile": {
+        "pass": true,
+        "detail": ""
+      },
+      "lint": {
+        "pass": true,
+        "detail": "JobyKit lint — BenchappWeb.DesignManifest |  |   ✓ Clean. Wrapper contract holds across the manifest."
+      },
+      "test": {
+        "pass": true,
+        "detail": "....... | Finished in 0.09 seconds (0.09s async, 0.00s sync) | 7 tests, 0 failures"
+      },
+      "routes": {
+        "pass": true,
+        "detail": "12 page loads, each with #main-nav"
+      },
+      "boots": {
+        "pass": true,
+        "detail": "GET / 200 with a nav"
+      },
+      "layout_replaced": {
+        "pass": true,
+        "detail": "the generator's stock nav+footer markers are gone from Layouts.app"
+      },
+      "composite_registered": {
+        "pass": true,
+        "detail": "1 app component(s) registered beyond the generator's"
+      },
+      "theme_toggle_mobile": {
+        "pass": true,
+        "detail": "at 390 px: theme-toggle present true, visible true"
+      },
+      "mobile_nav": {
+        "pass": true,
+        "detail": "at 390 px: nav-toggle visible true, nav links visible true"
+      },
+      "dark_theme": {
+        "pass": true,
+        "detail": "data-theme \"light\" → \"dark\", body bg rgb(246, 249, 251) → rgb(17, 22, 30)"
+      },
+      "page_tests": {
+        "pass": true,
+        "detail": "7 tests ran, 4 are the generator's (a render test per new page asked)"
+      },
+      "composite_reused": {
+        "pass": true,
+        "detail": "used on two or more pages: record_card"
+      },
+      "theme_pair": {
+        "pass": true,
+        "detail": "light primary oklch(48% 0.11 195) (want L≈48.0 h≈195.0); dark base-100 oklch(20% 0.018 255) (want L ≤ 20.0)"
+      },
+      "contrast": {
+        "pass": true,
+        "detail": "566 text elements ≥ WCAG AA across pages, themes, widths"
+      },
+      "demo_gone": {
+        "pass": true,
+        "detail": "no link to or mention of the kit's demo pages"
+      },
+      "nav_current": {
+        "pass": true,
+        "detail": "aria-current=page on exactly the current link, all three pages"
+      },
+      "no_overflow": {
+        "pass": true,
+        "detail": "no horizontal overflow at 390 px on any page or theme"
+      },
+      "icons_resolve": {
+        "pass": true,
+        "detail": "42 heroicon(s), all resolved"
+      },
+      "copy_clean": {
+        "pass": true,
+        "detail": "no kit, framework, or task words in the rendered copy"
+      }
+    },
+    "checks_passed": 19,
+    "checks_total": 19,
+    "reasoning_tokens": 93963,
+    "name": "site",
+    "final": "Done. Precommit green (7 tests passing), lint clean.\n\nRebuilt JobyCorp's public site in `benchapp`: replaced the generator demo with a JobyCorp header `#main-nav` (current-page `aria-current`, collapsible `#nav-toggle` at phone, kit theme toggle usable at both widths) and JobyCorp footer, added `/`, `/research`, `/about` on the shared layout — hero with a monospace \"run record\" composite card (registered in the DesignManifest with a preview, used on home + research), measured-quantity tables, numbered method, and closing research CTA — applied the DESIGN.md signal-teal palette to the `light`/`dark` themes (plotting-paper + figure-table CSS), and added a render test per page; routes for `/design`, `/custom-designs`, `/design.json` remain but nothing links to them.",
+    "scores": {
+      "tests_total": 7,
+      "tests_added": 3,
+      "lint_warnings": 0,
+      "components_added": 1,
+      "page_height": 2572,
+      "composites_reused": 1
+    },
+    "duration_ms": 3626580,
+    "nudges": 0,
+    "ending": "summary",
+    "completion_tok_s": 34.9,
+    "render": {
+      "about": {
+        "dark": {
+          "desktop": {
+            "bg": "rgb(17, 22, 30)",
+            "contrast_checked": 30,
+            "contrast_fail_count": 0,
+            "contrast_fails": [],
+            "current": [
+              "/about"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 1699,
+            "icons": 3,
+            "icons_unresolved": [],
+            "inner_width": 1440,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 1440,
+            "text": "JobyCorp\nHome\nResearch\nAbout\nLocal models, measured and shared\n\nJobyCorp is a local AI research company. It runs analysis and benchmarks of local language models on its own hardware, and shares the research openly with the community.\n\nWhy the work is shared\n\nA benchmark only means something if it can be checked. JobyCorp runs the models on machines it owns, under conditions it records, and publishes the results in full — so anyone can see what was measured and repeat it.\n\nOpen research is the point of the work. Numbers that sit behind a headline are not the work; the record behind them is.\n\npublish\n\nWhat a published result includes\n\nPublishing a result means publishing the record: the model, the hardware, the settings, the data, and the numbers that came out of it.\n\nNothing about how it was got stays private.\n\npart\twhat it records\nmodel\twhich weights were measured\nhardware\tthe machine that ran it\nsettings\thow each run was configured\ndata\twhat the model was measured on\nresults\tevery number, with its unit\n\nJobyCorp\n\nHome\nResearch\nAbout\n\nRuns local language models on its own hardware and publishes the results in full.",
+            "theme": "dark",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "About",
+            "toggle_visible": false
+          },
+          "phone": {
+            "bg": "rgb(17, 22, 30)",
+            "contrast_checked": 27,
+            "contrast_fail_count": 0,
+            "contrast_fails": [],
+            "current": [
+              "/about"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 1821,
+            "icons": 4,
+            "icons_unresolved": [],
+            "inner_width": 390,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 390,
+            "text": "JobyCorp\nLocal models, measured and shared\n\nJobyCorp is a local AI research company. It runs analysis and benchmarks of local language models on its own hardware, and shares the research openly with the community.\n\nWhy the work is shared\n\nA benchmark only means something if it can be checked. JobyCorp runs the models on machines it owns, under conditions it records, and publishes the results in full — so anyone can see what was measured and repeat it.\n\nOpen research is the point of the work. Numbers that sit behind a headline are not the work; the record behind them is.\n\npublish\n\nWhat a published result includes\n\nPublishing a result means publishing the record: the model, the hardware, the settings, the data, and the numbers that came out of it.\n\nNothing about how it was got stays private.\n\npart\twhat it records\nmodel\twhich weights were measured\nhardware\tthe machine that ran it\nsettings\thow each run was configured\ndata\twhat the model was measured on\nresults\tevery number, with its unit\n\nJobyCorp\n\nHome\nResearch\nAbout\n\nRuns local language models on its own hardware and publishes the results in full.",
+            "theme": "dark",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "About",
+            "toggle_visible": true
+          }
+        },
+        "light": {
+          "desktop": {
+            "bg": "rgb(246, 249, 251)",
+            "contrast_checked": 30,
+            "contrast_fail_count": 0,
+            "contrast_fails": [],
+            "current": [
+              "/about"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 1699,
+            "icons": 3,
+            "icons_unresolved": [],
+            "inner_width": 1440,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 1440,
+            "text": "JobyCorp\nHome\nResearch\nAbout\nLocal models, measured and shared\n\nJobyCorp is a local AI research company. It runs analysis and benchmarks of local language models on its own hardware, and shares the research openly with the community.\n\nWhy the work is shared\n\nA benchmark only means something if it can be checked. JobyCorp runs the models on machines it owns, under conditions it records, and publishes the results in full — so anyone can see what was measured and repeat it.\n\nOpen research is the point of the work. Numbers that sit behind a headline are not the work; the record behind them is.\n\npublish\n\nWhat a published result includes\n\nPublishing a result means publishing the record: the model, the hardware, the settings, the data, and the numbers that came out of it.\n\nNothing about how it was got stays private.\n\npart\twhat it records\nmodel\twhich weights were measured\nhardware\tthe machine that ran it\nsettings\thow each run was configured\ndata\twhat the model was measured on\nresults\tevery number, with its unit\n\nJobyCorp\n\nHome\nResearch\nAbout\n\nRuns local language models on its own hardware and publishes the results in full.",
+            "theme": "light",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "About",
+            "toggle_visible": false
+          },
+          "phone": {
+            "bg": "rgb(246, 249, 251)",
+            "contrast_checked": 27,
+            "contrast_fail_count": 0,
+            "contrast_fails": [],
+            "current": [
+              "/about"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 1821,
+            "icons": 4,
+            "icons_unresolved": [],
+            "inner_width": 390,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 390,
+            "text": "JobyCorp\nLocal models, measured and shared\n\nJobyCorp is a local AI research company. It runs analysis and benchmarks of local language models on its own hardware, and shares the research openly with the community.\n\nWhy the work is shared\n\nA benchmark only means something if it can be checked. JobyCorp runs the models on machines it owns, under conditions it records, and publishes the results in full — so anyone can see what was measured and repeat it.\n\nOpen research is the point of the work. Numbers that sit behind a headline are not the work; the record behind them is.\n\npublish\n\nWhat a published result includes\n\nPublishing a result means publishing the record: the model, the hardware, the settings, the data, and the numbers that came out of it.\n\nNothing about how it was got stays private.\n\npart\twhat it records\nmodel\twhich weights were measured\nhardware\tthe machine that ran it\nsettings\thow each run was configured\ndata\twhat the model was measured on\nresults\tevery number, with its unit\n\nJobyCorp\n\nHome\nResearch\nAbout\n\nRuns local language models on its own hardware and publishes the results in full.",
+            "theme": "light",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "About",
+            "toggle_visible": true
+          }
+        }
+      },
+      "home": {
+        "dark": {
+          "desktop": {
+            "bg": "rgb(17, 22, 30)",
+            "contrast_checked": 55,
+            "contrast_fail_count": 0,
+            "contrast_fails": [],
+            "current": [
+              "/"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 2572,
+            "icons": 3,
+            "icons_unresolved": [],
+            "inner_width": 1440,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 1440,
+            "text": "JobyCorp\nHome\nResearch\nAbout\nJobyCorp measures local language models on its own hardware and publishes every result in full.\n\nWe run open models on the machines we own, hold the conditions steady, and share every run — the settings, the data, and the numbers — so anyone can repeat it.\n\nRead the research\n\nrun record\n\nmodel\nidentifier\nweights\nbits\ncontext\ntokens\nthroughput\ntok/s\nlatency\nms\nmemory\nGB\nThe same fields on every run, so runs compare.\n\nresearch\n\nWhat a run measures\n\nEvery run is measured against the same fixed set of quantities, on the same hardware, with the settings recorded before anything starts. A number from one model reads against a number from the next.\n\nThe fields are few and fixed. Each result reports them with their units — and nothing else.\n\nquantity\tunit\nmodel\tidentifier\nweights\tbits\ncontext\ttokens\nthroughput\ttok/s\nlatency\tms\nmemory\tGB\n\nhardware\n\nLocal models, local hardware\nmodels\nOpen-weights models only — the ones we can run and inspect ourselves.\nhardware\nLocal machines we own, dedicated to benchmarking and described with every run.\npublication\nNo abstract hiding the middle. Each run ships its method, its hardware, and its numbers.\nRead the research\n\nThe records are published with the work behind them. See what JobyCorp measures, how each run is tested, and what a result leaves behind.\n\nRead the research\n\nJobyCorp\n\nHome\nResearch\nAbout\n\nRuns local language models on its own hardware and publishes the results in full.",
+            "theme": "dark",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "JobyCorp",
+            "toggle_visible": false
+          },
+          "phone": {
+            "bg": "rgb(17, 22, 30)",
+            "contrast_checked": 52,
+            "contrast_fail_count": 0,
+            "contrast_fails": [],
+            "current": [
+              "/"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 3127,
+            "icons": 4,
+            "icons_unresolved": [],
+            "inner_width": 390,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 390,
+            "text": "JobyCorp\nJobyCorp measures local language models on its own hardware and publishes every result in full.\n\nWe run open models on the machines we own, hold the conditions steady, and share every run — the settings, the data, and the numbers — so anyone can repeat it.\n\nRead the research\n\nrun record\n\nmodel\nidentifier\nweights\nbits\ncontext\ntokens\nthroughput\ntok/s\nlatency\nms\nmemory\nGB\nThe same fields on every run, so runs compare.\n\nresearch\n\nWhat a run measures\n\nEvery run is measured against the same fixed set of quantities, on the same hardware, with the settings recorded before anything starts. A number from one model reads against a number from the next.\n\nThe fields are few and fixed. Each result reports them with their units — and nothing else.\n\nquantity\tunit\nmodel\tidentifier\nweights\tbits\ncontext\ttokens\nthroughput\ttok/s\nlatency\tms\nmemory\tGB\n\nhardware\n\nLocal models, local hardware\nmodels\nOpen-weights models only — the ones we can run and inspect ourselves.\nhardware\nLocal machines we own, dedicated to benchmarking and described with every run.\npublication\nNo abstract hiding the middle. Each run ships its method, its hardware, and its numbers.\nRead the research\n\nThe records are published with the work behind them. See what JobyCorp measures, how each run is tested, and what a result leaves behind.\n\nRead the research\n\nJobyCorp\n\nHome\nResearch\nAbout\n\nRuns local language models on its own hardware and publishes the results in full.",
+            "theme": "dark",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "JobyCorp",
+            "toggle_visible": true
+          }
+        },
+        "light": {
+          "desktop": {
+            "bg": "rgb(246, 249, 251)",
+            "contrast_checked": 55,
+            "contrast_fail_count": 0,
+            "contrast_fails": [],
+            "current": [
+              "/"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 2572,
+            "icons": 3,
+            "icons_unresolved": [],
+            "inner_width": 1440,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 1440,
+            "text": "JobyCorp\nHome\nResearch\nAbout\nJobyCorp measures local language models on its own hardware and publishes every result in full.\n\nWe run open models on the machines we own, hold the conditions steady, and share every run — the settings, the data, and the numbers — so anyone can repeat it.\n\nRead the research\n\nrun record\n\nmodel\nidentifier\nweights\nbits\ncontext\ntokens\nthroughput\ntok/s\nlatency\nms\nmemory\nGB\nThe same fields on every run, so runs compare.\n\nresearch\n\nWhat a run measures\n\nEvery run is measured against the same fixed set of quantities, on the same hardware, with the settings recorded before anything starts. A number from one model reads against a number from the next.\n\nThe fields are few and fixed. Each result reports them with their units — and nothing else.\n\nquantity\tunit\nmodel\tidentifier\nweights\tbits\ncontext\ttokens\nthroughput\ttok/s\nlatency\tms\nmemory\tGB\n\nhardware\n\nLocal models, local hardware\nmodels\nOpen-weights models only — the ones we can run and inspect ourselves.\nhardware\nLocal machines we own, dedicated to benchmarking and described with every run.\npublication\nNo abstract hiding the middle. Each run ships its method, its hardware, and its numbers.\nRead the research\n\nThe records are published with the work behind them. See what JobyCorp measures, how each run is tested, and what a result leaves behind.\n\nRead the research\n\nJobyCorp\n\nHome\nResearch\nAbout\n\nRuns local language models on its own hardware and publishes the results in full.",
+            "theme": "light",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "JobyCorp",
+            "toggle_visible": false
+          },
+          "phone": {
+            "bg": "rgb(246, 249, 251)",
+            "contrast_checked": 52,
+            "contrast_fail_count": 0,
+            "contrast_fails": [],
+            "current": [
+              "/"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 3127,
+            "icons": 4,
+            "icons_unresolved": [],
+            "inner_width": 390,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 390,
+            "text": "JobyCorp\nJobyCorp measures local language models on its own hardware and publishes every result in full.\n\nWe run open models on the machines we own, hold the conditions steady, and share every run — the settings, the data, and the numbers — so anyone can repeat it.\n\nRead the research\n\nrun record\n\nmodel\nidentifier\nweights\nbits\ncontext\ntokens\nthroughput\ntok/s\nlatency\nms\nmemory\nGB\nThe same fields on every run, so runs compare.\n\nresearch\n\nWhat a run measures\n\nEvery run is measured against the same fixed set of quantities, on the same hardware, with the settings recorded before anything starts. A number from one model reads against a number from the next.\n\nThe fields are few and fixed. Each result reports them with their units — and nothing else.\n\nquantity\tunit\nmodel\tidentifier\nweights\tbits\ncontext\ttokens\nthroughput\ttok/s\nlatency\tms\nmemory\tGB\n\nhardware\n\nLocal models, local hardware\nmodels\nOpen-weights models only — the ones we can run and inspect ourselves.\nhardware\nLocal machines we own, dedicated to benchmarking and described with every run.\npublication\nNo abstract hiding the middle. Each run ships its method, its hardware, and its numbers.\nRead the research\n\nThe records are published with the work behind them. See what JobyCorp measures, how each run is tested, and what a result leaves behind.\n\nRead the research\n\nJobyCorp\n\nHome\nResearch\nAbout\n\nRuns local language models on its own hardware and publishes the results in full.",
+            "theme": "light",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "JobyCorp",
+            "toggle_visible": true
+          }
+        }
+      },
+      "research": {
+        "dark": {
+          "desktop": {
+            "bg": "rgb(17, 22, 30)",
+            "contrast_checked": 61,
+            "contrast_fail_count": 0,
+            "contrast_fails": [],
+            "current": [
+              "/research"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 2550,
+            "icons": 3,
+            "icons_unresolved": [],
+            "inner_width": 1440,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 1440,
+            "text": "JobyCorp\nHome\nResearch\nAbout\nWhat we publish and how we test\n\nJobyCorp benchmarks local language models on its own hardware. Every result is published with the conditions it was measured under, so it can be read, checked, and repeated.\n\nresearch\n\nWhat a run measures\n\nA small, fixed set of quantities. The same fields, the same units, on every run — so a result is a number you can compare, not a paragraph.\n\nMeasured on the hardware that ran the model, never carried over from a vendor's spec sheet.\n\nquantity\tunit\nmodel\tidentifier\nweights\tbits\ncontext\ttokens\nthroughput\ttok/s\nlatency\tms\nmemory\tGB\n\nmethod\n\nHow a run is tested\n01\nfix the conditions\nChoose a model, a machine, and a record of every setting before anything runs.\n02\nrun the workload\nThe same set of prompts and tasks against each model, so runs differ only in the model.\n03\nmeasure the run\nThroughput, latency, memory, and tokens, taken under the same conditions and in the same units.\n04\npublish the record\nThe method, the hardware, the data, and the numbers — in full.\n\nrecord\n\nWhat a record carries\n\nEach run leaves a record with the fields it was measured against. Publishing means publishing that record — the model, the hardware, the settings, and the data — not just the headline number.\n\nA record is the unit of work. Where a section asks for a result, the record tells you how it was got.\n\nrun record\n\nmodel\nidentifier\nweights\nbits\ncontext\ntokens\nthroughput\ntok/s\nlatency\nms\nmemory\nGB\nEnough to repeat the run, not just admire it.\n\nJobyCorp\n\nHome\nResearch\nAbout\n\nRuns local language models on its own hardware and publishes the results in full.",
+            "theme": "dark",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "Research",
+            "toggle_visible": false
+          },
+          "phone": {
+            "bg": "rgb(17, 22, 30)",
+            "contrast_checked": 58,
+            "contrast_fail_count": 0,
+            "contrast_fails": [],
+            "current": [
+              "/research"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 3139,
+            "icons": 4,
+            "icons_unresolved": [],
+            "inner_width": 390,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 390,
+            "text": "JobyCorp\nWhat we publish and how we test\n\nJobyCorp benchmarks local language models on its own hardware. Every result is published with the conditions it was measured under, so it can be read, checked, and repeated.\n\nresearch\n\nWhat a run measures\n\nA small, fixed set of quantities. The same fields, the same units, on every run — so a result is a number you can compare, not a paragraph.\n\nMeasured on the hardware that ran the model, never carried over from a vendor's spec sheet.\n\nquantity\tunit\nmodel\tidentifier\nweights\tbits\ncontext\ttokens\nthroughput\ttok/s\nlatency\tms\nmemory\tGB\n\nmethod\n\nHow a run is tested\n01\nfix the conditions\nChoose a model, a machine, and a record of every setting before anything runs.\n02\nrun the workload\nThe same set of prompts and tasks against each model, so runs differ only in the model.\n03\nmeasure the run\nThroughput, latency, memory, and tokens, taken under the same conditions and in the same units.\n04\npublish the record\nThe method, the hardware, the data, and the numbers — in full.\n\nrecord\n\nWhat a record carries\n\nEach run leaves a record with the fields it was measured against. Publishing means publishing that record — the model, the hardware, the settings, and the data — not just the headline number.\n\nA record is the unit of work. Where a section asks for a result, the record tells you how it was got.\n\nrun record\n\nmodel\nidentifier\nweights\nbits\ncontext\ntokens\nthroughput\ntok/s\nlatency\nms\nmemory\nGB\nEnough to repeat the run, not just admire it.\n\nJobyCorp\n\nHome\nResearch\nAbout\n\nRuns local language models on its own hardware and publishes the results in full.",
+            "theme": "dark",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "Research",
+            "toggle_visible": true
+          }
+        },
+        "light": {
+          "desktop": {
+            "bg": "rgb(246, 249, 251)",
+            "contrast_checked": 61,
+            "contrast_fail_count": 0,
+            "contrast_fails": [],
+            "current": [
+              "/research"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 2550,
+            "icons": 3,
+            "icons_unresolved": [],
+            "inner_width": 1440,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 1440,
+            "text": "JobyCorp\nHome\nResearch\nAbout\nWhat we publish and how we test\n\nJobyCorp benchmarks local language models on its own hardware. Every result is published with the conditions it was measured under, so it can be read, checked, and repeated.\n\nresearch\n\nWhat a run measures\n\nA small, fixed set of quantities. The same fields, the same units, on every run — so a result is a number you can compare, not a paragraph.\n\nMeasured on the hardware that ran the model, never carried over from a vendor's spec sheet.\n\nquantity\tunit\nmodel\tidentifier\nweights\tbits\ncontext\ttokens\nthroughput\ttok/s\nlatency\tms\nmemory\tGB\n\nmethod\n\nHow a run is tested\n01\nfix the conditions\nChoose a model, a machine, and a record of every setting before anything runs.\n02\nrun the workload\nThe same set of prompts and tasks against each model, so runs differ only in the model.\n03\nmeasure the run\nThroughput, latency, memory, and tokens, taken under the same conditions and in the same units.\n04\npublish the record\nThe method, the hardware, the data, and the numbers — in full.\n\nrecord\n\nWhat a record carries\n\nEach run leaves a record with the fields it was measured against. Publishing means publishing that record — the model, the hardware, the settings, and the data — not just the headline number.\n\nA record is the unit of work. Where a section asks for a result, the record tells you how it was got.\n\nrun record\n\nmodel\nidentifier\nweights\nbits\ncontext\ntokens\nthroughput\ntok/s\nlatency\nms\nmemory\nGB\nEnough to repeat the run, not just admire it.\n\nJobyCorp\n\nHome\nResearch\nAbout\n\nRuns local language models on its own hardware and publishes the results in full.",
+            "theme": "light",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "Research",
+            "toggle_visible": false
+          },
+          "phone": {
+            "bg": "rgb(246, 249, 251)",
+            "contrast_checked": 58,
+            "contrast_fail_count": 0,
+            "contrast_fails": [],
+            "current": [
+              "/research"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 3139,
+            "icons": 4,
+            "icons_unresolved": [],
+            "inner_width": 390,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 390,
+            "text": "JobyCorp\nWhat we publish and how we test\n\nJobyCorp benchmarks local language models on its own hardware. Every result is published with the conditions it was measured under, so it can be read, checked, and repeated.\n\nresearch\n\nWhat a run measures\n\nA small, fixed set of quantities. The same fields, the same units, on every run — so a result is a number you can compare, not a paragraph.\n\nMeasured on the hardware that ran the model, never carried over from a vendor's spec sheet.\n\nquantity\tunit\nmodel\tidentifier\nweights\tbits\ncontext\ttokens\nthroughput\ttok/s\nlatency\tms\nmemory\tGB\n\nmethod\n\nHow a run is tested\n01\nfix the conditions\nChoose a model, a machine, and a record of every setting before anything runs.\n02\nrun the workload\nThe same set of prompts and tasks against each model, so runs differ only in the model.\n03\nmeasure the run\nThroughput, latency, memory, and tokens, taken under the same conditions and in the same units.\n04\npublish the record\nThe method, the hardware, the data, and the numbers — in full.\n\nrecord\n\nWhat a record carries\n\nEach run leaves a record with the fields it was measured against. Publishing means publishing that record — the model, the hardware, the settings, and the data — not just the headline number.\n\nA record is the unit of work. Where a section asks for a result, the record tells you how it was got.\n\nrun record\n\nmodel\nidentifier\nweights\nbits\ncontext\ntokens\nthroughput\ntok/s\nlatency\nms\nmemory\nGB\nEnough to repeat the run, not just admire it.\n\nJobyCorp\n\nHome\nResearch\nAbout\n\nRuns local language models on its own hardware and publishes the results in full.",
+            "theme": "light",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "Research",
+            "toggle_visible": true
+          }
+        }
+      }
+    },
+    "cached_reported": true,
+    "completion_tokens": 126406,
+    "failed": 2,
+    "work_dir": "/Users/jody/benchmarks/results/2026-09-06-design/work/dsv4-flash-vision-exp",
+    "final_line": "Rebuilt JobyCorp's public site in `benchapp`: replaced the generator demo with a JobyCorp header `#main-nav` (current-page `aria-current`, collapsible `#nav-toggle` at phone, kit theme toggle usable at both widths) and JobyCorp footer, added `/`, `/research`, `/about` on the shared layout — hero with a monospace \"run record\" composite card (registered in the DesignManifest with a preview, used on home + research), measured-quantity tables, numbered method, and closing research CTA — applied the DESIGN.md signal-teal palette to the `light`/`dark` themes (plotting-paper + figure-table CSS), and added a render test per page; routes for `/design`, `/custom-designs`, `/design.json` remain but nothing links to them.",
+    "assistant_messages": 139,
+    "uncached_prompt_tokens": 220847,
+    "outcome": "done",
+    "screenshots": {
+      "dsv4-flash-vision-exp-about-dark-desktop.png": "/Users/jody/benchmarks/results/2026-09-06-design/screenshots/dsv4-flash-vision-exp-about-dark-desktop.png",
+      "dsv4-flash-vision-exp-about-dark-phone.png": "/Users/jody/benchmarks/results/2026-09-06-design/screenshots/dsv4-flash-vision-exp-about-dark-phone.png",
+      "dsv4-flash-vision-exp-about-light-desktop.png": "/Users/jody/benchmarks/results/2026-09-06-design/screenshots/dsv4-flash-vision-exp-about-light-desktop.png",
+      "dsv4-flash-vision-exp-about-light-phone.png": "/Users/jody/benchmarks/results/2026-09-06-design/screenshots/dsv4-flash-vision-exp-about-light-phone.png",
+      "dsv4-flash-vision-exp-home-dark-desktop.png": "/Users/jody/benchmarks/results/2026-09-06-design/screenshots/dsv4-flash-vision-exp-home-dark-desktop.png",
+      "dsv4-flash-vision-exp-home-dark-phone.png": "/Users/jody/benchmarks/results/2026-09-06-design/screenshots/dsv4-flash-vision-exp-home-dark-phone.png",
+      "dsv4-flash-vision-exp-home-light-desktop.png": "/Users/jody/benchmarks/results/2026-09-06-design/screenshots/dsv4-flash-vision-exp-home-light-desktop.png",
+      "dsv4-flash-vision-exp-home-light-phone.png": "/Users/jody/benchmarks/results/2026-09-06-design/screenshots/dsv4-flash-vision-exp-home-light-phone.png",
+      "dsv4-flash-vision-exp-research-dark-desktop.png": "/Users/jody/benchmarks/results/2026-09-06-design/screenshots/dsv4-flash-vision-exp-research-dark-desktop.png",
+      "dsv4-flash-vision-exp-research-dark-phone.png": "/Users/jody/benchmarks/results/2026-09-06-design/screenshots/dsv4-flash-vision-exp-research-dark-phone.png",
+      "dsv4-flash-vision-exp-research-light-desktop.png": "/Users/jody/benchmarks/results/2026-09-06-design/screenshots/dsv4-flash-vision-exp-research-light-desktop.png",
+      "dsv4-flash-vision-exp-research-light-phone.png": "/Users/jody/benchmarks/results/2026-09-06-design/screenshots/dsv4-flash-vision-exp-research-light-phone.png"
+    },
+    "last_call": null,
+    "turns": 1,
+    "rounds": 139,
+    "tools": {
+      "bash": 54,
+      "edit": 19,
+      "grep": 1,
+      "preview": 28,
+      "proc": 1,
+      "read": 37,
+      "read_artifact": 2,
+      "todo": 2,
+      "tree": 2,
+      "write": 12
+    }
+  }
+}

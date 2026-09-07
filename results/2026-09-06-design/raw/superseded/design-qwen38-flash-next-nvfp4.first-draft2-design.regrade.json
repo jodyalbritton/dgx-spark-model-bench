@@ -1,0 +1,419 @@
+{
+  "label": "qwen38-flash-next-nvfp4",
+  "kind": "design-regrade",
+  "helm_sha": "38f69f9",
+  "helm_dirty": false,
+  "graded_utc": "2026-09-06T12:33:52Z",
+  "site": {
+    "render": {
+      "about": {
+        "dark": {
+          "desktop": {
+            "bg": "rgb(16, 20, 25)",
+            "contrast_checked": 25,
+            "contrast_fail_count": 0,
+            "contrast_fails": [],
+            "current": [
+              "/about"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 1423,
+            "icons": 3,
+            "icons_unresolved": [],
+            "inner_width": 1440,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 1440,
+            "text": "JobyCorp\nHome\nResearch\nAbout\nA local AI research company that publishes what it runs\n\nJobyCorp analyses and benchmarks local language models — models you can run on your own machine — on hardware it owns and operates. It is not a model vendor, a hosting service, or a benchmark for hire. The work is the research, and the research is shared with the community.\n\nWhy the work is shared\n\nA number that arrives without its method asks the reader to trust a stranger. Publishing the machine, the prompts, and the settings alongside every measurement gives a reader something to check, and something specific to disagree with. Both are worth more than confidence.\n\nLocal models are built by people who handed over their weights and their code. Measuring them on our own machines and keeping the results to ourselves would be the odd choice.\n\nWhat sharing looks like\nEvery run\nthe runs that went well and the runs that did not\nThe method\nthe harness, the prompts, and the settings behind every figure\nThe machine\nwhat a run needed, and the limits it hit\nThe records\nkept in full, never summarised down to a headline\n\nAll of it is on the research page, in the form it is kept in.\n\nJobyCorp\n\nJobyCorp runs local language models on its own hardware, measures them, and publishes the results in full.\n\nHome\nResearch\nAbout",
+            "theme": "dark",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "About · JobyCorp",
+            "toggle_visible": false
+          },
+          "phone": {
+            "bg": "rgb(16, 20, 25)",
+            "contrast_checked": 22,
+            "contrast_fail_count": 0,
+            "contrast_fails": [],
+            "current": [
+              "/about"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 1796,
+            "icons": 4,
+            "icons_unresolved": [],
+            "inner_width": 390,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 390,
+            "text": "JobyCorp\nA local AI research company that publishes what it runs\n\nJobyCorp analyses and benchmarks local language models — models you can run on your own machine — on hardware it owns and operates. It is not a model vendor, a hosting service, or a benchmark for hire. The work is the research, and the research is shared with the community.\n\nWhy the work is shared\n\nA number that arrives without its method asks the reader to trust a stranger. Publishing the machine, the prompts, and the settings alongside every measurement gives a reader something to check, and something specific to disagree with. Both are worth more than confidence.\n\nLocal models are built by people who handed over their weights and their code. Measuring them on our own machines and keeping the results to ourselves would be the odd choice.\n\nWhat sharing looks like\nEvery run\nthe runs that went well and the runs that did not\nThe method\nthe harness, the prompts, and the settings behind every figure\nThe machine\nwhat a run needed, and the limits it hit\nThe records\nkept in full, never summarised down to a headline\n\nAll of it is on the research page, in the form it is kept in.\n\nJobyCorp\n\nJobyCorp runs local language models on its own hardware, measures them, and publishes the results in full.\n\nHome\nResearch\nAbout",
+            "theme": "dark",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "About · JobyCorp",
+            "toggle_visible": true
+          }
+        },
+        "light": {
+          "desktop": {
+            "bg": "rgb(247, 249, 250)",
+            "contrast_checked": 25,
+            "contrast_fail_count": 0,
+            "contrast_fails": [],
+            "current": [
+              "/about"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 1423,
+            "icons": 3,
+            "icons_unresolved": [],
+            "inner_width": 1440,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 1440,
+            "text": "JobyCorp\nHome\nResearch\nAbout\nA local AI research company that publishes what it runs\n\nJobyCorp analyses and benchmarks local language models — models you can run on your own machine — on hardware it owns and operates. It is not a model vendor, a hosting service, or a benchmark for hire. The work is the research, and the research is shared with the community.\n\nWhy the work is shared\n\nA number that arrives without its method asks the reader to trust a stranger. Publishing the machine, the prompts, and the settings alongside every measurement gives a reader something to check, and something specific to disagree with. Both are worth more than confidence.\n\nLocal models are built by people who handed over their weights and their code. Measuring them on our own machines and keeping the results to ourselves would be the odd choice.\n\nWhat sharing looks like\nEvery run\nthe runs that went well and the runs that did not\nThe method\nthe harness, the prompts, and the settings behind every figure\nThe machine\nwhat a run needed, and the limits it hit\nThe records\nkept in full, never summarised down to a headline\n\nAll of it is on the research page, in the form it is kept in.\n\nJobyCorp\n\nJobyCorp runs local language models on its own hardware, measures them, and publishes the results in full.\n\nHome\nResearch\nAbout",
+            "theme": "light",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "About · JobyCorp",
+            "toggle_visible": false
+          },
+          "phone": {
+            "bg": "rgb(247, 249, 250)",
+            "contrast_checked": 22,
+            "contrast_fail_count": 0,
+            "contrast_fails": [],
+            "current": [
+              "/about"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 1796,
+            "icons": 4,
+            "icons_unresolved": [],
+            "inner_width": 390,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 390,
+            "text": "JobyCorp\nA local AI research company that publishes what it runs\n\nJobyCorp analyses and benchmarks local language models — models you can run on your own machine — on hardware it owns and operates. It is not a model vendor, a hosting service, or a benchmark for hire. The work is the research, and the research is shared with the community.\n\nWhy the work is shared\n\nA number that arrives without its method asks the reader to trust a stranger. Publishing the machine, the prompts, and the settings alongside every measurement gives a reader something to check, and something specific to disagree with. Both are worth more than confidence.\n\nLocal models are built by people who handed over their weights and their code. Measuring them on our own machines and keeping the results to ourselves would be the odd choice.\n\nWhat sharing looks like\nEvery run\nthe runs that went well and the runs that did not\nThe method\nthe harness, the prompts, and the settings behind every figure\nThe machine\nwhat a run needed, and the limits it hit\nThe records\nkept in full, never summarised down to a headline\n\nAll of it is on the research page, in the form it is kept in.\n\nJobyCorp\n\nJobyCorp runs local language models on its own hardware, measures them, and publishes the results in full.\n\nHome\nResearch\nAbout",
+            "theme": "light",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "About · JobyCorp",
+            "toggle_visible": true
+          }
+        }
+      },
+      "home": {
+        "dark": {
+          "desktop": {
+            "bg": "rgb(16, 20, 25)",
+            "contrast_checked": 35,
+            "contrast_fail_count": 0,
+            "contrast_fails": [],
+            "current": [
+              "/"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 2082,
+            "icons": 3,
+            "icons_unresolved": [],
+            "inner_width": 1440,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 1440,
+            "text": "JobyCorp\nHome\nResearch\nAbout\nWe benchmark local language models on the hardware we own.\n\nJobyCorp is an AI research company. We run local models on our own machines, measure what they do, and share the work with anyone who wants to read it.\n\nWhat every record carries\nModel\nthe model and its exact revision\nHardware\nthe machine the run was made on\nMethod\nthe harness, the prompts, the settings\nMeasured\nwhat was timed and counted\nData\nwhere the full result lives\nWhat we measure\n\nEvery model is measured on the same harness, so a run can be read against the runs beside it. We time how long a prompt waits for its first token, how fast the answer arrives, how much of the machine the model takes up, and how the whole thing behaves as the prompt grows.\n\ntime to first token  ms\ngeneration speed     tokens/s\npeak memory          GiB\nprompt length        tokens\n\n\nEach quantity leaves with its unit, so a figure is never the only thing there.\n\nHow a run is set up, repeated, and written out is on the research page.\n\nLocal models on local hardware\n\nEverything JobyCorp reports runs on machines we own and can see the front of. Nothing is measured through somebody else's endpoint, so no result depends on a server farm being quiet that afternoon.\n\nThe method travels with the number. A record names the model and its revision, the machine it ran on, the prompts it was given, the settings those prompts ran under, and the measurements taken — all of it, not the flattering parts.\n\nEvery result is published\n\nThe records, the method behind them, and the quantities they carry are on the research page.\n\nRead the research\nWho runs the machines\nJobyCorp\n\nJobyCorp runs local language models on its own hardware, measures them, and publishes the results in full.\n\nHome\nResearch\nAbout",
+            "theme": "dark",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "Home · JobyCorp",
+            "toggle_visible": false
+          },
+          "phone": {
+            "bg": "rgb(16, 20, 25)",
+            "contrast_checked": 32,
+            "contrast_fail_count": 0,
+            "contrast_fails": [],
+            "current": [
+              "/"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 2495,
+            "icons": 4,
+            "icons_unresolved": [],
+            "inner_width": 390,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 390,
+            "text": "JobyCorp\nWe benchmark local language models on the hardware we own.\n\nJobyCorp is an AI research company. We run local models on our own machines, measure what they do, and share the work with anyone who wants to read it.\n\nWhat every record carries\nModel\nthe model and its exact revision\nHardware\nthe machine the run was made on\nMethod\nthe harness, the prompts, the settings\nMeasured\nwhat was timed and counted\nData\nwhere the full result lives\nWhat we measure\n\nEvery model is measured on the same harness, so a run can be read against the runs beside it. We time how long a prompt waits for its first token, how fast the answer arrives, how much of the machine the model takes up, and how the whole thing behaves as the prompt grows.\n\ntime to first token  ms\ngeneration speed     tokens/s\npeak memory          GiB\nprompt length        tokens\n\n\nEach quantity leaves with its unit, so a figure is never the only thing there.\n\nHow a run is set up, repeated, and written out is on the research page.\n\nLocal models on local hardware\n\nEverything JobyCorp reports runs on machines we own and can see the front of. Nothing is measured through somebody else's endpoint, so no result depends on a server farm being quiet that afternoon.\n\nThe method travels with the number. A record names the model and its revision, the machine it ran on, the prompts it was given, the settings those prompts ran under, and the measurements taken — all of it, not the flattering parts.\n\nEvery result is published\n\nThe records, the method behind them, and the quantities they carry are on the research page.\n\nRead the research\nWho runs the machines\nJobyCorp\n\nJobyCorp runs local language models on its own hardware, measures them, and publishes the results in full.\n\nHome\nResearch\nAbout",
+            "theme": "dark",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "Home · JobyCorp",
+            "toggle_visible": true
+          }
+        },
+        "light": {
+          "desktop": {
+            "bg": "rgb(247, 249, 250)",
+            "contrast_checked": 35,
+            "contrast_fail_count": 0,
+            "contrast_fails": [],
+            "current": [
+              "/"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 2082,
+            "icons": 3,
+            "icons_unresolved": [],
+            "inner_width": 1440,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 1440,
+            "text": "JobyCorp\nHome\nResearch\nAbout\nWe benchmark local language models on the hardware we own.\n\nJobyCorp is an AI research company. We run local models on our own machines, measure what they do, and share the work with anyone who wants to read it.\n\nWhat every record carries\nModel\nthe model and its exact revision\nHardware\nthe machine the run was made on\nMethod\nthe harness, the prompts, the settings\nMeasured\nwhat was timed and counted\nData\nwhere the full result lives\nWhat we measure\n\nEvery model is measured on the same harness, so a run can be read against the runs beside it. We time how long a prompt waits for its first token, how fast the answer arrives, how much of the machine the model takes up, and how the whole thing behaves as the prompt grows.\n\ntime to first token  ms\ngeneration speed     tokens/s\npeak memory          GiB\nprompt length        tokens\n\n\nEach quantity leaves with its unit, so a figure is never the only thing there.\n\nHow a run is set up, repeated, and written out is on the research page.\n\nLocal models on local hardware\n\nEverything JobyCorp reports runs on machines we own and can see the front of. Nothing is measured through somebody else's endpoint, so no result depends on a server farm being quiet that afternoon.\n\nThe method travels with the number. A record names the model and its revision, the machine it ran on, the prompts it was given, the settings those prompts ran under, and the measurements taken — all of it, not the flattering parts.\n\nEvery result is published\n\nThe records, the method behind them, and the quantities they carry are on the research page.\n\nRead the research\nWho runs the machines\nJobyCorp\n\nJobyCorp runs local language models on its own hardware, measures them, and publishes the results in full.\n\nHome\nResearch\nAbout",
+            "theme": "light",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "Home · JobyCorp",
+            "toggle_visible": false
+          },
+          "phone": {
+            "bg": "rgb(247, 249, 250)",
+            "contrast_checked": 32,
+            "contrast_fail_count": 0,
+            "contrast_fails": [],
+            "current": [
+              "/"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 2495,
+            "icons": 4,
+            "icons_unresolved": [],
+            "inner_width": 390,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 390,
+            "text": "JobyCorp\nWe benchmark local language models on the hardware we own.\n\nJobyCorp is an AI research company. We run local models on our own machines, measure what they do, and share the work with anyone who wants to read it.\n\nWhat every record carries\nModel\nthe model and its exact revision\nHardware\nthe machine the run was made on\nMethod\nthe harness, the prompts, the settings\nMeasured\nwhat was timed and counted\nData\nwhere the full result lives\nWhat we measure\n\nEvery model is measured on the same harness, so a run can be read against the runs beside it. We time how long a prompt waits for its first token, how fast the answer arrives, how much of the machine the model takes up, and how the whole thing behaves as the prompt grows.\n\ntime to first token  ms\ngeneration speed     tokens/s\npeak memory          GiB\nprompt length        tokens\n\n\nEach quantity leaves with its unit, so a figure is never the only thing there.\n\nHow a run is set up, repeated, and written out is on the research page.\n\nLocal models on local hardware\n\nEverything JobyCorp reports runs on machines we own and can see the front of. Nothing is measured through somebody else's endpoint, so no result depends on a server farm being quiet that afternoon.\n\nThe method travels with the number. A record names the model and its revision, the machine it ran on, the prompts it was given, the settings those prompts ran under, and the measurements taken — all of it, not the flattering parts.\n\nEvery result is published\n\nThe records, the method behind them, and the quantities they carry are on the research page.\n\nRead the research\nWho runs the machines\nJobyCorp\n\nJobyCorp runs local language models on its own hardware, measures them, and publishes the results in full.\n\nHome\nResearch\nAbout",
+            "theme": "light",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "Home · JobyCorp",
+            "toggle_visible": true
+          }
+        }
+      },
+      "research": {
+        "dark": {
+          "desktop": {
+            "bg": "rgb(16, 20, 25)",
+            "contrast_checked": 37,
+            "contrast_fail_count": 0,
+            "contrast_fails": [],
+            "current": [
+              "/research"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 2066,
+            "icons": 3,
+            "icons_unresolved": [],
+            "inner_width": 1440,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 1440,
+            "text": "JobyCorp\nHome\nResearch\nAbout\nHow the work is done, and what it leaves behind\n\nJobyCorp publishes run records. Each one carries a measurement and everything needed to read it: the machine, the method, the quantities, and the units they came in. This page is that method, written out.\n\nWhat we publish\n\nA record is a result with its surroundings attached. It is written as the run happens, not reconstructed afterwards, and it leaves in the form it was kept in.\n\nModel\nwhich model ran, at the revision it was pulled at\nHardware\nthe machine it ran on, in the configuration it ran in\nMethod\nthe harness, the prompts, and every setting the run depended on\nMeasured\nthe quantities timed and counted, each with its unit\nData\nwhere the full record lives and how to read it\n\nA run that went badly is published on the same terms as one that went well. A result only carries weight if the failures beside it do too.\n\nWhat we measure\n\nThe same quantities for every model, so a run can be read against the runs beside it. Timing runs from the request to the last token. Memory is the peak the model reached while it was working, not the size of its weights.\n\nPrompt length is measured alongside them, because a figure taken on a short prompt says little about a long one. Where a quantity cannot be taken fairly, it is left out and the reason is written in the record.\n\nHow a run is published\n\nEvery run goes through the same four steps, in this order.\n\nSet up\nOne model, one machine, one harness. The prompts and the settings are chosen and written down before anything runs.\nRun\nThe model is given those prompts and timed, from the request to the last token.\nRepeat\nThe run is done more than once. Every repeat is kept, so the record shows what varied rather than the best of it.\nPublish\nThe record goes out with its method, so a reader can check the work or argue with it.\nJobyCorp\n\nJobyCorp runs local language models on its own hardware, measures them, and publishes the results in full.\n\nHome\nResearch\nAbout",
+            "theme": "dark",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "Research · JobyCorp",
+            "toggle_visible": false
+          },
+          "phone": {
+            "bg": "rgb(16, 20, 25)",
+            "contrast_checked": 34,
+            "contrast_fail_count": 0,
+            "contrast_fails": [],
+            "current": [
+              "/research"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 2658,
+            "icons": 4,
+            "icons_unresolved": [],
+            "inner_width": 390,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 390,
+            "text": "JobyCorp\nHow the work is done, and what it leaves behind\n\nJobyCorp publishes run records. Each one carries a measurement and everything needed to read it: the machine, the method, the quantities, and the units they came in. This page is that method, written out.\n\nWhat we publish\n\nA record is a result with its surroundings attached. It is written as the run happens, not reconstructed afterwards, and it leaves in the form it was kept in.\n\nModel\nwhich model ran, at the revision it was pulled at\nHardware\nthe machine it ran on, in the configuration it ran in\nMethod\nthe harness, the prompts, and every setting the run depended on\nMeasured\nthe quantities timed and counted, each with its unit\nData\nwhere the full record lives and how to read it\n\nA run that went badly is published on the same terms as one that went well. A result only carries weight if the failures beside it do too.\n\nWhat we measure\n\nThe same quantities for every model, so a run can be read against the runs beside it. Timing runs from the request to the last token. Memory is the peak the model reached while it was working, not the size of its weights.\n\nPrompt length is measured alongside them, because a figure taken on a short prompt says little about a long one. Where a quantity cannot be taken fairly, it is left out and the reason is written in the record.\n\nHow a run is published\n\nEvery run goes through the same four steps, in this order.\n\nSet up\nOne model, one machine, one harness. The prompts and the settings are chosen and written down before anything runs.\nRun\nThe model is given those prompts and timed, from the request to the last token.\nRepeat\nThe run is done more than once. Every repeat is kept, so the record shows what varied rather than the best of it.\nPublish\nThe record goes out with its method, so a reader can check the work or argue with it.\nJobyCorp\n\nJobyCorp runs local language models on its own hardware, measures them, and publishes the results in full.\n\nHome\nResearch\nAbout",
+            "theme": "dark",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "Research · JobyCorp",
+            "toggle_visible": true
+          }
+        },
+        "light": {
+          "desktop": {
+            "bg": "rgb(247, 249, 250)",
+            "contrast_checked": 37,
+            "contrast_fail_count": 0,
+            "contrast_fails": [],
+            "current": [
+              "/research"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 2066,
+            "icons": 3,
+            "icons_unresolved": [],
+            "inner_width": 1440,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 1440,
+            "text": "JobyCorp\nHome\nResearch\nAbout\nHow the work is done, and what it leaves behind\n\nJobyCorp publishes run records. Each one carries a measurement and everything needed to read it: the machine, the method, the quantities, and the units they came in. This page is that method, written out.\n\nWhat we publish\n\nA record is a result with its surroundings attached. It is written as the run happens, not reconstructed afterwards, and it leaves in the form it was kept in.\n\nModel\nwhich model ran, at the revision it was pulled at\nHardware\nthe machine it ran on, in the configuration it ran in\nMethod\nthe harness, the prompts, and every setting the run depended on\nMeasured\nthe quantities timed and counted, each with its unit\nData\nwhere the full record lives and how to read it\n\nA run that went badly is published on the same terms as one that went well. A result only carries weight if the failures beside it do too.\n\nWhat we measure\n\nThe same quantities for every model, so a run can be read against the runs beside it. Timing runs from the request to the last token. Memory is the peak the model reached while it was working, not the size of its weights.\n\nPrompt length is measured alongside them, because a figure taken on a short prompt says little about a long one. Where a quantity cannot be taken fairly, it is left out and the reason is written in the record.\n\nHow a run is published\n\nEvery run goes through the same four steps, in this order.\n\nSet up\nOne model, one machine, one harness. The prompts and the settings are chosen and written down before anything runs.\nRun\nThe model is given those prompts and timed, from the request to the last token.\nRepeat\nThe run is done more than once. Every repeat is kept, so the record shows what varied rather than the best of it.\nPublish\nThe record goes out with its method, so a reader can check the work or argue with it.\nJobyCorp\n\nJobyCorp runs local language models on its own hardware, measures them, and publishes the results in full.\n\nHome\nResearch\nAbout",
+            "theme": "light",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "Research · JobyCorp",
+            "toggle_visible": false
+          },
+          "phone": {
+            "bg": "rgb(247, 249, 250)",
+            "contrast_checked": 34,
+            "contrast_fail_count": 0,
+            "contrast_fails": [],
+            "current": [
+              "/research"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 2658,
+            "icons": 4,
+            "icons_unresolved": [],
+            "inner_width": 390,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 390,
+            "text": "JobyCorp\nHow the work is done, and what it leaves behind\n\nJobyCorp publishes run records. Each one carries a measurement and everything needed to read it: the machine, the method, the quantities, and the units they came in. This page is that method, written out.\n\nWhat we publish\n\nA record is a result with its surroundings attached. It is written as the run happens, not reconstructed afterwards, and it leaves in the form it was kept in.\n\nModel\nwhich model ran, at the revision it was pulled at\nHardware\nthe machine it ran on, in the configuration it ran in\nMethod\nthe harness, the prompts, and every setting the run depended on\nMeasured\nthe quantities timed and counted, each with its unit\nData\nwhere the full record lives and how to read it\n\nA run that went badly is published on the same terms as one that went well. A result only carries weight if the failures beside it do too.\n\nWhat we measure\n\nThe same quantities for every model, so a run can be read against the runs beside it. Timing runs from the request to the last token. Memory is the peak the model reached while it was working, not the size of its weights.\n\nPrompt length is measured alongside them, because a figure taken on a short prompt says little about a long one. Where a quantity cannot be taken fairly, it is left out and the reason is written in the record.\n\nHow a run is published\n\nEvery run goes through the same four steps, in this order.\n\nSet up\nOne model, one machine, one harness. The prompts and the settings are chosen and written down before anything runs.\nRun\nThe model is given those prompts and timed, from the request to the last token.\nRepeat\nThe run is done more than once. Every repeat is kept, so the record shows what varied rather than the best of it.\nPublish\nThe record goes out with its method, so a reader can check the work or argue with it.\nJobyCorp\n\nJobyCorp runs local language models on its own hardware, measures them, and publishes the results in full.\n\nHome\nResearch\nAbout",
+            "theme": "light",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "Research · JobyCorp",
+            "toggle_visible": true
+          }
+        }
+      }
+    },
+    "screenshots": {
+      "qwen38-flash-next-nvfp4-regrade-about-dark-desktop.png": "/Users/jody/benchmarks/results/2026-09-06-design/screenshots/qwen38-flash-next-nvfp4-regrade-about-dark-desktop.png",
+      "qwen38-flash-next-nvfp4-regrade-about-dark-phone.png": "/Users/jody/benchmarks/results/2026-09-06-design/screenshots/qwen38-flash-next-nvfp4-regrade-about-dark-phone.png",
+      "qwen38-flash-next-nvfp4-regrade-about-light-desktop.png": "/Users/jody/benchmarks/results/2026-09-06-design/screenshots/qwen38-flash-next-nvfp4-regrade-about-light-desktop.png",
+      "qwen38-flash-next-nvfp4-regrade-about-light-phone.png": "/Users/jody/benchmarks/results/2026-09-06-design/screenshots/qwen38-flash-next-nvfp4-regrade-about-light-phone.png",
+      "qwen38-flash-next-nvfp4-regrade-home-dark-desktop.png": "/Users/jody/benchmarks/results/2026-09-06-design/screenshots/qwen38-flash-next-nvfp4-regrade-home-dark-desktop.png",
+      "qwen38-flash-next-nvfp4-regrade-home-dark-phone.png": "/Users/jody/benchmarks/results/2026-09-06-design/screenshots/qwen38-flash-next-nvfp4-regrade-home-dark-phone.png",
+      "qwen38-flash-next-nvfp4-regrade-home-light-desktop.png": "/Users/jody/benchmarks/results/2026-09-06-design/screenshots/qwen38-flash-next-nvfp4-regrade-home-light-desktop.png",
+      "qwen38-flash-next-nvfp4-regrade-home-light-phone.png": "/Users/jody/benchmarks/results/2026-09-06-design/screenshots/qwen38-flash-next-nvfp4-regrade-home-light-phone.png",
+      "qwen38-flash-next-nvfp4-regrade-research-dark-desktop.png": "/Users/jody/benchmarks/results/2026-09-06-design/screenshots/qwen38-flash-next-nvfp4-regrade-research-dark-desktop.png",
+      "qwen38-flash-next-nvfp4-regrade-research-dark-phone.png": "/Users/jody/benchmarks/results/2026-09-06-design/screenshots/qwen38-flash-next-nvfp4-regrade-research-dark-phone.png",
+      "qwen38-flash-next-nvfp4-regrade-research-light-desktop.png": "/Users/jody/benchmarks/results/2026-09-06-design/screenshots/qwen38-flash-next-nvfp4-regrade-research-light-desktop.png",
+      "qwen38-flash-next-nvfp4-regrade-research-light-phone.png": "/Users/jody/benchmarks/results/2026-09-06-design/screenshots/qwen38-flash-next-nvfp4-regrade-research-light-phone.png"
+    },
+    "checks": {
+      "compile": {
+        "pass": true,
+        "detail": ""
+      },
+      "lint": {
+        "pass": true,
+        "detail": "JobyKit lint — BenchappWeb.DesignManifest |  |   ✓ Clean. Wrapper contract holds across the manifest."
+      },
+      "test": {
+        "pass": true,
+        "detail": ".............. | Finished in 0.1 seconds (0.1s async, 0.00s sync) | 14 tests, 0 failures"
+      },
+      "routes": {
+        "pass": true,
+        "detail": "12 page loads, each with #main-nav"
+      },
+      "boots": {
+        "pass": true,
+        "detail": "GET / 200 with a nav"
+      },
+      "layout_replaced": {
+        "pass": true,
+        "detail": "the generator's stock nav+footer markers are gone from Layouts.app"
+      },
+      "composite_registered": {
+        "pass": true,
+        "detail": "2 app component(s) registered beyond the generator's"
+      },
+      "theme_toggle_mobile": {
+        "pass": true,
+        "detail": "at 390 px: theme-toggle present true, visible true"
+      },
+      "mobile_nav": {
+        "pass": true,
+        "detail": "at 390 px: nav-toggle visible true, nav links visible true"
+      },
+      "dark_theme": {
+        "pass": true,
+        "detail": "data-theme \"light\" → \"dark\", body bg rgb(247, 249, 250) → rgb(16, 20, 25)"
+      },
+      "page_tests": {
+        "pass": true,
+        "detail": "14 tests ran, 4 are the generator's (a render test per new page asked)"
+      },
+      "composite_reused": {
+        "pass": true,
+        "detail": "used on two or more pages: record_list, specimen"
+      },
+      "theme_pair": {
+        "pass": true,
+        "detail": "light primary oklch(45% 0.12 258) (want L≈45.0 h≈258.0); dark base-100 oklch(19% 0.012 250) (want L ≤ 20.0)"
+      },
+      "contrast": {
+        "pass": true,
+        "detail": "370 text elements ≥ WCAG AA across pages, themes, widths"
+      },
+      "demo_gone": {
+        "pass": true,
+        "detail": "no link to or mention of the kit's demo pages"
+      },
+      "nav_current": {
+        "pass": true,
+        "detail": "aria-current=page on exactly the current link, all three pages"
+      },
+      "no_overflow": {
+        "pass": true,
+        "detail": "no horizontal overflow at 390 px on any page or theme"
+      },
+      "icons_resolve": {
+        "pass": true,
+        "detail": "42 heroicon(s), all resolved"
+      },
+      "copy_clean": {
+        "pass": true,
+        "detail": "no kit, framework, or task words in the rendered copy"
+      }
+    },
+    "scores": {
+      "tests_total": 14,
+      "tests_added": 10,
+      "lint_warnings": 0,
+      "components_added": 2,
+      "page_height": 2082,
+      "composites_reused": 2
+    },
+    "checks_passed": 19,
+    "checks_total": 19
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "key": {
+    "A": "qwen38-flash-next-nvfp4",
+    "B": "glm53-flash-exl3",
+    "C": "dsv4-flash-vision-exp"
+  },
+  "sealed_utc": "2026-09-07T00:20:36Z"
+}

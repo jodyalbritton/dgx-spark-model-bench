@@ -25,6 +25,12 @@ Every row below ran on one harness; the constants are written into each run's JS
 
 Checks with `—` did not exist on that run's harness. Screenshots per app: `screenshots/<label>-{desktop-light,desktop-dark,full-light,mobile-light,mobile-full-light,desktop-light-after-12s}.png`.
 
+Oracle provenance — a later oracle fixed a harness mistake, and the row above is the app under that oracle (`raw/coding-<label>.regrade.json`; the run-time file is untouched):
+
+- **glm53-flash-exl3** — graded under hidden tests `6ed2e858` on helm `a2b0d51` (run-time oracle `6ccd80bc`); no check changed
+- **qwen38-flash-next-nvfp4** — graded under hidden tests `6ed2e858` on helm `a2b0d51` (run-time oracle `6ccd80bc`); no check changed
+- **dsv4-flash-vision-exp** — graded under hidden tests `6ed2e858` on helm `a2b0d51` (run-time oracle `6ccd80bc`); no check changed
+
 ### Speed
 
 | model | fixtures wall (s) | median fixture (s) | app wall (s) | app rounds | app tool calls | app TTFT (s) | app completion tok/s |

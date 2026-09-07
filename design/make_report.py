@@ -16,6 +16,8 @@ def fmt(v, d=1):
 def load():
     runs = {}
     for f in sorted(glob.glob(f"{RAW}/*.json")):
+        base = os.path.basename(f)
+        if base.startswith(("coding-", "design-")) or base.endswith(".regrade.json"): continue  # helm benches load below
         r = json.load(open(f))
         if str(r.get("kind", "")).startswith("coding"):
             continue  # coding rows and their re-grades render in coding_section()
@@ -43,6 +45,29 @@ def load_coding():
                         screenshots=a.get("screenshots") or r["app"].get("screenshots"))
         r["summary"]["app_checks_passed"] = a["checks_passed"]; r["summary"]["app_checks_total"] = a["checks_total"]
     return [runs[k] for k in ORDER if k in runs] + [r for k, r in runs.items() if k not in ORDER]
+
+
+def load_design():
+    runs = {}
+    for f in sorted(glob.glob(f"{RAW}/design-*.json")):
+        if f.endswith(".regrade.json"): continue
+        r = json.load(open(f)); runs[r["label"]] = r
+    for label, r in runs.items():
+        f = f"{RAW}/design-{label}.regrade.json"
+        if os.path.exists(f) and r.get("site"):
+            rg = json.load(open(f)); a = rg["site"]
+            r["as_graded"] = {"checks": r["site"].get("checks", {})}; r["regrade"] = rg
+            r["site"].update(checks=a["checks"], scores=a.get("scores"), checks_passed=a["checks_passed"], checks_total=a["checks_total"])
+    return [runs[k] for k in ORDER if k in runs] + [r for k, r in runs.items() if k not in ORDER]
+
+
+def load_review():
+    """DESIGN_REVIEW scores, if the reviewer wrote review.json: {label: {line: mean, ...}}; and the vote, if vote.json exists."""
+    out = {}
+    for name in ("review", "vote"):
+        f = f"{RAW}/review/{name}.json"
+        out[name] = json.load(open(f)) if os.path.exists(f) else None
+    return out
 
 
 def secs(ms):
@@ -167,6 +192,85 @@ def server_line(r):
             f"engine {s.get('engine_build') or (r.get('server',{}).get('version') or {}).get('version','?')} · "
             f"image `{prof.get('image','?')}` · ctx {s.get('ctx','?')} · parallel {s.get('parallel','?')} · tp {s.get('tp_size','?')}")
 
+GATES_STATIC = ["compile", "test", "lint", "layout_replaced", "page_tests", "composite_registered", "composite_reused", "theme_pair"]
+GATES_RENDERED = ["boots", "routes", "demo_gone", "nav_current", "no_overflow", "contrast", "icons_resolve", "copy_clean", "mobile_nav", "theme_toggle_mobile", "dark_theme"]
+RUBRIC = ["Identity", "Hierarchy and rhythm", "Type", "Colour and themes", "Phone", "Copy", "Restraint", "Composite"]
+
+
+def design_section(L):
+    runs = load_design()
+    if not runs:
+        return
+    L.append("\n## Front-end design (helm design bench)\n")
+    L.append("Harness: `Helm.Evals.Design` — one brief (the JobyCorp website), one `DESIGN.md`, a prepared JobyKit base per round, one session per model at its ceiling effort. "
+             "Two layers, never blended: **gates** are mechanical, pass/fail, decided by the harness; **ranking** is the rubric scored by the reviewer from anonymised composites (three shuffled passes, mean), and the public vote on the same images. "
+             "Protocol: `design/DESIGN_BENCH.md`.\n")
+    L.append("Every row ran on one harness:\n")
+    for r in runs:
+        h = r.get("harness") or {}
+        L.append(f"- **{r['label']}** — helm `{r.get('helm_sha','?')}`{' (dirty tree)' if r.get('helm_dirty') else ''}, brief `{h.get('prompt_sha','?')}`, DESIGN.md `{h.get('design_sha','?')}`, base `{h.get('base_sha','?')}` (joby_kit {h.get('joby_kit_version','?')}), "
+                 f"effort {h.get('effort','?')}, vision {h.get('vision_model','?')}, cap {h.get('site_rounds_cap','?')} rounds / {secs(h.get('site_deadline_ms'))} s, {r['started_utc']} → {r.get('finished_utc') or '(running)'}")
+    L.append("")
+    L.append("### Gates\n")
+    L.append("| model | gates | static (8) | rendered (11) | scores |")
+    L.append("|---|---:|---|---|---|")
+    for r in runs:
+        site = r.get("site") or {}; ch = site.get("checks", {}); sc = site.get("scores") or {}
+        def glyphs(keys):
+            return " · ".join("✅" if ch.get(k, {}).get("pass") else ("❌" if k in ch else "—") for k in keys)
+        scores = f"tests +{sc.get('tests_added','—')} · components +{sc.get('components_added','—')} · reused {sc.get('composites_reused','—')} · lint warnings {sc.get('lint_warnings','—')}" if sc else "—"
+        L.append(f"| {r['label']} | {site.get('checks_passed','—')}/{site.get('checks_total','—')} | {glyphs(GATES_STATIC)} | {glyphs(GATES_RENDERED)} | {scores} |")
+    L.append("")
+    L.append("Static gates, in order: " + ", ".join(GATES_STATIC) + ". Rendered gates, in order: " + ", ".join(GATES_RENDERED) + ".")
+    L.append("")
+    fails = []
+    for r in runs:
+        ch = (r.get("site") or {}).get("checks", {})
+        for k in GATES_STATIC + GATES_RENDERED:
+            v = ch.get(k)
+            if v and not v.get("pass"):
+                fails.append(f"- **{r['label']}** `{k}`: {' '.join(str(v.get('detail','')).split())[:240].replace('|', '·')}")
+    if fails:
+        L.append("Failed gates, as the harness saw them:\n"); L.extend(fails); L.append("")
+    regraded = [r for r in runs if r.get("regrade")]
+    if regraded:
+        L.append("Oracle provenance — the row is the site under the later gates (`raw/design-<label>.regrade.json`; the run-time file is untouched):\n")
+        for r in regraded:
+            before = r["as_graded"]["checks"]; after = r["regrade"]["site"]["checks"]
+            fixed = [k for k in sorted(after) if k in before and not before[k].get("pass") and after[k].get("pass")]
+            broke = [k for k in sorted(after) if k in before and before[k].get("pass") and not after[k].get("pass")]
+            L.append(f"- **{r['label']}** — helm `{r['regrade'].get('helm_sha','?')}`" + (f"; corrected: {', '.join(fixed)}" if fixed else "") + (f"; regressed: {', '.join(broke)}" if broke else "") + ("; no check changed" if not fixed and not broke else ""))
+        L.append("")
+    review = load_review()
+    L.append("### Ranking\n")
+    if review["review"]:
+        rv = review["review"]; vote = review["vote"] or {}
+        L.append("| model | " + " | ".join(RUBRIC) + " | mean | X vote |")
+        L.append("|---|" + "---:|" * (len(RUBRIC) + 2))
+        for r in runs:
+            row = rv.get(r["label"]) or {}
+            vals = [row.get(line) for line in RUBRIC]
+            mean = sum(v for v in vals if v is not None) / max(1, len([v for v in vals if v is not None])) if any(v is not None for v in vals) else None
+            L.append(f"| {r['label']} | " + " | ".join(f"{v:.1f}" if isinstance(v, (int, float)) else "—" for v in vals) + f" | {mean:.2f} | {vote.get(r['label'], '—')} |" if mean is not None else f"| {r['label']} | " + " | ".join("—" for _ in RUBRIC) + f" | — | {vote.get(r['label'], '—')} |")
+        L.append("")
+        L.append("Rubric 1–5 per line, three shuffled passes, mean; the reviewer's prose is `DESIGN_REVIEW.md`. The X vote is recorded when it closes (`raw/review/vote.json`).")
+    else:
+        L.append("_Not yet reviewed: `Helm.Evals.Design.review_pack()` seals the key and renders `screenshots/review/{A,B,C}.png`; the reviewer writes `DESIGN_REVIEW.md` and `raw/review/review.json` (`{label: {line: score}}`) after the key is opened; `raw/review/vote.json` (`{label: votes}`) records the X vote._")
+    L.append("")
+    L.append("### Speed and tokens\n")
+    L.append("| model | outcome (ending, nudges) | rounds | wall (s) | tool calls | uncached prompt | completion | reasoning | tools |")
+    L.append("|---|---|---:|---:|---:|---:|---:|---:|---|")
+    for r in runs:
+        site = r.get("site") or {}
+        outcome = site.get("outcome", "—") + (f" ({site['ending']}, {site.get('nudges', 0)} nudge{'s' if site.get('nudges', 0) != 1 else ''})" if site.get("ending") else "")
+        if site.get("last_call"):
+            lc = site["last_call"]; outcome += f"; last call {lc.get('outcome')} in {lc.get('rounds')} round{'s' if lc.get('rounds') != 1 else ''}"
+        tools = ", ".join(f"{k} {v}" for k, v in sorted((site.get("tools") or {}).items(), key=lambda kv: -kv[1]))
+        L.append(f"| {r['label']} | {outcome} | {site.get('rounds','—')} | {secs(site.get('wall_ms'))} | {site.get('tool_calls','—')} | {site.get('uncached_prompt_tokens') if site.get('uncached_prompt_tokens') is not None else 'not reported'} | {site.get('completion_tokens','—')} | {site.get('reasoning_tokens','—')} | {tools or '—'} |")
+    L.append("")
+    L.append("Screenshots per site: `screenshots/<label>-{home,research,about}-{light,dark}-{desktop,phone}.png`; the anonymised composites in `screenshots/review/`.")
+
+
 def main():
     runs = load(); L = []
     round_name = os.path.basename(os.path.realpath(ROUND))
@@ -232,6 +336,7 @@ def main():
     # finish before Phase A in a round (TESTPLAN §6: no round-specific
     # strings here; notes live in the per-run JSON `notes` field)
     coding_section(L)
+    design_section(L)
     notes = [(r["label"], r["notes"]) for r in runs if r.get("notes")]
     if notes:
         L.append("\n## Notes\n")
