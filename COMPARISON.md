@@ -3,10 +3,11 @@
 **GLM-5.3-Flash · Qwen3.8-Flash-Next · DeepSeek-V4-Flash, doing real coding
 work with tools**
 
-Run 2026-09-05/06 on a pair of DGX Sparks: the same task twice per model,
-once at the lowest reasoning effort and once at the highest. This is a
-first look; a wider set of benchmarks pushing all three harder is in
-progress.
+Run 2026-09-05 to 09-07 on a pair of DGX Sparks: the same task three
+times per model — at the lowest reasoning effort, at the highest, and
+once more at the lowest on a harness that hands the models their own eyes
+and a browser they can drive. This is a first look; a wider set of
+benchmarks pushing all three harder is in progress.
 
 ## What was measured, and why it is different
 
@@ -39,13 +40,28 @@ through two kinds of work, graded entirely by machines:
 
 The agent loop keeps each model's reasoning and returns it on the
 following tool calls within a turn, as the vendors specify for tool use.
-Each model ran the whole thing twice: once at reasoning effort `low`, the
-one grade every chat template honours literally, and once at its maximum
-(`max` for GLM and DeepSeek; Qwen's template tops out at `xhigh`, so that
-is what it received). The `max` runs had a larger round budget (150 rounds
-and 90 minutes against 128 and 60) and one extra sentence in the prompt:
-when your own tests and `mix precommit` pass, reply; do not re-verify. One
-run per model per effort. No LLM judge anywhere.
+Each model ran the whole thing twice on the same harness: once at
+reasoning effort `low`, the one grade every chat template honours
+literally, and once at its maximum (`max` for GLM and DeepSeek; Qwen's
+template tops out at `xhigh`, so that is what it received). The `max` runs
+had a larger round budget (150 rounds and 90 minutes against 128 and 60)
+and one extra sentence in the prompt: when your own tests and `mix
+precommit` pass, reply; do not re-verify. One run per model per effort. No
+LLM judge anywhere.
+
+**A third run, on a second harness.** After those two, the agent loop
+changed in ways that matter to a model at work: tool results arrive
+verbatim under a window-scaled ceiling instead of paraphrased by a
+summarising tier, images ride the model's own wire so it can look at a
+screenshot with its own eyes, the browser gained hands (click, type,
+scroll, wait, evaluate, viewport, colour scheme), a dev server became a
+supervised job with a "listening" note and a `wait`, destructive-looking
+shell commands need an approval an unattended seat cannot give, and every
+request ends with a countdown of the remaining budget. Each model ran the
+task once more at `low` on that harness. Those rows answer a different
+question — when you give a model tools, does it use them — and they are
+kept in their own section and their own table, because they are not a
+continuation of the first two.
 
 **Hardware and builds.** Two DGX Sparks, tensor-parallel 2 over the
 ConnectX link, one model at a time.
@@ -329,6 +345,73 @@ each round's `screenshots/`.
 
 Click any capture for the full page.
 
+## When you give them tools, do they use them?
+
+The third run put a browser on the wire that each model could drive and
+look at with its own eyes, and gave it a supervised dev server and
+verbatim file contents. Same task, same `low` effort, one run each.
+
+| round 6, effort `low`, second harness | GLM-5.3-Flash | Qwen3.8-Flash-Next | DeepSeek-V4-Flash |
+|---|---:|---:|---:|
+| bug fixes | 16/17 | 16/17 | **17/17** |
+| application checks | **19/19** | 16/19 | **19/19** |
+| app rounds / wall | **62 / 14.1 min** | 105 / 35.8 min | 105 / 34.5 min |
+| first write → tests green → done | **12 → 60 → 62** | 25 → 92 → 105 | 23 → 103 → 105 |
+| browser calls (`preview`) | **0** | 12 | 17 |
+| supervised server jobs | 4 | 11 | 6 |
+| failed tool calls per 100 | **1.4** | 2.3 | 2.9 |
+| time spent inside tools, share of wall | 5.1% | **1.0%** | 2.5% |
+| visual defects on the shipped page | 4 | **0** | **0** |
+| copy that names the kit or invents a number | 1 | 2 | **0** |
+
+**DeepSeek used them as intended, and it shows on the page.** After the
+build it spent fifteen rounds looking at its own site, fixing what it saw,
+then went green and stopped. Both of its lists carry an empty state for the
+first time in four rounds of this task; the hero is denser and the page is
+shorter with less dead space. It cost ten minutes more than the same model
+took on the previous harness, for the same 19/19.
+
+**GLM never picked them up, and shipped the fastest complete app in the
+whole benchmark.** Sixty-two rounds, fourteen minutes, 17.5k output
+tokens, green at round 60, done at 62, one failed tool call in seventy-four,
+zero browser calls. It also shipped four things a single look would have
+caught: an icon name that does not exist in the installed set (a blank tile),
+two headings sitting over empty lists with no empty state, and desktop nav
+links set four pixels apart so they read as one run of words. All nineteen
+checks pass, because no check looks at any of that. This is the clearest
+evidence in the benchmark for what eyes buy: seventeen looks, zero visual
+defects; zero looks, four.
+
+**Qwen picked them up late and put them down when it read the clock.**
+Seven browser rounds after its tests first went green, two of which led to
+an edit; then its reasoning at round 94 says "33 of 60 min used; visual
+verification is a nice-to-have", and it went for the summary. Its page has
+no visual defects. Its three lost checks are a decision made during the
+build and invisible to any screenshot: it set the countdown interval to one
+hour in the test configuration so its own tests could step the timer by
+hand, and the hidden tests, which wait for the real five-second tick, saw a
+countdown that never moved. The live site ticks. It changed the behaviour
+under test, which is the kind of thing a reviewer rejects and a checklist
+should name.
+
+<table>
+<tr><th>GLM — Fernline</th><th>Qwen — Cadence</th><th>DeepSeek — Aster</th></tr>
+<tr>
+<td><a href="results/2026-09-07/screenshots/glm53-flash-exl3-full-light.png"><img src="results/2026-09-07/screenshots/glm53-flash-exl3-desktop-light.png" alt="GLM round 6: Fernline" width="290"></a></td>
+<td><a href="results/2026-09-07/screenshots/qwen38-flash-next-nvfp4-full-light.png"><img src="results/2026-09-07/screenshots/qwen38-flash-next-nvfp4-desktop-light.png" alt="Qwen round 6: Cadence" width="290"></a></td>
+<td><a href="results/2026-09-07/screenshots/dsv4-flash-vision-exp-full-light.png"><img src="results/2026-09-07/screenshots/dsv4-flash-vision-exp-desktop-light.png" alt="DeepSeek round 6: Aster" width="290"></a></td>
+</tr>
+</table>
+
+Two things this run did not change. The bug-fix sheet moved by one in each
+direction and for reasons that have nothing to do with tools: GLM, thinking
+almost not at all at `low`, rewrote a concurrent rate limiter's exhausted
+branch so it reset the counter to zero and the cap stopped holding, a
+fixture it had passed before; Qwen missed the same trailing-newline fixture
+it has now missed at three settings in a row. And the throughput per round
+barely moved even though contexts nearly doubled, because the prefix cache
+absorbed the extra reading — the numbers are in `REALWORLD.md`.
+
 ## What it feels like to use each one
 
 **DeepSeek-V4-Flash is the one you can leave alone, at `low`.** It reads
@@ -343,7 +426,8 @@ experience: twice as long before the first file appears, a transcript
 that goes quiet, more polling and more retries, and a better-furnished
 result (more tests, a custom theme) that took twice as long to arrive.
 `max` did not make DeepSeek wrong anywhere; it made it slower and less
-tidy for a modest gain.
+tidy for a modest gain. Given a browser it can drive, it is also the only
+one of the three that reliably stops to look at what it built.
 
 **Qwen3.8-Flash-Next is the thorough one, and `xhigh` makes it more so.**
 Watching it work is watching almost nothing: the transcript shows a
@@ -356,7 +440,10 @@ rounds, the most reasoning, the largest context, and at `xhigh` the only
 run to reach the round cap, not because the app was unfinished but because
 it kept verifying past the finish line. It also has the fastest engine on
 this hardware, which matters if you serve more than one seat, and which is
-why its 147k-token rounds still ran at 36 tok/s end to end.
+why its 147k-token rounds still ran at 36 tok/s end to end. Watch it for
+shortcuts rather than for mistakes: given a checklist it cannot see, it
+will occasionally make its own tests easier rather than make the feature
+right.
 
 **GLM-5.3-Flash is the sprinter, and at `max` it is the most efficient
 of the three.** At `low` it finishes first, emits a third of the tokens,
@@ -366,9 +453,11 @@ is the slowest of the three per token on this hardware. At `max` it is
 still first, still on half the tokens of the others, and now with a tenth
 of the tool failures, twice the tests, and a page with a strong identity.
 Effort made GLM better at the same cost ratio it made the others slower.
-The caveat is sample size: GLM has one run at `max` on record, and the
+Two caveats. Sample size: GLM has one run at `max` on record, and the
 first attempt at `max`, before the stopping instruction was added to the
-prompt, ran to the round cap re-verifying a finished app.
+prompt, ran to the round cap re-verifying a finished app. And speed has a
+price — given a browser and a page to check, GLM did not open it, and the
+page it shipped has the defects to prove it.
 
 ## Which one to run
 
@@ -384,11 +473,13 @@ For two Sparks and one person at the keyboard:
   line, or it will keep verifying. Also the pick for concurrent users; its
   engine has the best prefill and concurrency here.
 - **If you want the fastest complete answer at the lowest output cost:
-  GLM-5.3-Flash.** At `low` it is the cheapest run on the board; at `max`
-  it is the run with the fewest mistakes and still the fastest at that
+  GLM-5.3-Flash.** At `low` it is the cheapest run on the board — fourteen
+  minutes for a complete application on the current harness; at `max` it
+  is the run with the fewest mistakes and still the fastest at that
   effort. Check that thinking is enabled in your serving config; its
   template does not turn it on from `reasoning_effort` alone, and its
-  `low` is lighter than the other two's.
+  `low` is lighter than the other two's. If the work has a visual result,
+  review it yourself: GLM will not.
 
 **On effort generally:** on this task it bought thoroughness and identity,
 not correctness, at about twice the wall and two to three times the
@@ -396,11 +487,21 @@ tokens. If the checklist is the goal, `low` is enough for all three. If the
 tests and the page are the goal, `max` is worth it for GLM, worth it for
 Qwen with a stopping rule, and a coin flip for DeepSeek.
 
+**On tools generally:** giving a model eyes and hands changes what it
+catches, not what it can build. It cost DeepSeek ten minutes and bought a
+page with no visual defects; it cost GLM nothing because GLM declined the
+offer; it cost Qwen seven rounds it then decided it could not afford. If
+you care about the thing being right on screen and you cannot review it
+yourself, that difference is the whole decision.
+
 ## Caveats
 
-- One run per model per effort. Run-to-run variance is real (Qwen's
-  fixture miss; DeepSeek's generator detour) and nothing here has error
-  bars.
+- One run per model per effort per harness. Run-to-run variance is real
+  (Qwen's fixture miss; DeepSeek's generator detour) and nothing here has
+  error bars.
+- The third run is on a different harness from the first two. Its rows are
+  comparable across the three models, not against the `low` and `max`
+  tables above.
 - Different quantizations (4-bit EXL3, NVFP4, fp8) on different engine
   builds. Raw speed is partly the stack.
 - `low` means less for GLM than for the others, and `max` means different
@@ -415,7 +516,8 @@ Qwen with a stopping rule, and a coin flip for DeepSeek.
 
 Everything is in this folder: `design/CODING_BENCH.md` for the prompts,
 tools, oracle and checklist as run; `results/2026-09-05-r2/` (the `low`
-runs) and `results/2026-09-05-r3/` (the `max` runs) for the raw rows, the
-generated apps, the screenshots, the per-round reasoning records, and each
-round's own `REPORT.md`; `REALWORLD.md` for what a session's throughput
-looks like round by round; `design/TESTPLAN.md` for the protocol.
+runs), `results/2026-09-05-r3/` (the `max` runs) and `results/2026-09-07/`
+(the second harness) for the raw rows, the generated apps, the
+screenshots, the per-round reasoning records, and each round's own
+`REPORT.md`; `REALWORLD.md` for what a session's throughput looks like
+round by round; `design/TESTPLAN.md` for the protocol.

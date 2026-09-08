@@ -1,0 +1,1034 @@
+diff --git a/AGENTS.md b/AGENTS.md
+index a4321b3..341e79d 100644
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -35,6 +35,14 @@ This is a web application written using the Phoenix web framework.
+   - You must import the vendor deps into app.js and app.css to use them
+   - **Never write inline <script>custom js</script> tags within templates**
+ 
++### UI/UX & design guidelines
++
++- **Produce world-class UI designs** with a focus on usability, aesthetics, and modern design principles
++- Implement **subtle micro-interactions** (e.g., button hover effects, and smooth transitions)
++- Ensure **clean typography, spacing, and layout balance** for a refined, premium look
++- Focus on **delightful details** like hover effects, loading states, and smooth page transitions
++
++
+ <!-- usage-rules-start -->
+ 
+ <!-- phoenix:elixir-start -->
+diff --git a/assets/css/app.css b/assets/css/app.css
+index 4661553..800d93c 100644
+--- a/assets/css/app.css
++++ b/assets/css/app.css
+@@ -8,7 +8,7 @@
+ @source "../../lib/benchapp_web";
+ /* Required for Tailwind to automatically pick up changes in colocated CSS files in dev */
+ @source "../../_build/dev/phoenix-colocated/benchapp/*/";
+-@source "../../deps/joby_kit/lib";
++@source "/Users/jody/dgx-spark-model-bench/results/2026-09-08/work/dsv4-flash-vision-exp/benchapp/deps/joby_kit/lib";
+ 
+ /* A Tailwind plugin that makes "hero-#{ICON}" classes available.
+    The heroicons installation itself is managed by your mix.exs */
+diff --git a/config/config.exs b/config/config.exs
+index 696760f..060a56a 100644
+--- a/config/config.exs
++++ b/config/config.exs
+@@ -20,7 +20,7 @@ config :benchapp, BenchappWeb.Endpoint,
+     layout: false
+   ],
+   pubsub_server: Benchapp.PubSub,
+-  live_view: [signing_salt: "sP3h7Sz8"]
++  live_view: [signing_salt: "A3wj3CO4"]
+ 
+ # Configure LiveView
+ config :phoenix_live_view,
+diff --git a/config/dev.exs b/config/dev.exs
+index 0d03c95..de2f348 100644
+--- a/config/dev.exs
++++ b/config/dev.exs
+@@ -23,7 +23,7 @@ config :benchapp, BenchappWeb.Endpoint,
+   check_origin: false,
+   code_reloader: true,
+   debug_errors: true,
+-  secret_key_base: "T92xe0BOyzaUWZQ7Xnebdc5MCYU5WgB83DvdG0vUublghatkeobWDin/F4vAGvyg",
++  secret_key_base: "rRme2cpQAXdDpXhCD+W73EyQOIOX4SK42GVDYQMyXhAY/44FAK8zrNaqt0cbHTTq",
+   watchers: [
+     esbuild: {Esbuild, :install_and_run, [:benchapp, ~w(--sourcemap=inline --watch)]},
+     tailwind: {Tailwind, :install_and_run, [:benchapp, ~w(--watch)]}
+diff --git a/config/test.exs b/config/test.exs
+index 98996c4..4265924 100644
+--- a/config/test.exs
++++ b/config/test.exs
+@@ -17,7 +17,7 @@ config :benchapp, Benchapp.Repo,
+ # you can enable the server option below.
+ config :benchapp, BenchappWeb.Endpoint,
+   http: [ip: {127, 0, 0, 1}, port: 4002],
+-  secret_key_base: "pFEiHjxriBn3mG4MJHqp56nl4hE29yKa9ljf55nT6jJYeA35ZEZ4sSHrrB7ntT3r",
++  secret_key_base: "KuDDvOFgpmEKKpvZoMBVPt8wtqH1o6RTFmkF1k8qzoZUEGOfQO9hfkIFPBsmOsEG",
+   server: false
+ 
+ # In test we don't send emails
+diff --git a/lib/benchapp_web/components/composite_components.ex b/lib/benchapp_web/components/composite_components.ex
+index 37013da..7e5741d 100644
+--- a/lib/benchapp_web/components/composite_components.ex
++++ b/lib/benchapp_web/components/composite_components.ex
+@@ -80,4 +80,38 @@ defmodule BenchappWeb.CompositeComponents do
+     </div>
+     """
+   end
++
++  @doc """
++  A feature-card composite: icon, title, and supporting copy. Build a
++  feature grid by composing several of these in a responsive grid.
++
++      <.feature_card icon="hero-bolt" title="Instant">
++        Set up in seconds with no configuration.
++      </.feature_card>
++  """
++  attr :icon, :string, default: "hero-sparkles", doc: "Heroicon name to display above the title."
++  attr :title, :string, required: true
++  attr :class, :any, default: nil
++  attr :rest, :global
++
++  slot :inner_block, doc: "Feature description rendered beneath the title."
++
++  def feature_card(assigns) do
++    ~H"""
++    <div
++      data-component="BenchappWeb.CompositeComponents.feature_card"
++      class={[
++        "group flex flex-col gap-3 rounded-2xl border border-base-300 bg-base-100/70 p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-lg hover:shadow-base-300/40",
++        @class
++      ]}
++      {@rest}
++    >
++      <span class="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors duration-200 group-hover:bg-primary/15">
++        <CoreComponents.icon name={@icon} class="size-5" />
++      </span>
++      <h3 class="text-base font-semibold text-base-content">{@title}</h3>
++      <p class="text-sm leading-relaxed text-base-content/70">{render_slot(@inner_block)}</p>
++    </div>
++    """
++  end
+ end
+diff --git a/lib/benchapp_web/components/layouts.ex b/lib/benchapp_web/components/layouts.ex
+index 1b27aa1..7c191d4 100644
+--- a/lib/benchapp_web/components/layouts.ex
++++ b/lib/benchapp_web/components/layouts.ex
+@@ -21,17 +21,65 @@ defmodule BenchappWeb.Layouts do
+   attr :active_nav, :string, default: nil
+   slot :inner_block, required: true
+ 
++  @nav_items [
++    %{key: "home", label: "Home", href: "/"},
++    %{key: "about", label: "About", href: "/about"}
++  ]
++
+   def app(assigns) do
++    assigns = assign(assigns, nav_items: @nav_items)
++
+     ~H"""
+     <div class="flex min-h-dvh flex-col bg-base-100">
+       <div class="sticky top-0 z-40 border-b border-base-300 bg-base-100/90 backdrop-blur">
+-        <div class="mx-auto w-full max-w-5xl px-4 sm:px-6">
+-          <JobyKit.NavComponent.simple_nav active={@active_nav} brand="Benchapp">
+-            <:actions>
+-              <JobyKit.CoreComponents.theme_toggle />
+-            </:actions>
+-          </JobyKit.NavComponent.simple_nav>
+-        </div>
++        <nav id="main-nav" class="mx-auto w-full max-w-6xl px-4 sm:px-6">
++          <div class="flex h-16 items-center justify-between gap-4">
++            <.link
++              navigate={~p"/"}
++              class="flex items-center gap-2 text-lg font-semibold tracking-tight text-base-content"
++            >
++              <span class="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-content">
++                <.icon name="hero-sun" class="size-5" />
++              </span>
++              Fathom
++            </.link>
++
++            <div class="flex items-center gap-2">
++              <JobyKit.CoreComponents.theme_toggle id="theme-toggle" />
++              <JobyKit.CoreComponents.button
++                type="button"
++                shape="square"
++                variant="ghost"
++                id="nav-toggle"
++                class="md:hidden"
++                aria-label="Toggle menu"
++                phx-click={JS.toggle_class("hidden", to: "#main-nav-links")}
++              >
++                <.icon name="hero-bars-3" class="size-5" />
++              </JobyKit.CoreComponents.button>
++            </div>
++          </div>
++
++          <div
++            id="main-nav-links"
++            class="hidden flex-col gap-1 border-t border-base-300 py-2 md:flex md:flex-row md:items-center md:gap-8 md:border-0 md:py-0"
++          >
++            <.link
++              :for={item <- @nav_items}
++              navigate={item.href}
++              aria-current={@active_nav == item.key && "page"}
++              class={[
++                "rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-150",
++                @active_nav == item.key &&
++                  "text-primary",
++                @active_nav != item.key &&
++                  "text-base-content/70 hover:bg-base-200/60 hover:text-base-content"
++              ]}
++            >
++              {item.label}
++            </.link>
++          </div>
++        </nav>
+       </div>
+ 
+       <main class="flex-1">
+@@ -39,24 +87,12 @@ defmodule BenchappWeb.Layouts do
+       </main>
+ 
+       <footer class="border-t border-base-300">
+-        <div class="mx-auto flex max-w-5xl flex-col gap-3 px-4 py-6 text-xs text-base-content/60 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+-          <p>
+-            Benchapp · built with
+-            <.link
+-              href="https://github.com/jobycorp/joby_kit"
+-              class="link link-hover font-medium"
+-              target="_blank"
+-              rel="noopener"
+-            >
+-              JobyKit
+-            </.link>
+-          </p>
++        <div class="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-6 text-xs text-base-content/60 sm:flex-row sm:items-center sm:justify-between sm:px-6">
++          <p>Fathom · bright ideas, made simple</p>
+           <p class="flex gap-2 font-mono">
+             <.link navigate={~p"/design"} class="link link-hover">/design</.link>
+             <span aria-hidden="true" class="opacity-40">·</span>
+             <.link navigate={~p"/custom-designs"} class="link link-hover">/custom-designs</.link>
+-            <span aria-hidden="true" class="opacity-40">·</span>
+-            <.link href={~p"/design.json"} class="link link-hover">/design.json</.link>
+           </p>
+         </div>
+       </footer>
+diff --git a/lib/benchapp_web/components/layouts/root.html.heex b/lib/benchapp_web/components/layouts/root.html.heex
+index 7aa32b2..c4e70b1 100644
+--- a/lib/benchapp_web/components/layouts/root.html.heex
++++ b/lib/benchapp_web/components/layouts/root.html.heex
+@@ -11,7 +11,7 @@
+     <link phx-track-static rel="stylesheet" href={~p"/assets/css/app.css"} />
+     <script defer phx-track-static type="text/javascript" src={~p"/assets/js/app.js"}>
+     </script>
+-    
++
+     <script>
+       (() => {
+         const systemTheme = () =>
+diff --git a/lib/benchapp_web/design_manifest.ex b/lib/benchapp_web/design_manifest.ex
+index 0b9312a..becdb68 100644
+--- a/lib/benchapp_web/design_manifest.ex
++++ b/lib/benchapp_web/design_manifest.ex
+@@ -17,13 +17,15 @@ defmodule BenchappWeb.DesignManifest do
+   alias BenchappWeb.CompositeComponents
+   alias BenchappWeb.DesignPreviews
+ 
+-  category :composite,
++  category(:composite,
+     label: "Generic composites",
+     description: "Multi-primitive patterns reused across domains."
++  )
+ 
+-  category :domain,
++  category(:domain,
+     label: "Domain composites",
+     description: "Composites tied to a product area."
++  )
+ 
+   # ----------------------------------------------------------------- composite
+   # `empty_state` is the worked example — a real composite that bundles
+@@ -35,10 +37,17 @@ defmodule BenchappWeb.DesignManifest do
+   # domain-specific ones in their own module (e.g.
+   # `BenchappWeb.ChatComponents`).
+ 
+-  component CompositeComponents, :empty_state,
++  component(CompositeComponents, :empty_state,
+     category: :composite,
+     summary: "Centered icon + title + optional action; fills empty containers.",
+     preview: &DesignPreviews.empty_state_preview/1
++  )
++
++  component(CompositeComponents, :feature_card,
++    category: :composite,
++    summary: "Icon + title + copy card used to build feature grids.",
++    preview: &DesignPreviews.feature_card_preview/1
++  )
+ 
+   # -------------------------------------------------------------------- domain
+   # Add domain composites here:
+diff --git a/lib/benchapp_web/design_previews.ex b/lib/benchapp_web/design_previews.ex
+index 613d9cd..282ee4e 100644
+--- a/lib/benchapp_web/design_previews.ex
++++ b/lib/benchapp_web/design_previews.ex
+@@ -28,18 +28,21 @@ defmodule BenchappWeb.DesignPreviews do
+   alias JobyKit.CoreComponents
+   alias BenchappWeb.CompositeComponents
+ 
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
++  def feature_card_preview(assigns) do
++    ~H"""
++    <div class="grid gap-4 sm:grid-cols-3">
++      <CompositeComponents.feature_card icon="hero-bolt" title="Instant">
++        Set up in seconds with no configuration or code changes.
++      </CompositeComponents.feature_card>
++      <CompositeComponents.feature_card icon="hero-shield-check" title="Private">
++        Your data stays on your devices, encrypted end to end.
++      </CompositeComponents.feature_card>
++      <CompositeComponents.feature_card icon="hero-chart-bar" title="Insightful">
++        Live dashboards surface what matters the moment it changes.
++      </CompositeComponents.feature_card>
++    </div>
++    """
++  end
+ 
+   def empty_state_preview(assigns) do
+     ~H"""
+@@ -60,5 +63,4 @@ defmodule BenchappWeb.DesignPreviews do
+     </div>
+     """
+   end
+-
+ end
+diff --git a/lib/benchapp_web/endpoint.ex b/lib/benchapp_web/endpoint.ex
+index 0a90b47..e50a2ea 100644
+--- a/lib/benchapp_web/endpoint.ex
++++ b/lib/benchapp_web/endpoint.ex
+@@ -7,7 +7,7 @@ defmodule BenchappWeb.Endpoint do
+   @session_options [
+     store: :cookie,
+     key: "_benchapp_key",
+-    signing_salt: "Dt0tU3Tp",
++    signing_salt: "hPKje/sO",
+     same_site: "Lax"
+   ]
+ 
+diff --git a/lib/benchapp_web/live/about_live.ex b/lib/benchapp_web/live/about_live.ex
+new file mode 100644
+index 0000000..b0739c0
+--- /dev/null
++++ b/lib/benchapp_web/live/about_live.ex
+@@ -0,0 +1,57 @@
++defmodule BenchappWeb.AboutLive do
++  @moduledoc """
++  The Fathom about page, on the app layout.
++  """
++
++  use BenchappWeb, :live_view
++
++  @impl true
++  def mount(_params, _session, socket) do
++    {:ok, assign(socket, page_title: "About")}
++  end
++
++  @impl true
++  def handle_event(_event, _params, socket), do: {:noreply, socket}
++
++  @impl true
++  def render(assigns) do
++    ~H"""
++    <Layouts.app flash={@flash} active_nav="about">
++      <div class="mx-auto max-w-3xl px-4 py-16 sm:px-6">
++        <.header size="page">
++          About Fathom
++          <:eyebrow>Our story</:eyebrow>
++          <:subtitle>
++            We're a small team obsessed with making the everyday feel effortless.
++          </:subtitle>
++        </.header>
++
++        <div class="mt-10 space-y-4 text-base-content/80">
++          <p>
++            Fathom began with a simple observation: the best technology is the kind
++            you forget is there. We wanted a home that quietly learns your rhythms
++            and adapts — warming a room before you wake, dimming the lights as the
++            evening winds down, and keeping the air fresh without a single schedule
++            to program.
++          </p>
++          <p>
++            Every device we make is built around privacy. Your data stays on your
++            devices, encrypted end to end, and never leaves your home. The result
++            is a system that feels personal precisely because it never shares your
++            details with anyone else.
++          </p>
++          <p>
++            We're just getting started, and we'd love to have you along for the
++            ride. Join the launch list on the home page to be first in line.
++          </p>
++        </div>
++
++        <div class="mt-12 flex flex-wrap gap-3">
++          <.button navigate={~p"/"} variant="primary">Back home</.button>
++          <.button navigate={~p"/design"} variant="ghost">Explore the interface</.button>
++        </div>
++      </div>
++    </Layouts.app>
++    """
++  end
++end
+diff --git a/lib/benchapp_web/live/custom_designs_live.ex b/lib/benchapp_web/live/custom_designs_live.ex
+index 33bac68..131245a 100644
+--- a/lib/benchapp_web/live/custom_designs_live.ex
++++ b/lib/benchapp_web/live/custom_designs_live.ex
+@@ -31,8 +31,7 @@ defmodule BenchappWeb.CustomDesignsLive do
+           <h1 class="text-3xl font-semibold leading-tight">Custom Designs</h1>
+           <p class="mt-2 max-w-3xl text-sm text-base-content/70">
+             This app's generic composites and domain components. Kit-curated
+-            wrappers and the contract live on
+-            <.link navigate={~p"/design"} class="link link-primary">/design</.link>.
++            wrappers and the contract live on <.link navigate={~p"/design"} class="link link-primary">/design</.link>.
+           </p>
+         </header>
+ 
+diff --git a/lib/benchapp_web/live/design_system_live.ex b/lib/benchapp_web/live/design_system_live.ex
+index efa439c..aac992c 100644
+--- a/lib/benchapp_web/live/design_system_live.ex
++++ b/lib/benchapp_web/live/design_system_live.ex
+@@ -26,8 +26,7 @@ defmodule BenchappWeb.DesignSystemLive do
+           <h1 class="text-3xl font-semibold leading-tight">Design System</h1>
+           <p class="mt-2 max-w-3xl text-sm text-base-content/70">
+             JobyKit's curated wrapper inventory and contract. Composites and domain
+-            components live on
+-            <.link navigate={~p"/custom-designs"} class="link link-primary">/custom-designs</.link>.
++            components live on <.link navigate={~p"/custom-designs"} class="link link-primary">/custom-designs</.link>.
+           </p>
+         </header>
+ 
+diff --git a/lib/benchapp_web/live/home_live.ex b/lib/benchapp_web/live/home_live.ex
+index eac5262..72a2625 100644
+--- a/lib/benchapp_web/live/home_live.ex
++++ b/lib/benchapp_web/live/home_live.ex
+@@ -1,150 +1,273 @@
+ defmodule BenchappWeb.HomeLive do
+   @moduledoc """
+-  Welcome page generated by `mix joby_kit.new`.
+-
+-  It doubles as the worked example: every block on it is built from a
+-  registered kit wrapper, and each section's eyebrow names the component
+-  that renders it. If you're an agent picking up this app, this page is
+-  the shortest correct answer to "how do I build UI here".
+-
+-  Edit freely — this file lives in your app, not in the kit. When you
+-  replace it, keep reaching for the wrappers it demonstrates.
++  The Fathom landing page: a hero, a live product countdown, a newsletter
++  signup form, a stats strip, an activity feed, and a feature grid.
+   """
+ 
+   use BenchappWeb, :live_view
+ 
+-  @build_order [
+-    %{step: "1", rule: "Domain composite exists?", detail: "Use it."},
+-    %{step: "2", rule: "Generic composite exists?", detail: "Use it — see /custom-designs."},
+-    %{step: "3", rule: "Core wrapper exists?", detail: "Use it — see /design."},
++  alias BenchappWeb.CompositeComponents
++
++  @tick_interval 5_000
++  @activity_limit 10
++  @initial_countdown 100
++
++  @features [
++    %{
++      icon: "hero-bolt",
++      title: "Instant",
++      body: "Turn it on and it works — no setup, no config, no tutorials."
++    },
+     %{
+-      step: "4",
+-      rule: "daisyUI primitive exists?",
+-      detail: "Wrap it, register it in DesignManifest, then use it."
++      icon: "hero-shield-check",
++      title: "Private",
++      body: "Your data stays yours. Encrypted end to end, always."
+     },
+     %{
+-      step: "5",
+-      rule: "None of the above?",
+-      detail: "Tailwind plus theme tokens — then expose the result as a wrapper and register it."
++      icon: "hero-chart-bar",
++      title: "Insightful",
++      body: "Live dashboards surface what matters the moment it changes."
+     }
+   ]
+ 
+-  @lint_snippet """
+-  # See what's already registered before building anything
+-  curl http://localhost:4000/design.json | jq '.components[].data_component'
+-
+-  # Then, after writing UI
+-  mix joby_kit.lint\
+-  """
+-
+   @impl true
+   def mount(_params, _session, socket) do
++    Process.send_after(self(), :countdown_tick, @tick_interval)
++
+     {:ok,
+      assign(socket,
+-       page_title: "Home",
+-       build_order: @build_order,
+-       lint_snippet: @lint_snippet
++       page_title: "Fathom",
++       countdown: @initial_countdown,
++       ticks: 0,
++       signups: [],
++       activity: [],
++       signup_error: nil,
++       features: @features,
++       form: to_form(%{}, as: :signup)
+      )}
+   end
+ 
+   @impl true
++  def handle_info(:countdown_tick, socket) do
++    countdown = max(socket.assigns.countdown - 1, 0)
++    ticks = socket.assigns.ticks + 1
++    activity = add_activity(socket.assigns.activity, :tick, "Countdown ticked to #{countdown}")
++    Process.send_after(self(), :countdown_tick, @tick_interval)
++
++    {:noreply, assign(socket, countdown: countdown, ticks: ticks, activity: activity)}
++  end
++
++  @impl true
++  def handle_event("subscribe", %{"signup" => %{"email" => email}}, socket) do
++    email = String.trim(email)
++
++    cond do
++      email == "" or not valid_email?(email) ->
++        {:noreply, assign(socket, signup_error: "Please enter a valid email address.")}
++
++      email in socket.assigns.signups ->
++        {:noreply, assign(socket, signup_error: "That email is already subscribed.")}
++
++      true ->
++        signups = [email | socket.assigns.signups]
++        activity = add_activity(socket.assigns.activity, :signup, "#{email} subscribed")
++        form = to_form(%{}, as: :signup)
++
++        {:noreply,
++         assign(socket,
++           signups: signups,
++           activity: activity,
++           signup_error: nil,
++           form: form
++         )}
++    end
++  end
++
+   def handle_event(_event, _params, socket), do: {:noreply, socket}
+ 
+   @impl true
+   def render(assigns) do
+     ~H"""
+     <Layouts.app flash={@flash} active_nav="home">
+-      <div class="mx-auto max-w-5xl space-y-14 px-4 py-12 sm:px-6">
+-        <.header size="page">
+-          Benchapp
+-          <:eyebrow>benchapp</:eyebrow>
+-          <:subtitle>
+-            A Phoenix app wired to JobyKit. Every UI primitive flows through a
+-            registered wrapper, so the component inventory, the rendered page, and
+-            the JSON manifest never drift apart.
+-          </:subtitle>
+-          <:actions>
+-            <.button navigate={~p"/design"} variant="primary">Open the inventory</.button>
+-          </:actions>
+-        </.header>
+-
+-        <section class="space-y-4">
+-          <.header level="h2">
+-            Three surfaces
+-            <:eyebrow>Start here</:eyebrow>
+-            <:subtitle>
+-              Where the component inventory lives, for people and for agents.
+-              Each panel below is a <code class="font-mono text-xs">&lt;.card&gt;</code>.
+-            </:subtitle>
+-          </.header>
+-
+-          <div class="grid gap-4 md:grid-cols-3">
+-            <.card prose>
+-              <:eyebrow>Kit wrappers</:eyebrow>
+-              <:title><span class="font-mono text-base">/design</span></:title>
+-              The curated inventory every JobyKit app shares, with the wrapper
+-              contract and the daisyUI catalogue.
+-              <:actions>
+-                <.button navigate={~p"/design"} size="sm">Open</.button>
+-              </:actions>
+-            </.card>
+-
+-            <.card prose>
+-              <:eyebrow>This app's components</:eyebrow>
+-              <:title><span class="font-mono text-base">/custom-designs</span></:title>
+-              Composites and domain components you add, starting from the worked
+-              empty-state example.
+-              <:actions>
+-                <.button navigate={~p"/custom-designs"} size="sm">Open</.button>
+-              </:actions>
+-            </.card>
+-
+-            <.card prose>
+-              <:eyebrow>Machine-readable</:eyebrow>
+-              <:title><span class="font-mono text-base">/design.json</span></:title>
+-              The same inventory as JSON — attrs, slots, and source lines. Fetch
+-              it instead of parsing rendered HEEx.
+-              <:actions>
+-                <.button href={~p"/design.json"} size="sm">Open</.button>
+-              </:actions>
+-            </.card>
++      <%!-- Hero --%>
++      <section class="relative overflow-hidden border-b border-base-300">
++        <div class="pointer-events-none absolute inset-0 bg-gradient-to-b from-primary/10 to-transparent">
++          <div class="absolute -right-24 -top-24 size-72 rounded-full bg-primary/10 blur-3xl" />
++          <div class="absolute -left-24 top-1/2 size-60 rounded-full bg-secondary/10 blur-3xl" />
++        </div>
++        <div class="relative mx-auto max-w-6xl px-4 pb-20 pt-20 sm:px-6 sm:pt-28">
++          <div class="max-w-2xl">
++            <.eyebrow>The brightest way to run your day</.eyebrow>
++            <h1 class="mt-4 text-4xl font-bold leading-tight tracking-tight text-base-content sm:text-6xl">
++              Fathom
++            </h1>
++            <p class="mt-6 max-w-xl text-base leading-relaxed text-base-content/70 sm:text-lg">
++              A home that thinks ahead. Fathom learns your rhythms and lights, warms, and
++              protects your space automatically — beautifully, privately, instantly.
++            </p>
++            <div class="mt-10 flex flex-wrap gap-3">
++              <.button navigate={~p"/about"} variant="primary" size="lg">
++                Learn more <.icon name="hero-arrow-right" class="size-4" />
++              </.button>
++              <.button navigate={~p"/design"} variant="ghost" size="lg">
++                Explore the interface
++              </.button>
++            </div>
+           </div>
+-        </section>
+-
+-        <section class="space-y-4">
+-          <.header level="h2">
+-            Build order
+-            <:eyebrow>The rule</:eyebrow>
+-            <:subtitle>
+-              Work down the steps and stop at the first match — the order decides
+-              the answer. Rendered with <code class="font-mono text-xs">&lt;.list&gt;</code>.
+-            </:subtitle>
+-          </.header>
+-
+-          <.list>
+-            <:item :for={entry <- @build_order} title={"#{entry.step}. #{entry.rule}"}>
+-              {entry.detail}
+-            </:item>
+-          </.list>
+-        </section>
+-
+-        <section class="space-y-4">
+-          <.header level="h2">
+-            Before you call it done
+-            <:eyebrow>Verify</:eyebrow>
+-            <:subtitle>
+-              The linter checks the contract end to end: registration, the
+-              <code class="font-mono text-xs">data-component</code> marker, global
+-              pass-through, and raw primitives that skipped a wrapper.
+-            </:subtitle>
+-          </.header>
+-
+-          <.card>
+-            <pre class="overflow-x-auto rounded-box bg-base-200 p-4 text-xs leading-relaxed"><code>{@lint_snippet}</code></pre>
+-          </.card>
+-        </section>
+-      </div>
++        </div>
++      </section>
++
++      <%!-- Countdown --%>
++      <section class="border-b border-base-300 bg-base-200/40">
++        <div class="mx-auto max-w-6xl px-4 py-12 text-center sm:px-6">
++          <h2 class="text-sm font-semibold uppercase tracking-[0.18em] text-base-content/55">
++            Launching in
++          </h2>
++          <p
++            id="countdown"
++            class="mt-4 text-6xl font-bold tabular-nums tracking-tight text-primary sm:text-8xl"
++          >
++            {@countdown}
++          </p>
++          <p class="mt-4 text-sm text-base-content/60">
++            A fresh release ships every five seconds. You'll feel it here first.
++          </p>
++        </div>
++      </section>
++
++      <%!-- Stats strip --%>
++      <section id="stats" class="border-b border-base-300">
++        <div class="mx-auto grid max-w-6xl grid-cols-2 gap-4 px-4 py-10 sm:px-6">
++          <div class="rounded-2xl border border-base-300 bg-base-100/70 p-6 text-center">
++            <p id="stat-signups" class="text-4xl font-bold tabular-nums text-base-content">
++              {length(@signups)}
++            </p>
++            <p class="mt-2 text-sm font-medium text-base-content/60">Signups</p>
++          </div>
++          <div class="rounded-2xl border border-base-300 bg-base-100/70 p-6 text-center">
++            <p id="stat-ticks" class="text-4xl font-bold tabular-nums text-base-content">
++              {@ticks}
++            </p>
++            <p class="mt-2 text-sm font-medium text-base-content/60">Countdown ticks</p>
++          </div>
++        </div>
++      </section>
++
++      <%!-- Newsletter signup --%>
++      <section class="border-b border-base-300">
++        <div class="mx-auto max-w-6xl px-4 py-14 sm:px-6">
++          <div class="mx-auto max-w-lg">
++            <div class="text-center">
++              <h2 class="text-2xl font-semibold text-base-content">Join the launch list</h2>
++              <p class="mt-2 text-sm text-base-content/60">
++                Get early access and product news. No spam, ever.
++              </p>
++            </div>
++
++            <.form for={@form} id="signup-form" phx-submit="subscribe" class="mt-8 space-y-4">
++              <.input
++                field={@form[:email]}
++                type="email"
++                label="Email"
++                placeholder="you@example.com"
++                input_class="font-sans"
++              />
++              <.button type="submit" variant="primary" class="w-full">
++                Subscribe
++              </.button>
++            </.form>
++
++            <%!--
++              The error element is always present so messages have a stable
++              anchor; it only carries a message once one exists.
++            --%>
++            <p id="signup-error" class="mt-3 text-center text-sm text-error" role="alert">
++              {@signup_error || ""}
++            </p>
++          </div>
++
++          <div class="mx-auto mt-14 max-w-lg">
++            <h3 class="text-sm font-semibold uppercase tracking-[0.18em] text-base-content/55">
++              Recent signups
++            </h3>
++            <ul id="signups" class="mt-4 space-y-2">
++              <li
++                :for={email <- @signups}
++                class="flex items-center gap-3 rounded-xl border border-base-300 bg-base-100/60 px-4 py-2 text-sm text-base-content"
++              >
++                <.icon name="hero-check-circle" class="size-4 text-success" />
++                {email}
++              </li>
++            </ul>
++            <p :if={@signups == []} class="mt-4 text-sm text-base-content/50">
++              No signups yet — be the first.
++            </p>
++          </div>
++        </div>
++      </section>
++
++      <%!-- Feature grid --%>
++      <section class="border-b border-base-300">
++        <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6">
++          <div class="max-w-xl">
++            <.eyebrow>Why Fathom</.eyebrow>
++            <h2 class="mt-3 text-2xl font-semibold text-base-content sm:text-3xl">
++              Thoughtful by design
++            </h2>
++            <p class="mt-3 text-sm text-base-content/60">
++              Every detail of Fathom is tuned to feel effortless — from the first
++              glance to the daily rhythm.
++            </p>
++          </div>
++          <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
++            <CompositeComponents.feature_card
++              :for={feature <- @features}
++              icon={feature.icon}
++              title={feature.title}
++            >
++              {feature.body}
++            </CompositeComponents.feature_card>
++          </div>
++        </div>
++      </section>
++
++      <%!-- Activity feed --%>
++      <section>
++        <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6">
++          <div class="mx-auto max-w-lg">
++            <h2 class="text-2xl font-semibold text-base-content">Live activity</h2>
++            <p class="mt-2 text-sm text-base-content/60">
++              Every countdown tick and every signup, newest first.
++            </p>
++            <ul id="activity" class="mt-6 space-y-2">
++              <li
++                :for={entry <- @activity}
++                class="flex items-center gap-3 rounded-xl border border-base-300 bg-base-100/60 px-4 py-2 text-sm text-base-content"
++              >
++                <.icon
++                  :if={entry.type == :signup}
++                  name="hero-user-plus"
++                  class="size-4 text-secondary"
++                />
++                <.icon :if={entry.type == :tick} name="hero-arrow-path" class="size-4 text-primary" />
++                {entry.text}
++              </li>
++            </ul>
++            <p :if={@activity == []} class="mt-4 text-sm text-base-content/50">
++              Nothing yet — activity will appear here as it happens.
++            </p>
++          </div>
++        </div>
++      </section>
+     </Layouts.app>
+     """
+   end
++
++  defp valid_email?(email) do
++    Regex.match?(~r/^[^\s@]+@[^\s@]+\.[^\s@]+$/, email)
++  end
++
++  defp add_activity(activity, type, text) do
++    [%{type: type, text: text} | activity] |> Enum.take(@activity_limit)
++  end
+ end
+diff --git a/lib/benchapp_web/router.ex b/lib/benchapp_web/router.ex
+index f563062..8c20fa8 100644
+--- a/lib/benchapp_web/router.ex
++++ b/lib/benchapp_web/router.ex
+@@ -18,6 +18,7 @@ defmodule BenchappWeb.Router do
+     pipe_through :browser
+ 
+     live "/", HomeLive, :index
++    live "/about", AboutLive, :index
+     live "/design", DesignSystemLive, :index
+     live "/custom-designs", CustomDesignsLive, :index
+   end
+diff --git a/test/benchapp_web/live/about_live_test.exs b/test/benchapp_web/live/about_live_test.exs
+new file mode 100644
+index 0000000..ba4d807
+--- /dev/null
++++ b/test/benchapp_web/live/about_live_test.exs
+@@ -0,0 +1,46 @@
++defmodule BenchappWeb.AboutLiveTest do
++  use BenchappWeb.ConnCase, async: false
++
++  import Phoenix.LiveViewTest
++
++  test "renders the about page on the app layout", %{conn: conn} do
++    {:ok, view, html} = live(conn, "/about")
++
++    assert html =~ ~s(id="main-nav")
++    assert html =~ "About Fathom"
++    assert has_element?(view, "#main-nav")
++  end
++
++  test "marks the about nav link with aria-current when on the about page", %{conn: conn} do
++    {:ok, _view, html} = live(conn, "/about")
++
++    about_link =
++      LazyHTML.from_fragment(html) |> LazyHTML.query(~s|nav#main-nav a[aria-current="page"]|)
++
++    assert Enum.count(about_link) == 1
++    assert Enum.map(about_link, &LazyHTML.text/1) |> List.first() =~ "About"
++  end
++
++  test "the home nav link is marked on the home page instead", %{conn: conn} do
++    {:ok, _view, html} = live(conn, "/")
++
++    current =
++      LazyHTML.from_fragment(html) |> LazyHTML.query(~s|nav#main-nav a[aria-current="page"]|)
++
++    assert Enum.count(current) == 1
++    assert Enum.map(current, &LazyHTML.text/1) |> List.first() =~ "Home"
++  end
++
++  test "links to the about page from the home page nav", %{conn: conn} do
++    {:ok, _view, html} = live(conn, "/")
++
++    nav_html =
++      html
++      |> LazyHTML.from_fragment()
++      |> LazyHTML.query("#main-nav")
++      |> Enum.map(&LazyHTML.text/1)
++      |> List.first()
++
++    assert nav_html =~ "About"
++  end
++end
+diff --git a/test/benchapp_web/live/home_live_test.exs b/test/benchapp_web/live/home_live_test.exs
+new file mode 100644
+index 0000000..40ea69c
+--- /dev/null
++++ b/test/benchapp_web/live/home_live_test.exs
+@@ -0,0 +1,147 @@
++defmodule BenchappWeb.HomeLiveTest do
++  use BenchappWeb.ConnCase, async: false
++
++  import Phoenix.LiveViewTest
++
++  describe "countdown" do
++    test "renders at 100 and decrements on each tick", %{conn: conn} do
++      {:ok, view, html} = live(conn, "/")
++
++      assert html =~ ~s(id="countdown")
++      assert element(view, "#countdown") |> render() =~ "100"
++
++      send(view.pid, :countdown_tick)
++      assert_until(view, "#countdown", "99")
++
++      send(view.pid, :countdown_tick)
++      assert_until(view, "#countdown", "98")
++    end
++  end
++
++  describe "newsletter signup" do
++    test "invalid email shows an error and is not added", %{conn: conn} do
++      {:ok, view, _html} = live(conn, "/")
++
++      form = form(view, "#signup-form", signup: %{email: "not-an-email"})
++      render_submit(form)
++
++      assert has_element?(view, "#signup-error")
++      assert element(view, "#signup-error") |> render() =~ "valid email"
++      assert element(view, "#stat-signups") |> render() =~ "0"
++      refute has_element?(view, "#signups li")
++    end
++
++    test "valid email is added to the recent signups list without a reload", %{conn: conn} do
++      {:ok, view, _html} = live(conn, "/")
++
++      form = form(view, "#signup-form", signup: %{email: "ada@example.com"})
++      render_submit(form)
++
++      assert has_element?(view, "#signups li")
++      assert element(view, "#signups") |> render() =~ "ada@example.com"
++      assert element(view, "#stat-signups") |> render() =~ "1"
++    end
++
++    test "a duplicate address shows an error and is not added again", %{conn: conn} do
++      {:ok, view, _html} = live(conn, "/")
++
++      form = form(view, "#signup-form", signup: %{email: "ada@example.com"})
++      render_submit(form)
++      assert element(view, "#stat-signups") |> render() =~ "1"
++
++      form = form(view, "#signup-form", signup: %{email: "ada@example.com"})
++      render_submit(form)
++
++      assert element(view, "#signup-error") |> render() =~ "already"
++      assert element(view, "#stat-signups") |> render() =~ "1"
++      assert element(view, "#signups") |> render() =~ "ada@example.com"
++    end
++  end
++
++  describe "stats strip" do
++    test "stat-signups and stat-ticks reflect live state", %{conn: conn} do
++      {:ok, view, html} = live(conn, "/")
++
++      assert html =~ ~s(id="stats")
++      assert element(view, "#stat-signups") |> render() =~ "0"
++      assert element(view, "#stat-ticks") |> render() =~ "0"
++
++      send(view.pid, :countdown_tick)
++      assert_until(view, "#stat-ticks", "1")
++
++      form = form(view, "#signup-form", signup: %{email: "grace@example.com"})
++      render_submit(form)
++
++      assert element(view, "#stat-signups") |> render() =~ "1"
++    end
++  end
++
++  describe "activity feed" do
++    test "logs one entry per tick and per signup, newest first", %{conn: conn} do
++      {:ok, view, _html} = live(conn, "/")
++
++      send(view.pid, :countdown_tick)
++      assert_until(view, "#activity li", "Countdown")
++
++      form = form(view, "#signup-form", signup: %{email: "ada@example.com"})
++      render_submit(form)
++
++      texts = li_texts(view)
++      assert Enum.at(texts, 0) =~ "ada@example.com"
++      assert Enum.at(texts, 1) =~ "Countdown"
++    end
++
++    test "keeps at most ten entries", %{conn: conn} do
++      {:ok, view, _html} = live(conn, "/")
++
++      for _ <- 1..12 do
++        send(view.pid, :countdown_tick)
++      end
++
++      assert_until_count(view, "#activity li", 10)
++    end
++  end
++
++  defp li_texts(view) do
++    view
++    |> render()
++    |> LazyHTML.from_fragment()
++    |> LazyHTML.query("#activity li")
++    |> Enum.map(&LazyHTML.text/1)
++  end
++
++  defp assert_until(view, selector, text, attempts \\ 20) do
++    cond do
++      attempts == 0 ->
++        flunk("expected #{selector} to contain #{inspect(text)}")
++
++      element(view, selector) |> render() =~ text ->
++        :ok
++
++      true ->
++        Process.sleep(50)
++        assert_until(view, selector, text, attempts - 1)
++    end
++  end
++
++  defp assert_until_count(view, selector, count, attempts \\ 20) do
++    rendered =
++      view
++      |> render()
++      |> LazyHTML.from_fragment()
++      |> LazyHTML.query(selector)
++      |> Enum.count()
++
++    cond do
++      attempts == 0 ->
++        flunk("expected #{selector} to eventually render #{count} elements")
++
++      rendered == count ->
++        :ok
++
++      true ->
++        Process.sleep(50)
++        assert_until_count(view, selector, count, attempts - 1)
++    end
++  end
++end

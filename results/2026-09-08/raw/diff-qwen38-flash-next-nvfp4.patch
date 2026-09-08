@@ -1,0 +1,2158 @@
+diff --git a/AGENTS.md b/AGENTS.md
+index a4321b3..341e79d 100644
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -35,6 +35,14 @@ This is a web application written using the Phoenix web framework.
+   - You must import the vendor deps into app.js and app.css to use them
+   - **Never write inline <script>custom js</script> tags within templates**
+ 
++### UI/UX & design guidelines
++
++- **Produce world-class UI designs** with a focus on usability, aesthetics, and modern design principles
++- Implement **subtle micro-interactions** (e.g., button hover effects, and smooth transitions)
++- Ensure **clean typography, spacing, and layout balance** for a refined, premium look
++- Focus on **delightful details** like hover effects, loading states, and smooth page transitions
++
++
+ <!-- usage-rules-start -->
+ 
+ <!-- phoenix:elixir-start -->
+diff --git a/assets/css/app.css b/assets/css/app.css
+index 4661553..c687c78 100644
+--- a/assets/css/app.css
++++ b/assets/css/app.css
+@@ -8,7 +8,7 @@
+ @source "../../lib/benchapp_web";
+ /* Required for Tailwind to automatically pick up changes in colocated CSS files in dev */
+ @source "../../_build/dev/phoenix-colocated/benchapp/*/";
+-@source "../../deps/joby_kit/lib";
++@source "/Users/jody/dgx-spark-model-bench/results/2026-09-08/work/qwen38-flash-next-nvfp4/benchapp/deps/joby_kit/lib";
+ 
+ /* A Tailwind plugin that makes "hero-#{ICON}" classes available.
+    The heroicons installation itself is managed by your mix.exs */
+diff --git a/assets/js/app.js b/assets/js/app.js
+index 24314a4..4529c2b 100644
+--- a/assets/js/app.js
++++ b/assets/js/app.js
+@@ -37,6 +37,21 @@ topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
+ window.addEventListener("phx:page-loading-start", _info => topbar.show(300))
+ window.addEventListener("phx:page-loading-stop", _info => topbar.hide())
+ 
++// Theme control. `<html data-theme>` lives outside the LiveView tree, so the
++// flip lives here: `#theme-toggle` (see `BenchappWeb.Layouts.app/1`) resolves
++// the next theme off the live attribute and re-uses the root layout's own
++// `phx:set-theme` protocol, which persists the choice and applies it before
++// the next paint. The same button pushes a `toggle_theme` event, which keeps
++// it a LiveView event target — so `Phoenix.LiveViewTest` can drive it like
++// every other control on the page.
++document.addEventListener("click", event => {
++  const toggle = event.target.closest("#theme-toggle")
++  if (!toggle) return
++  const isDark = document.documentElement.getAttribute("data-theme") === "dark"
++  toggle.dataset.phxTheme = isDark ? "light" : "dark"
++  toggle.dispatchEvent(new Event("phx:set-theme", {bubbles: true}))
++})
++
+ // connect if there are any LiveViews on the page
+ liveSocket.connect()
+ 
+diff --git a/config/config.exs b/config/config.exs
+index 696760f..be862f5 100644
+--- a/config/config.exs
++++ b/config/config.exs
+@@ -20,7 +20,7 @@ config :benchapp, BenchappWeb.Endpoint,
+     layout: false
+   ],
+   pubsub_server: Benchapp.PubSub,
+-  live_view: [signing_salt: "sP3h7Sz8"]
++  live_view: [signing_salt: "rUOV1Wkn"]
+ 
+ # Configure LiveView
+ config :phoenix_live_view,
+diff --git a/config/dev.exs b/config/dev.exs
+index 0d03c95..273e1c1 100644
+--- a/config/dev.exs
++++ b/config/dev.exs
+@@ -23,7 +23,7 @@ config :benchapp, BenchappWeb.Endpoint,
+   check_origin: false,
+   code_reloader: true,
+   debug_errors: true,
+-  secret_key_base: "T92xe0BOyzaUWZQ7Xnebdc5MCYU5WgB83DvdG0vUublghatkeobWDin/F4vAGvyg",
++  secret_key_base: "hMj6uMFp9X8Q6odooJkFjA/mIQJwdltLUya0rJILDM9QiO75VDTPFxQQCJP+dy4M",
+   watchers: [
+     esbuild: {Esbuild, :install_and_run, [:benchapp, ~w(--sourcemap=inline --watch)]},
+     tailwind: {Tailwind, :install_and_run, [:benchapp, ~w(--watch)]}
+diff --git a/config/test.exs b/config/test.exs
+index 98996c4..efcb1cc 100644
+--- a/config/test.exs
++++ b/config/test.exs
+@@ -17,7 +17,7 @@ config :benchapp, Benchapp.Repo,
+ # you can enable the server option below.
+ config :benchapp, BenchappWeb.Endpoint,
+   http: [ip: {127, 0, 0, 1}, port: 4002],
+-  secret_key_base: "pFEiHjxriBn3mG4MJHqp56nl4hE29yKa9ljf55nT6jJYeA35ZEZ4sSHrrB7ntT3r",
++  secret_key_base: "CM9BiMrVxBHpI+9U2PwThOtI7CrrdjJIda75RXvjHpL6GPj9LJQ4yYfDAyBURunr",
+   server: false
+ 
+ # In test we don't send emails
+diff --git a/lib/benchapp/launch_list.ex b/lib/benchapp/launch_list.ex
+new file mode 100644
+index 0000000..5693a0d
+--- /dev/null
++++ b/lib/benchapp/launch_list.ex
+@@ -0,0 +1,89 @@
++defmodule Benchapp.LaunchList do
++  @moduledoc """
++  The pilot-attendee list for a Tidepool launch window.
++
++  Deliberately in-memory: the landing page keeps the list in its own
++  LiveView assigns, so this module is pure functions — normalise, validate,
++  and reject duplicates. No Ecto schema, no Repo, no database.
++
++  Validation runs through `Ecto.Changeset` so the page has one set of
++  messages to render, and the same rules hold whether they arrive from a
++  submit or from live change validation.
++  """
++
++  @email_format ~r/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
++
++  @typedoc "An address as it is stored on the list."
++  @type email :: String.t()
++
++  @doc """
++  Canonical form of an address: trimmed, lower-cased.
++
++  Duplicates are decided on this value, so `Ada@Lab.org ` and
++  `ada@lab.org` are the same signup.
++  """
++  @spec normalize(String.t() | nil) :: String.t()
++  def normalize(email) when is_binary(email), do: email |> String.trim() |> String.downcase()
++  def normalize(_), do: ""
++
++  @doc """
++  Changeset over `%{"email" => address}` — trims, requires, and format-checks.
++
++  Errors are the messages the page shows verbatim, so `signup-error` reads
++  the same whether the address was malformed or already on the list.
++  """
++  @spec changeset(map()) :: Ecto.Changeset.t()
++  def changeset(params) when is_map(params) do
++    {%{}, %{email: :string}}
++    |> Ecto.Changeset.cast(params, [:email])
++    |> Ecto.Changeset.update_change(:email, &normalize/1)
++    |> Ecto.Changeset.validate_required(:email, message: "Enter an email address.")
++    |> Ecto.Changeset.validate_format(:email, @email_format,
++      message: "That doesn't look like an email address."
++    )
++    |> Ecto.Changeset.validate_length(:email, max: 160, message: "That address is too long.")
++  end
++
++  @doc """
++  Validates one address against the list already signed up.
++
++  Returns `{:ok, normalized}` when the address is well-formed and absent,
++  `{:error, message}` otherwise.
++  """
++  @spec check_signup(String.t() | nil, [email()]) :: {:ok, email()} | {:error, String.t()}
++  def check_signup(email, signed_up) when is_list(signed_up) do
++    changeset = changeset(%{"email" => email})
++
++    cond do
++      not changeset.valid? ->
++        {:error, first_message(changeset)}
++
++      Enum.member?(signed_up, changeset.changes.email) ->
++        {:error, "That address is already on this launch list."}
++
++      true ->
++        {:ok, changeset.changes.email}
++    end
++  end
++
++  @doc """
++  Whether an address is well-formed, ignoring the list.
++
++  Live validation uses this so a half-typed address reads as unfinished
++  rather than wrong.
++  """
++  @spec valid_email?(String.t() | nil) :: boolean()
++  def valid_email?(email) do
++    changeset(%{"email" => email}).valid?
++  end
++
++  # The first error's own message, interpolations filled in — the page shows
++  # it verbatim in `#signup-error`.
++  defp first_message(%{errors: [{_field, {message, opts}} | _]}) do
++    Enum.reduce(opts, message, fn {key, value}, acc ->
++      String.replace(acc, "%{#{key}}", to_string(value))
++    end)
++  end
++
++  defp first_message(_changeset), do: "That address could not be saved."
++end
+diff --git a/lib/benchapp_web/chrome.ex b/lib/benchapp_web/chrome.ex
+new file mode 100644
+index 0000000..461a1f2
+--- /dev/null
++++ b/lib/benchapp_web/chrome.ex
+@@ -0,0 +1,28 @@
++defmodule BenchappWeb.Chrome do
++  @moduledoc """
++  Shared state for the page chrome that `BenchappWeb.Layouts.app/1` draws —
++  currently the phone-width navigation menu.
++
++  The menu is server-rendered rather than toggled by a script: the links
++  stay in the document at every width, and `#nav-toggle` behaves like any
++  other LiveView control, so it is drivable from `Phoenix.LiveViewTest`.
++
++  Every LiveView that renders `<Layouts.app>` calls `assign_chrome/1` in
++  `mount/3` and delegates `"toggle_nav"` to `toggle_nav/1`.
++  """
++
++  @doc "Assigns the chrome state a page needs before it renders the layout."
++  def assign_chrome(socket) do
++    Phoenix.Component.assign(socket, :nav_open, false)
++  end
++
++  @doc "Opens the collapsed phone menu, or collapses it if it is open."
++  def toggle_nav(socket) do
++    Phoenix.Component.assign(socket, :nav_open, not nav_open?(socket))
++  end
++
++  @doc "Whether the phone menu is currently expanded."
++  def nav_open?(socket) do
++    Map.get(socket.assigns, :nav_open, false)
++  end
++end
+diff --git a/lib/benchapp_web/components/composite_components.ex b/lib/benchapp_web/components/composite_components.ex
+index 37013da..45baced 100644
+--- a/lib/benchapp_web/components/composite_components.ex
++++ b/lib/benchapp_web/components/composite_components.ex
+@@ -23,6 +23,9 @@ defmodule BenchappWeb.CompositeComponents do
+   Use it as a template when you add your own composites: copy the
+   attribute / slot / `data-component` shape, then register the new entry
+   in the manifest.
++
++  `feature_grid/1` and `stat_readout/1` are this app's own additions: the
++  landing page's capability grid and the tiles in its live stats strip.
+   """
+ 
+   use BenchappWeb, :html
+@@ -80,4 +83,117 @@ defmodule BenchappWeb.CompositeComponents do
+     </div>
+     """
+   end
++
++  @doc """
++  Responsive capability grid: one `<.card>` per item, each with an icon
++  tile, an eyebrow, a title, body copy, and an optional badge.
++
++      <.feature_grid columns="3" items={[
++        %{icon: "hero-signal", eyebrow: "Telemetry", title: "Buoy-grade sampling",
++          body: "1 Hz readings from every moored node.", tag: "live"}
++      ]} />
++
++  `items` takes maps with `:icon`, `:eyebrow`, `:title`, `:body`, and an
++  optional `:tag`. The grid owns the column rhythm; the caller owns the
++  copy.
++  """
++  attr :items, :list,
++    required: true,
++    doc: "Maps of `%{icon:, eyebrow:, title:, body:, tag:}`. `:tag` is optional."
++
++  attr :columns, :string,
++    values: ~w(2 3),
++    default: "3",
++    doc: "Column count at `lg`. Collapses to two at `md`, one below that."
++
++  attr :class, :any, default: nil
++  attr :rest, :global
++
++  def feature_grid(assigns) do
++    columns = %{
++      "2" => "sm:grid-cols-2 lg:grid-cols-2",
++      "3" => "sm:grid-cols-2 lg:grid-cols-3"
++    }
++
++    assigns = assign(assigns, :columns_class, Map.fetch!(columns, assigns.columns))
++
++    ~H"""
++    <div
++      data-component="BenchappWeb.CompositeComponents.feature_grid"
++      class={["grid gap-4 sm:gap-5", @columns_class, @class]}
++      {@rest}
++    >
++      <CoreComponents.card
++        :for={item <- @items}
++        variant="elevated"
++        class="transition-transform duration-200 hover:-translate-y-0.5"
++      >
++        <:eyebrow>{item.eyebrow}</:eyebrow>
++        <:title>
++          <span class="flex items-center gap-3">
++            <span class="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
++              <CoreComponents.icon name={item.icon} class="size-5" />
++            </span>
++            {item.title}
++          </span>
++        </:title>
++        <p class="text-sm leading-relaxed text-base-content/70">{item.body}</p>
++        <:actions :if={item.tag}>
++          <CoreComponents.badge tone="info" size="xs">{item.tag}</CoreComponents.badge>
++        </:actions>
++      </CoreComponents.card>
++    </div>
++    """
++  end
++
++  @doc """
++  One number in a live stats strip: a label, the figure, and a hint line.
++
++      <.stat_readout label="Signups" value={length(@signups)} value_id="stat-signups" />
++
++  `value_id` lands on the figure itself — the thing a test or an agent
++  reads — so the label and hint can change wording without moving the id.
++  `pulse` marks a figure that is still ticking and gives it a soft ring.
++  """
++  attr :label, :string, required: true
++  attr :value, :any, required: true
++  attr :value_id, :string, default: nil, doc: "DOM id for the figure element."
++  attr :hint, :string, default: nil
++  attr :icon, :string, default: nil
++  attr :pulse, :boolean, default: false, doc: "Ring the figure of a still-moving number."
++  attr :class, :any, default: nil
++  attr :rest, :global
++
++  def stat_readout(assigns) do
++    ~H"""
++    <div
++      data-component="BenchappWeb.CompositeComponents.stat_readout"
++      class={[
++        "flex items-center gap-3 rounded-2xl border border-base-300/70 bg-base-100 px-4 py-3",
++        @class
++      ]}
++      {@rest}
++    >
++      <span
++        :if={@icon}
++        class="flex size-9 shrink-0 items-center justify-center rounded-xl bg-base-200 text-base-content/70"
++      >
++        <CoreComponents.icon name={@icon} class="size-4" />
++      </span>
++      <div class="min-w-0">
++        <CoreComponents.eyebrow>{@label}</CoreComponents.eyebrow>
++        <p
++          id={@value_id}
++          class={[
++            "font-mono text-2xl font-semibold leading-tight tabular-nums",
++            @pulse && "text-primary"
++          ]}
++        >
++          {@value}
++        </p>
++        <p :if={@hint} class="truncate text-xs text-base-content/55">{@hint}</p>
++      </div>
++    </div>
++    """
++  end
+ end
+diff --git a/lib/benchapp_web/components/landing_components.ex b/lib/benchapp_web/components/landing_components.ex
+new file mode 100644
+index 0000000..c90f63a
+--- /dev/null
++++ b/lib/benchapp_web/components/landing_components.ex
+@@ -0,0 +1,58 @@
++defmodule BenchappWeb.LandingComponents do
++  @moduledoc """
++  Domain composites for Tidepool's landing page.
++
++  These are the blocks that mean something only in this product's terms —
++  the fleet activity feed, and the live panel that frames it. Anything a
++  second product area could reuse belongs in `BenchappWeb.CompositeComponents`
++  instead.
++  """
++
++  use BenchappWeb, :html
++
++  alias JobyKit.CoreComponents
++
++  @doc """
++  The newest-first activity log: one `<li>` per event, capped by the caller.
++
++      <.activity_feed id="activity" entries={@activity} />
++
++  Each entry is `%{id:, kind:, text:}` where `kind` is `:signup` or
++  `:tick`, which picks the glyph. The list element itself carries
++  `id="activity"`, so `#activity li` is the feed — an empty state renders
++  beside it, never inside it, so an entry count stays an entry count.
++  """
++  attr :entries, :list, required: true, doc: "Maps of `%{id:, kind:, text:}`, newest first."
++
++  attr :class, :any, default: nil
++  attr :rest, :global
++
++  def activity_feed(assigns) do
++    assigns = assign(assigns, :glyphs, %{signup: "hero-envelope", tick: "hero-arrow-path"})
++
++    ~H"""
++    <ul
++      data-component="BenchappWeb.LandingComponents.activity_feed"
++      class={["divide-y divide-base-300/70", @class]}
++      {@rest}
++    >
++      <li :for={entry <- @entries} id={"activity-" <> entry.id} class="flex items-start gap-3 py-2.5">
++        <span class="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-base-200 text-base-content/60">
++          <CoreComponents.icon name={Map.fetch!(@glyphs, entry.kind)} class="size-3.5" />
++        </span>
++        <span class="min-w-0 flex-1 text-sm leading-snug text-base-content/80">
++          <span class="break-words">{entry.text}</span>
++        </span>
++        <CoreComponents.badge
++          :if={entry.kind == :signup}
++          tone="ok"
++          size="xs"
++          class="mt-0.5 shrink-0"
++        >
++          new
++        </CoreComponents.badge>
++      </li>
++    </ul>
++    """
++  end
++end
+diff --git a/lib/benchapp_web/components/layouts.ex b/lib/benchapp_web/components/layouts.ex
+index 1b27aa1..b02cde7 100644
+--- a/lib/benchapp_web/components/layouts.ex
++++ b/lib/benchapp_web/components/layouts.ex
+@@ -1,63 +1,144 @@
+ defmodule BenchappWeb.Layouts do
+   @moduledoc """
+-  Layouts for BenchappWeb. Generated by `mix joby_kit.new`.
++  Page chrome for Benchapp.
+ 
+-  Pages compose `<Layouts.app flash={@flash}>...` from inside their
+-  LiveView render and supply only their content — the nav, the theme
+-  control, the footer, and the flash container are wired in here so
+-  every page gets them for free.
++  `app/1` owns the sticky `#main-nav` bar — brand, page links, theme
++  control, and the phone-width menu toggle — plus the footer and the flash
++  container, so pages compose `<Layouts.app flash={@flash} active_nav="...">`
++  and supply only their content.
+ 
+-  The chrome owns its own surface: the sticky bar draws the background
+-  and border edge-to-edge, and `simple_nav/1` inside it draws neither.
+-  Splitting that between the two is what produces a seam where the
+-  centred nav's max-width ends.
++  Two details the nav depends on:
++
++    * The active page is marked with `aria-current="page"` and styled with
++      theme tokens only, so the treatment survives a theme swap.
++    * Below `md` the menu collapses behind `#nav-toggle`, but it stays in
++      the document (`max-md:hidden`, not an `if`) so the links remain
++      crawlable and assertable at every width. `BenchappWeb.Chrome` owns
++      that open/closed state.
++
++  The chrome owns its own surface: the sticky bar draws the background and
++  border edge-to-edge, and the nav inside it draws neither. Splitting that
++  between the two is what produces a seam where the bar's max-width ends.
+   """
+   use BenchappWeb, :html
+ 
+   embed_templates "layouts/*"
+ 
++  @nav_links [
++    %{key: "home", label: "Overview", href: "/"},
++    %{key: "about", label: "About", href: "/about"},
++    %{key: "design", label: "Design", href: "/design"},
++    %{key: "custom-designs", label: "Components", href: "/custom-designs"}
++  ]
++
+   attr :flash, :map, required: true
+   attr :current_scope, :map, default: nil
+   attr :active_nav, :string, default: nil
++
++  attr :nav_open, :boolean,
++    default: false,
++    doc: "Whether the phone-width menu is expanded. Owned by `BenchappWeb.Chrome`."
++
+   slot :inner_block, required: true
+ 
+   def app(assigns) do
++    assigns = assign(assigns, :nav_links, @nav_links)
++
+     ~H"""
+     <div class="flex min-h-dvh flex-col bg-base-100">
+-      <div class="sticky top-0 z-40 border-b border-base-300 bg-base-100/90 backdrop-blur">
+-        <div class="mx-auto w-full max-w-5xl px-4 sm:px-6">
+-          <JobyKit.NavComponent.simple_nav active={@active_nav} brand="Benchapp">
+-            <:actions>
+-              <JobyKit.CoreComponents.theme_toggle />
+-            </:actions>
+-          </JobyKit.NavComponent.simple_nav>
++      <header class="sticky top-0 z-40 border-b border-base-300/80 bg-base-100/85 backdrop-blur">
++        <div class="mx-auto w-full max-w-6xl px-4 sm:px-6">
++          <nav id="main-nav" aria-label="Main" class="relative flex items-center gap-2 py-3">
++            <.link
++              navigate={~p"/"}
++              class="flex items-center gap-2 px-1 text-base font-semibold tracking-tight transition-opacity hover:opacity-75"
++            >
++              <span class="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-content shadow-sm">
++                <.icon name="hero-water" class="size-5" />
++              </span>
++              Tidepool
++            </.link>
++
++            <ul
++              id="nav-menu"
++              class={[
++                "ml-2 flex items-center gap-1 max-md:absolute max-md:inset-x-0 max-md:top-full max-md:z-50 max-md:flex-col max-md:items-stretch max-md:gap-1 max-md:rounded-b-2xl max-md:border max-md:border-base-300 max-md:bg-base-100 max-md:p-3 max-md:shadow-lg",
++                !@nav_open && "max-md:hidden"
++              ]}
++            >
++              <li :for={link <- @nav_links}>
++                <.link
++                  navigate={link.href}
++                  aria-current={@active_nav == link.key && "page"}
++                  class={[
++                    "block rounded-full px-3 py-2 text-sm transition-colors max-md:rounded-xl",
++                    @active_nav == link.key && "bg-primary/10 font-semibold text-primary",
++                    @active_nav != link.key &&
++                      "text-base-content/70 hover:bg-base-200 hover:text-base-content"
++                  ]}
++                >
++                  {link.label}
++                </.link>
++              </li>
++            </ul>
++
++            <div class="ml-auto flex items-center gap-1">
++              <.button
++                id="theme-toggle"
++                variant="ghost"
++                size="sm"
++                shape="square"
++                phx-click="toggle_theme"
++                aria-label="Switch colour theme"
++                title="Switch colour theme"
++              >
++                <.icon name="hero-sun" class="size-4 dark:hidden" />
++                <.icon name="hero-moon" class="hidden size-4 dark:block" />
++              </.button>
++
++              <.button
++                id="nav-toggle"
++                variant="ghost"
++                size="sm"
++                shape="square"
++                phx-click="toggle_nav"
++                phx-value-open={!@nav_open}
++                aria-controls="nav-menu"
++                aria-expanded={to_string(@nav_open)}
++                aria-label="Show navigation menu"
++                class="md:hidden"
++              >
++                <.icon name={if @nav_open, do: "hero-x-mark", else: "hero-bars-3"} class="size-5" />
++              </.button>
++            </div>
++          </nav>
+         </div>
+-      </div>
++      </header>
+ 
+       <main class="flex-1">
+         {render_slot(@inner_block)}
+       </main>
+ 
+-      <footer class="border-t border-base-300">
+-        <div class="mx-auto flex max-w-5xl flex-col gap-3 px-4 py-6 text-xs text-base-content/60 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+-          <p>
+-            Benchapp · built with
+-            <.link
+-              href="https://github.com/jobycorp/joby_kit"
+-              class="link link-hover font-medium"
+-              target="_blank"
+-              rel="noopener"
+-            >
+-              JobyKit
+-            </.link>
+-          </p>
+-          <p class="flex gap-2 font-mono">
++      <footer class="border-t border-base-300 bg-base-200/40">
++        <div class="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-8 text-sm sm:flex-row sm:items-end sm:justify-between sm:px-6">
++          <div class="max-w-sm space-y-2">
++            <p class="flex items-center gap-2 font-semibold text-base-content">
++              <span class="flex size-6 items-center justify-center rounded-md bg-primary/15 text-primary">
++                <.icon name="hero-water" class="size-4" />
++              </span>
++              Tidepool Instruments
++            </p>
++            <p class="text-base-content/60">
++              Buoy-grade water telemetry for community labs. A fictional product,
++              built as the demo surface for this app's component kit.
++            </p>
++          </div>
++          <div class="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-xs text-base-content/55">
++            <.link navigate={~p"/about"} class="link link-hover">About</.link>
+             <.link navigate={~p"/design"} class="link link-hover">/design</.link>
+-            <span aria-hidden="true" class="opacity-40">·</span>
+             <.link navigate={~p"/custom-designs"} class="link link-hover">/custom-designs</.link>
+-            <span aria-hidden="true" class="opacity-40">·</span>
+             <.link href={~p"/design.json"} class="link link-hover">/design.json</.link>
+-          </p>
++          </div>
+         </div>
+       </footer>
+ 
+diff --git a/lib/benchapp_web/components/layouts/root.html.heex b/lib/benchapp_web/components/layouts/root.html.heex
+index 7aa32b2..c4e70b1 100644
+--- a/lib/benchapp_web/components/layouts/root.html.heex
++++ b/lib/benchapp_web/components/layouts/root.html.heex
+@@ -11,7 +11,7 @@
+     <link phx-track-static rel="stylesheet" href={~p"/assets/css/app.css"} />
+     <script defer phx-track-static type="text/javascript" src={~p"/assets/js/app.js"}>
+     </script>
+-    
++
+     <script>
+       (() => {
+         const systemTheme = () =>
+diff --git a/lib/benchapp_web/design_manifest.ex b/lib/benchapp_web/design_manifest.ex
+index 0b9312a..92688c1 100644
+--- a/lib/benchapp_web/design_manifest.ex
++++ b/lib/benchapp_web/design_manifest.ex
+@@ -17,13 +17,15 @@ defmodule BenchappWeb.DesignManifest do
+   alias BenchappWeb.CompositeComponents
+   alias BenchappWeb.DesignPreviews
+ 
+-  category :composite,
++  category(:composite,
+     label: "Generic composites",
+     description: "Multi-primitive patterns reused across domains."
++  )
+ 
+-  category :domain,
++  category(:domain,
+     label: "Domain composites",
+     description: "Composites tied to a product area."
++  )
+ 
+   # ----------------------------------------------------------------- composite
+   # `empty_state` is the worked example — a real composite that bundles
+@@ -35,17 +37,32 @@ defmodule BenchappWeb.DesignManifest do
+   # domain-specific ones in their own module (e.g.
+   # `BenchappWeb.ChatComponents`).
+ 
+-  component CompositeComponents, :empty_state,
++  component(CompositeComponents, :empty_state,
+     category: :composite,
+     summary: "Centered icon + title + optional action; fills empty containers.",
+     preview: &DesignPreviews.empty_state_preview/1
++  )
++
++  component(CompositeComponents, :feature_grid,
++    category: :composite,
++    summary: "Responsive capability grid: icon tile, eyebrow, title, body, optional badge.",
++    preview: &DesignPreviews.feature_grid_preview/1
++  )
++
++  component(CompositeComponents, :stat_readout,
++    category: :composite,
++    summary: "One live figure — label, number with a stable DOM id, hint line.",
++    preview: &DesignPreviews.stat_readout_preview/1
++  )
+ 
+   # -------------------------------------------------------------------- domain
+-  # Add domain composites here:
+-  #
+-  #   component BenchappWeb.ChatComponents, :composer,
+-  #     category: :domain,
+-  #     summary: "Message composer with response-length controls."
++  # Composites tied to one product area live in their own module.
++
++  component(BenchappWeb.LandingComponents, :activity_feed,
++    category: :domain,
++    summary: "Newest-first event log, one <li> per event; the landing page caps it at ten.",
++    preview: &DesignPreviews.activity_feed_preview/1
++  )
+ 
+   @doc """
+   daisyUI primitives **this app** wraps that the kit does not.
+diff --git a/lib/benchapp_web/design_previews.ex b/lib/benchapp_web/design_previews.ex
+index 613d9cd..8f2cadb 100644
+--- a/lib/benchapp_web/design_previews.ex
++++ b/lib/benchapp_web/design_previews.ex
+@@ -26,20 +26,41 @@ defmodule BenchappWeb.DesignPreviews do
+   use BenchappWeb, :html
+ 
+   alias JobyKit.CoreComponents
+-  alias BenchappWeb.CompositeComponents
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
++  alias BenchappWeb.{CompositeComponents, LandingComponents}
++
++  @preview_features [
++    %{
++      icon: "hero-signal",
++      eyebrow: "Telemetry",
++      title: "Sampling at 1 Hz",
++      body: "Turbidity, chlorophyll, and temperature from every moored node.",
++      tag: "1 Hz"
++    },
++    %{
++      icon: "hero-shield-check",
++      eyebrow: "Integrity",
++      title: "Citable calibration",
++      body: "Drift correction and service history travel with the series.",
++      tag: nil
++    },
++    %{
++      icon: "hero-bell",
++      eyebrow: "Alerting",
++      title: "Thresholds that page",
++      body: "Rolling-window rules escalate to the crew that services the node.",
++      tag: "on-call"
++    }
++  ]
++
++  @preview_activity [
++    %{id: "signup-9", kind: :signup, text: "saltwater@harbour.gov joined the pilot list."},
++    %{
++      id: "tick-8",
++      kind: :tick,
++      text: "Sync cycle #8 closed — 92 windows until the fleet resyncs."
++    },
++    %{id: "signup-7", kind: :signup, text: "ada@lab.org joined the pilot list."}
++  ]
+ 
+   def empty_state_preview(assigns) do
+     ~H"""
+@@ -61,4 +82,48 @@ defmodule BenchappWeb.DesignPreviews do
+     """
+   end
+ 
++  def feature_grid_preview(assigns) do
++    assigns = assign(assigns, :preview_features, @preview_features)
++
++    ~H"""
++    <div class="space-y-5">
++      <CompositeComponents.feature_grid items={@preview_features} columns="3" />
++      <CompositeComponents.feature_grid items={@preview_features} columns="2" />
++    </div>
++    """
++  end
++
++  def stat_readout_preview(assigns) do
++    ~H"""
++    <div class="grid gap-3 sm:grid-cols-2">
++      <CompositeComponents.stat_readout
++        icon="hero-envelope"
++        label="Pilot signups"
++        hint="listed newest first"
++        value={12}
++        value_id="preview-stat-signups"
++      />
++      <CompositeComponents.stat_readout
++        icon="hero-arrow-path"
++        label="Countdown ticks"
++        hint="one every five seconds"
++        value={7}
++        value_id="preview-stat-ticks"
++        pulse
++      />
++    </div>
++    """
++  end
++
++  def activity_feed_preview(assigns) do
++    assigns = assign(assigns, :preview_activity, @preview_activity)
++
++    ~H"""
++    <CoreComponents.card variant="elevated" body_class="gap-3">
++      <:eyebrow>Fleet log</:eyebrow>
++      <:title>Activity</:title>
++      <LandingComponents.activity_feed id="preview-activity" entries={@preview_activity} />
++    </CoreComponents.card>
++    """
++  end
+ end
+diff --git a/lib/benchapp_web/endpoint.ex b/lib/benchapp_web/endpoint.ex
+index 0a90b47..a0deadf 100644
+--- a/lib/benchapp_web/endpoint.ex
++++ b/lib/benchapp_web/endpoint.ex
+@@ -7,7 +7,7 @@ defmodule BenchappWeb.Endpoint do
+   @session_options [
+     store: :cookie,
+     key: "_benchapp_key",
+-    signing_salt: "Dt0tU3Tp",
++    signing_salt: "iEVVTjbe",
+     same_site: "Lax"
+   ]
+ 
+diff --git a/lib/benchapp_web/live/about_live.ex b/lib/benchapp_web/live/about_live.ex
+new file mode 100644
+index 0000000..5cae937
+--- /dev/null
++++ b/lib/benchapp_web/live/about_live.ex
+@@ -0,0 +1,196 @@
++defmodule BenchappWeb.AboutLive do
++  @moduledoc """
++  `/about` — Tidepool's origin story, method, and crew.
++
++  Same layout as the landing page (`active_nav="about"` marks the nav link),
++  so the chrome, theme control, and phone menu behave identically here. The
++  capability tiles are the `feature_grid` composite again, in its two-column
++  setting, which is the point of registering it.
++  """
++
++  use BenchappWeb, :live_view
++
++  alias BenchappWeb.{Chrome, CompositeComponents}
++
++  @principles [
++    %{
++      icon: "hero-scale",
++      eyebrow: "Method",
++      title: "Publish the uncertainty, not just the number",
++      body:
++        "A reading without its drift band is a rumour. Tidepool ships the band with the reading, always, including in the public tier.",
++      tag: nil
++    },
++    %{
++      icon: "hero-wrench-screwdriver",
++      eyebrow: "Fleet",
++      title: "A node you can service yourself",
++      body:
++        "Seals, probes, and mounts are stock parts with printed spares lists. A crew with a screwdriver keeps a site online.",
++      tag: nil
++    },
++    %{
++      icon: "hero-lock-closed",
++      eyebrow: "Ownership",
++      title: "The lab that collected it keeps it",
++      body:
++        "Public tiers publish a derived view. Raw series stay in the account that moored the buoy, exportable at any hour.",
++      tag: nil
++    }
++  ]
++
++  @crew [
++    %{
++      initials: "AO",
++      name: "Dr. Ada Okonjo",
++      role: "Sensor lead",
++      note: "Fifteen years of moored-platform calibration in the North Atlantic."
++    },
++    %{
++      initials: "RM",
++      name: "Rafi Mehta",
++      role: "Field operations",
++      note: "Keeps six watersheds and their volunteer crews pointed at the same method."
++    },
++    %{
++      initials: "JL",
++      name: "June Li",
++      role: "Platform",
++      note: "Built the buffer that survives a week of dropped link on a 2 W radio."
++    }
++  ]
++
++  @impl true
++  def mount(_params, _session, socket) do
++    {:ok,
++     socket
++     |> Chrome.assign_chrome()
++     |> assign(page_title: "About", principles: @principles, crew: @crew)}
++  end
++
++  @impl true
++  def handle_event("toggle_nav", _params, socket) do
++    {:noreply, Chrome.toggle_nav(socket)}
++  end
++
++  # See the note in `BenchappWeb.HomeLive`: the theme flip belongs to the
++  # client, but the control is a LiveView event target on every page.
++  def handle_event("toggle_theme", _params, socket) do
++    {:noreply, socket}
++  end
++
++  def handle_event(_event, _params, socket), do: {:noreply, socket}
++
++  @impl true
++  def render(assigns) do
++    ~H"""
++    <Layouts.app flash={@flash} active_nav="about" nav_open={@nav_open}>
++      <div class="relative overflow-hidden border-b border-base-300/60">
++        <div class="pointer-events-none absolute -left-20 -top-20 size-72 rounded-full bg-secondary/10 blur-3xl" />
++
++        <div class="relative mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:py-20">
++          <.header level="h1" size="page">
++            We got tired of arguing about a number nobody could re-derive
++            <:eyebrow>About Tidepool</:eyebrow>
++            <:subtitle>
++              Tidepool Instruments builds moored water-quality telemetry for the
++              small organisations that watch a shoreline closely — university
++              labs, harbour councils, volunteer catchment groups. One method, one
++              calibration record, from the probe to the published chart.
++            </:subtitle>
++          </.header>
++
++          <div class="mt-10 grid gap-3 sm:grid-cols-3">
++            <CompositeComponents.stat_readout
++              icon="hero-water"
++              label="Watersheds live"
++              hint="since 2023"
++              value={6}
++            />
++            <CompositeComponents.stat_readout
++              icon="hero-bug"
++              label="Sensor-days logged"
++              hint="unbroken record"
++              value={41_208}
++            />
++            <CompositeComponents.stat_readout
++              icon="hero-map"
++              label="Countries"
++              hint="same method, six coasts"
++              value={4}
++            />
++          </div>
++        </div>
++      </div>
++
++      <div class="mx-auto max-w-6xl space-y-16 px-4 py-14 sm:px-6">
++        <section class="space-y-5">
++          <.header level="h2" size="page">
++            Three things we refuse to compromise
++            <:eyebrow>Principles</:eyebrow>
++            <:subtitle>
++              The same <code class="font-mono text-xs">feature_grid</code> composite
++              as the landing page, set to two columns — registered in the app's
++              design manifest, so this is the component, not a copy of it.
++            </:subtitle>
++          </.header>
++
++          <CompositeComponents.feature_grid items={@principles} columns="2" id="principle-grid" />
++        </section>
++
++        <section class="grid gap-8 lg:grid-cols-[1fr_1.1fr]">
++          <.header level="h2" size="page">
++            The method, in one paragraph
++            <:eyebrow>How it works</:eyebrow>
++          </.header>
++
++          <div class="space-y-4 text-base-content/75">
++            <p class="leading-relaxed">
++              A node samples at 1 Hz, buffers locally through a dropped radio
++              link, and posts to the catchment account it belongs to. The
++              platform applies the drift correction recorded at that node's
++              last service, keeps the correction in the series metadata, and
++              only then charts anything. If a sensor has drifted past its band,
++              the chart says so and pages the crew that serviced it last.
++            </p>
++            <p class="leading-relaxed">
++              Nothing here is clever for its own sake. The reason a harbour
++              council can act on a Tidepool chart is that the same chart can be
++              handed to a regulator with the service history attached — which is
++              also the only reason a volunteer crew keeps going out in November.
++            </p>
++            <div class="flex flex-wrap gap-3 pt-2">
++              <.button variant="primary" navigate={~p"/"}>Back to the launch page</.button>
++              <.button variant="ghost" href={~p"/design"}>Inspect the component kit</.button>
++            </div>
++          </div>
++        </section>
++
++        <section class="space-y-5">
++          <.header level="h2" size="page">
++            A small crew
++            <:eyebrow>Who builds it</:eyebrow>
++          </.header>
++
++          <div class="grid gap-4 sm:grid-cols-3">
++            <.card :for={person <- @crew} variant="elevated" prose body_class="gap-3">
++              <:title>
++                <span class="flex items-center gap-3">
++                  <span class="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/10 font-mono text-sm font-semibold text-primary">
++                    {person.initials}
++                  </span>
++                  <span class="min-w-0">
++                    {person.name}
++                    <span class="block text-xs font-normal text-base-content/55">{person.role}</span>
++                  </span>
++                </span>
++              </:title>
++              <p>{person.note}</p>
++            </.card>
++          </div>
++        </section>
++      </div>
++    </Layouts.app>
++    """
++  end
++end
+diff --git a/lib/benchapp_web/live/custom_designs_live.ex b/lib/benchapp_web/live/custom_designs_live.ex
+index 33bac68..9013799 100644
+--- a/lib/benchapp_web/live/custom_designs_live.ex
++++ b/lib/benchapp_web/live/custom_designs_live.ex
+@@ -16,23 +16,30 @@ defmodule BenchappWeb.CustomDesignsLive do
+ 
+   @impl true
+   def mount(_params, _session, socket) do
+-    {:ok, assign(socket, page_title: "Custom Designs")}
++    {:ok, socket |> BenchappWeb.Chrome.assign_chrome() |> assign(page_title: "Custom Designs")}
+   end
+ 
+   @impl true
++  def handle_event("toggle_nav", _params, socket) do
++    {:noreply, BenchappWeb.Chrome.toggle_nav(socket)}
++  end
++
++  # The theme flip is applied client-side by `assets/js/app.js`; answering
++  # the event keeps the control a LiveView event target on every page.
++  def handle_event("toggle_theme", _params, socket), do: {:noreply, socket}
++
+   def handle_event(_event, _params, socket), do: {:noreply, socket}
+ 
+   @impl true
+   def render(assigns) do
+     ~H"""
+-    <Layouts.app flash={@flash}>
++    <Layouts.app flash={@flash} active_nav="custom-designs" nav_open={@nav_open}>
+       <div id="custom-designs-page" class="space-y-8 p-4 sm:p-8">
+         <header>
+           <h1 class="text-3xl font-semibold leading-tight">Custom Designs</h1>
+           <p class="mt-2 max-w-3xl text-sm text-base-content/70">
+             This app's generic composites and domain components. Kit-curated
+-            wrappers and the contract live on
+-            <.link navigate={~p"/design"} class="link link-primary">/design</.link>.
++            wrappers and the contract live on <.link navigate={~p"/design"} class="link link-primary">/design</.link>.
+           </p>
+         </header>
+ 
+diff --git a/lib/benchapp_web/live/design_system_live.ex b/lib/benchapp_web/live/design_system_live.ex
+index efa439c..5af41c1 100644
+--- a/lib/benchapp_web/live/design_system_live.ex
++++ b/lib/benchapp_web/live/design_system_live.ex
+@@ -11,23 +11,30 @@ defmodule BenchappWeb.DesignSystemLive do
+ 
+   @impl true
+   def mount(_params, _session, socket) do
+-    {:ok, assign(socket, page_title: "Design System")}
++    {:ok, socket |> BenchappWeb.Chrome.assign_chrome() |> assign(page_title: "Design System")}
+   end
+ 
+   @impl true
++  def handle_event("toggle_nav", _params, socket) do
++    {:noreply, BenchappWeb.Chrome.toggle_nav(socket)}
++  end
++
++  # The theme flip is applied client-side by `assets/js/app.js`; answering
++  # the event keeps the control a LiveView event target on every page.
++  def handle_event("toggle_theme", _params, socket), do: {:noreply, socket}
++
+   def handle_event(_event, _params, socket), do: {:noreply, socket}
+ 
+   @impl true
+   def render(assigns) do
+     ~H"""
+-    <Layouts.app flash={@flash}>
++    <Layouts.app flash={@flash} active_nav="design" nav_open={@nav_open}>
+       <div id="design-system-page" class="space-y-8 p-4 sm:p-8">
+         <header>
+           <h1 class="text-3xl font-semibold leading-tight">Design System</h1>
+           <p class="mt-2 max-w-3xl text-sm text-base-content/70">
+             JobyKit's curated wrapper inventory and contract. Composites and domain
+-            components live on
+-            <.link navigate={~p"/custom-designs"} class="link link-primary">/custom-designs</.link>.
++            components live on <.link navigate={~p"/custom-designs"} class="link link-primary">/custom-designs</.link>.
+           </p>
+         </header>
+ 
+diff --git a/lib/benchapp_web/live/home_live.ex b/lib/benchapp_web/live/home_live.ex
+index eac5262..337d8c2 100644
+--- a/lib/benchapp_web/live/home_live.ex
++++ b/lib/benchapp_web/live/home_live.ex
+@@ -1,148 +1,433 @@
+ defmodule BenchappWeb.HomeLive do
+   @moduledoc """
+-  Welcome page generated by `mix joby_kit.new`.
++  Tidepool's landing page.
+ 
+-  It doubles as the worked example: every block on it is built from a
+-  registered kit wrapper, and each section's eyebrow names the component
+-  that renders it. If you're an agent picking up this app, this page is
+-  the shortest correct answer to "how do I build UI here".
++  Three live things share one socket: the launch-window countdown, the
++  pilot-list signup form, and the fleet activity log. They share it because
++  they are one story — the countdown ticks, the tick is counted and logged,
++  and a signup is counted and logged beside it. So `#stats` reads the state
++  the page is rendering rather than a cached copy: `#stat-signups` is
++  `length(@signups)` and `#stat-ticks` is `@ticks`.
+ 
+-  Edit freely — this file lives in your app, not in the kit. When you
+-  replace it, keep reaching for the wrappers it demonstrates.
++  ## The countdown
++
++  `@tick_interval_ms` is a module attribute, not configuration, and it is
++  `5_000` in every environment including `:test`. Tests wait on the real
++  interval; nothing here is shortened, parked, or stubbed for them. The
++  timer is armed only once `connected?/1`, so a static first render doesn't
++  send `:countdown_tick` to a socket nobody is listening to. The countdown
++  holds at zero and stops re-arming — the fleet has resynced.
++
++  ## The pilot list
++
++  State lives in these assigns; `Benchapp.LaunchList` holds the rules. A
++  rejected address leaves the list untouched and explains itself in
++  `#signup-error`, and it is the same message live validation shows, so the
++  error does not change shape between a keystroke and a submit.
++
++  ## The activity log
++
++  `@activity_limit` caps the feed at ten entries, newest first, one per
++  signup and one per tick. The cap lives in the assign rather than in the
++  markup, so `#activity li` is a truthful count.
+   """
+ 
+   use BenchappWeb, :live_view
+ 
+-  @build_order [
+-    %{step: "1", rule: "Domain composite exists?", detail: "Use it."},
+-    %{step: "2", rule: "Generic composite exists?", detail: "Use it — see /custom-designs."},
+-    %{step: "3", rule: "Core wrapper exists?", detail: "Use it — see /design."},
++  alias Benchapp.LaunchList
++  alias BenchappWeb.{Chrome, CompositeComponents, LandingComponents}
++
++  @countdown_start 100
++  @tick_interval_ms 5_000
++  @activity_limit 10
++
++  @features [
++    %{
++      icon: "hero-signal",
++      eyebrow: "Telemetry",
++      title: "Buoy-grade sampling",
++      body:
++        "Turbidity, chlorophyll, and temperature at 1 Hz from every moored node, buffered through dropped links.",
++      tag: "1 Hz"
++    },
+     %{
+-      step: "4",
+-      rule: "daisyUI primitive exists?",
+-      detail: "Wrap it, register it in DesignManifest, then use it."
++      icon: "hero-shield-check",
++      eyebrow: "Integrity",
++      title: "Calibration you can cite",
++      body:
++        "Every series carries its drift correction and its sensor's service history, so a result survives review.",
++      tag: nil
+     },
+     %{
+-      step: "5",
+-      rule: "None of the above?",
+-      detail: "Tailwind plus theme tokens — then expose the result as a wrapper and register it."
++      icon: "hero-map-pin",
++      eyebrow: "Coverage",
++      title: "Catchment maps, not dashboards",
++      body:
++        "Sites group by waterbody on their own. Compare an inlet to its outlet without writing a query.",
++      tag: nil
++    },
++    %{
++      icon: "hero-bell",
++      eyebrow: "Alerting",
++      title: "Thresholds that page a person",
++      body:
++        "Rolling-window rules escalate to whoever last serviced that node. No alert inbox to tend.",
++      tag: "on-call"
++    },
++    %{
++      icon: "hero-cloud-arrow-down",
++      eyebrow: "Archive",
++      title: "Export the whole record",
++      body:
++        "Parquet, CSV, or a DOI for the survey itself. The dataset your crew collected leaves with you.",
++      tag: nil
++    },
++    %{
++      icon: "hero-users",
++      eyebrow: "Sharing",
++      title: "Read access for the town",
++      body:
++        "Publish a waterbody to the public read tier while the raw series stays with the lab that took it.",
++      tag: nil
+     }
+   ]
+ 
+-  @lint_snippet """
+-  # See what's already registered before building anything
+-  curl http://localhost:4000/design.json | jq '.components[].data_component'
++  @impl true
++  def mount(_params, _session, socket) do
++    socket =
++      socket
++      |> Chrome.assign_chrome()
++      |> assign(
++        page_title: "Tidepool",
++        countdown: @countdown_start,
++        ticks: 0,
++        signups: [],
++        activity: [],
++        activity_seq: 0,
++        signup_form: to_form(%{"email" => ""}, as: "signup"),
++        signup_error: nil,
++        features: @features
++      )
+ 
+-  # Then, after writing UI
+-  mix joby_kit.lint\
+-  """
++    socket = if connected?(socket), do: schedule_tick(socket), else: socket
++
++    {:ok, socket}
++  end
+ 
+   @impl true
+-  def mount(_params, _session, socket) do
+-    {:ok,
+-     assign(socket,
+-       page_title: "Home",
+-       build_order: @build_order,
+-       lint_snippet: @lint_snippet
+-     )}
++  def handle_info(:countdown_tick, socket) do
++    remaining = max(socket.assigns.countdown - 1, 0)
++    ticks = socket.assigns.ticks + 1
++    seq = socket.assigns.activity_seq + 1
++
++    socket =
++      socket
++      |> assign(countdown: remaining, ticks: ticks, activity_seq: seq)
++      |> push_activity(%{
++        id: "tick-#{seq}",
++        kind: :tick,
++        text: "Sync cycle ##{ticks} closed — #{remaining} windows until the fleet resyncs."
++      })
++
++    {:noreply, if(remaining > 0, do: schedule_tick(socket), else: socket)}
+   end
+ 
+   @impl true
++  def handle_event("toggle_nav", _params, socket) do
++    {:noreply, Chrome.toggle_nav(socket)}
++  end
++
++  # Live validation: the same rules as submit, but silent while the field is
++  # empty so a half-typed address doesn't read as a mistake.
++  def handle_event("validate", %{"signup" => params}, socket) do
++    email = Map.get(params, "email", "")
++
++    error =
++      case email do
++        "" ->
++          nil
++
++        email ->
++          case LaunchList.check_signup(email, socket.assigns.signups) do
++            {:ok, _} -> nil
++            {:error, message} -> message
++          end
++      end
++
++    {:noreply,
++     assign(socket, signup_form: to_form(%{"email" => email}, as: "signup"), signup_error: error)}
++  end
++
++  def handle_event("signup", %{"signup" => params}, socket) do
++    case LaunchList.check_signup(Map.get(params, "email"), socket.assigns.signups) do
++      {:ok, email} ->
++        seq = socket.assigns.activity_seq + 1
++
++        {:noreply,
++         socket
++         |> assign(activity_seq: seq, signups: [email | socket.assigns.signups])
++         |> push_activity(%{
++           id: "signup-#{seq}",
++           kind: :signup,
++           text: "#{email} joined the pilot list."
++         })
++         |> assign(signup_form: to_form(%{"email" => ""}, as: "signup"), signup_error: nil)}
++
++      {:error, message} ->
++        {:noreply,
++         assign(socket, signup_error: message, signup_form: to_form(params, as: "signup"))}
++    end
++  end
++
++  # `#theme-toggle` owns the theme. `<html data-theme>` lives outside the
++  # LiveView tree, so `assets/js/app.js` applies the flip on click — before
++  # paint, persisted to localStorage, exactly as the kit's own theme control
++  # does. Answering the event here is still deliberate: the control is a
++  # LiveView event target, so `Phoenix.LiveViewTest` can drive it like any
++  # other one.
++  def handle_event("toggle_theme", _params, socket) do
++    {:noreply, socket}
++  end
++
+   def handle_event(_event, _params, socket), do: {:noreply, socket}
+ 
++  defp schedule_tick(socket) do
++    Process.send_after(self(), :countdown_tick, @tick_interval_ms)
++    socket
++  end
++
++  defp push_activity(socket, entry) do
++    assign(socket, :activity, Enum.take([entry | socket.assigns.activity], @activity_limit))
++  end
++
+   @impl true
+   def render(assigns) do
+     ~H"""
+-    <Layouts.app flash={@flash} active_nav="home">
+-      <div class="mx-auto max-w-5xl space-y-14 px-4 py-12 sm:px-6">
+-        <.header size="page">
+-          Benchapp
+-          <:eyebrow>benchapp</:eyebrow>
+-          <:subtitle>
+-            A Phoenix app wired to JobyKit. Every UI primitive flows through a
+-            registered wrapper, so the component inventory, the rendered page, and
+-            the JSON manifest never drift apart.
+-          </:subtitle>
+-          <:actions>
+-            <.button navigate={~p"/design"} variant="primary">Open the inventory</.button>
+-          </:actions>
+-        </.header>
+-
+-        <section class="space-y-4">
+-          <.header level="h2">
+-            Three surfaces
+-            <:eyebrow>Start here</:eyebrow>
+-            <:subtitle>
+-              Where the component inventory lives, for people and for agents.
+-              Each panel below is a <code class="font-mono text-xs">&lt;.card&gt;</code>.
+-            </:subtitle>
+-          </.header>
++    <Layouts.app flash={@flash} active_nav="home" nav_open={@nav_open}>
++      <div id="hero" class="relative overflow-hidden border-b border-base-300/60">
++        <div class="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/15 via-transparent to-secondary/10" />
++        <div class="pointer-events-none absolute -right-24 -top-24 size-72 rounded-full bg-primary/10 blur-3xl" />
++
++        <div class="relative mx-auto grid max-w-6xl items-center gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:py-24">
++          <div class="space-y-7">
++            <div class="flex flex-wrap items-center gap-2">
++              <.badge tone="ok" variant="solid" size="sm">Cohort 12 open</.badge>
++              <.badge tone="neutral" variant="outline" size="sm">
++                <span class="flex items-center gap-1.5">
++                  <span class="size-1.5 animate-pulse rounded-full bg-current" /> fleet online
++                </span>
++              </.badge>
++            </div>
++
++            <h1 class="text-4xl font-semibold leading-[1.05] tracking-tight text-base-content sm:text-5xl lg:text-6xl">
++              Know what is in the water
++              <span class="block text-primary">before anyone wades in.</span>
++            </h1>
++
++            <p class="max-w-xl text-lg leading-relaxed text-base-content/70">
++              Tidepool puts buoy-grade telemetry within reach of the labs,
++              councils, and volunteer crews who actually walk the shoreline —
++              with the calibration record to prove it.
++            </p>
++
++            <div class="flex flex-wrap items-center gap-3">
++              <.button variant="primary" size="lg" href="#signup-form">
++                Join the pilot list <.icon name="hero-arrow-down" class="size-4" />
++              </.button>
++              <.button variant="neutral" size="lg" navigate={~p"/about"}>How it works</.button>
++            </div>
++
++            <p class="flex items-center gap-2 text-sm text-base-content/55">
++              <.icon name="hero-check-circle" class="size-4 shrink-0 text-success" />
++              Six watersheds reporting now · no hardware deposit
++            </p>
++          </div>
+ 
+-          <div class="grid gap-4 md:grid-cols-3">
+-            <.card prose>
+-              <:eyebrow>Kit wrappers</:eyebrow>
+-              <:title><span class="font-mono text-base">/design</span></:title>
+-              The curated inventory every JobyKit app shares, with the wrapper
+-              contract and the daisyUI catalogue.
+-              <:actions>
+-                <.button navigate={~p"/design"} size="sm">Open</.button>
+-              </:actions>
+-            </.card>
+-
+-            <.card prose>
+-              <:eyebrow>This app's components</:eyebrow>
+-              <:title><span class="font-mono text-base">/custom-designs</span></:title>
+-              Composites and domain components you add, starting from the worked
+-              empty-state example.
+-              <:actions>
+-                <.button navigate={~p"/custom-designs"} size="sm">Open</.button>
+-              </:actions>
+-            </.card>
+-
+-            <.card prose>
+-              <:eyebrow>Machine-readable</:eyebrow>
+-              <:title><span class="font-mono text-base">/design.json</span></:title>
+-              The same inventory as JSON — attrs, slots, and source lines. Fetch
+-              it instead of parsing rendered HEEx.
+-              <:actions>
+-                <.button href={~p"/design.json"} size="sm">Open</.button>
+-              </:actions>
+-            </.card>
++          <div class="relative rounded-3xl border border-base-300 bg-base-100/95 p-6 shadow-xl shadow-base-300/40 backdrop-blur">
++            <div class="flex items-start justify-between gap-4">
++              <div>
++                <.eyebrow>Next fleet resync</.eyebrow>
++                <p class="mt-1 text-sm text-base-content/60">
++                  Windows left before every node re-reads its calibration curve.
++                </p>
++              </div>
++              <span class="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
++                <.icon name="hero-clock" class="size-5" />
++              </span>
++            </div>
++
++            <div class="mt-6 flex items-end gap-3">
++              <p
++                id="countdown"
++                class="font-mono text-6xl font-semibold leading-none tabular-nums tracking-tight text-base-content"
++              >
++                {@countdown}
++              </p>
++              <span class="pb-1 text-sm text-base-content/55">windows</span>
++            </div>
++
++            <div class="mt-4 h-1.5 overflow-hidden rounded-full bg-base-200">
++              <div
++                class="h-full rounded-full bg-primary transition-all duration-700 ease-out"
++                style={"width: #{@countdown}%"}
++              />
++            </div>
++
++            <div class="mt-6 space-y-2 border-t border-base-300/70 pt-4 text-sm text-base-content/65">
++              <p class="flex items-center justify-between gap-4">
++                <span>Sync cycles this session</span>
++                <span class="font-mono tabular-nums text-base-content">{@ticks}</span>
++              </p>
++              <p class="flex items-center justify-between gap-4">
++                <span>On the pilot list</span>
++                <span class="font-mono tabular-nums text-base-content">{length(@signups)}</span>
++              </p>
++            </div>
+           </div>
++        </div>
++      </div>
++
++      <div class="mx-auto max-w-6xl space-y-16 px-4 py-14 sm:px-6">
++        <section id="stats" aria-label="Live figures" class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
++          <CompositeComponents.stat_readout
++            icon="hero-envelope"
++            label="Pilot signups"
++            hint="listed newest first"
++            value={length(@signups)}
++            value_id="stat-signups"
++          />
++          <CompositeComponents.stat_readout
++            icon="hero-arrow-path"
++            label="Countdown ticks"
++            hint="one every five seconds"
++            value={@ticks}
++            value_id="stat-ticks"
++            pulse
++          />
++          <CompositeComponents.stat_readout
++            icon="hero-water"
++            label="Watersheds reporting"
++            hint="public read tier"
++            value={6}
++          />
++          <CompositeComponents.stat_readout
++            icon="hero-bolt"
++            label="Samples per second"
++            hint="across all moored nodes"
++            value={284}
++          />
+         </section>
+ 
+-        <section class="space-y-4">
+-          <.header level="h2">
+-            Build order
+-            <:eyebrow>The rule</:eyebrow>
++        <section class="space-y-5">
++          <.header level="h2" size="page">
++            Built for the shoreline, not the server room
++            <:eyebrow>What Tidepool does</:eyebrow>
+             <:subtitle>
+-              Work down the steps and stop at the first match — the order decides
+-              the answer. Rendered with <code class="font-mono text-xs">&lt;.list&gt;</code>.
++              Six capabilities carry the whole product. These tiles are one
++              composite — <code class="font-mono text-xs">feature_grid</code>
++              —
++              registered on
++              <.link navigate={~p"/custom-designs"} class="link link-primary">the components page</.link>
++              and previewed there with sample data.
+             </:subtitle>
+           </.header>
+ 
+-          <.list>
+-            <:item :for={entry <- @build_order} title={"#{entry.step}. #{entry.rule}"}>
+-              {entry.detail}
+-            </:item>
+-          </.list>
++          <CompositeComponents.feature_grid items={@features} columns="3" id="feature-grid" />
+         </section>
+ 
+-        <section class="space-y-4">
+-          <.header level="h2">
+-            Before you call it done
+-            <:eyebrow>Verify</:eyebrow>
+-            <:subtitle>
+-              The linter checks the contract end to end: registration, the
+-              <code class="font-mono text-xs">data-component</code> marker, global
+-              pass-through, and raw primitives that skipped a wrapper.
+-            </:subtitle>
+-          </.header>
++        <section class="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
++          <.card variant="elevated" body_class="gap-4">
++            <:eyebrow>Pilot programme</:eyebrow>
++            <:title>Join cohort 12</:title>
++            <p class="text-sm leading-relaxed text-base-content/70">
++              Twelve labs get the first fleet windows. Leave an address and we
++              hold a place for your waterbody — one address per lab, and a
++              repeat is politely refused.
++            </p>
+ 
+-          <.card>
+-            <pre class="overflow-x-auto rounded-box bg-base-200 p-4 text-xs leading-relaxed"><code>{@lint_snippet}</code></pre>
++            <.form
++              for={@signup_form}
++              id="signup-form"
++              phx-submit="signup"
++              phx-change="validate"
++              class="flex items-start gap-2"
++            >
++              <.input
++                field={@signup_form[:email]}
++                type="email"
++                class="min-w-0 flex-1"
++                placeholder="lab@example.org"
++                autocomplete="email"
++                aria-label="Email address"
++                aria-describedby="signup-error"
++              />
++              <.button type="submit" variant="primary" class="mt-0.5 shrink-0">
++                Join
++              </.button>
++            </.form>
++
++            <p
++              :if={@signup_error}
++              id="signup-error"
++              role="alert"
++              aria-live="polite"
++              class="flex items-center gap-2 text-sm font-medium text-error"
++            >
++              <.icon name="hero-exclamation-circle" class="size-4 shrink-0" />
++              {@signup_error}
++            </p>
++
++            <div class="space-y-2 border-t border-base-300/70 pt-4">
++              <.eyebrow>Recent signups</.eyebrow>
++              <ul id="signups" class="space-y-1.5 text-sm">
++                <li
++                  :for={email <- @signups}
++                  key={email}
++                  class="flex items-center gap-2 text-base-content/80"
++                >
++                  <.icon name="hero-check" class="size-4 shrink-0 text-success" />
++                  <span class="break-all">{email}</span>
++                </li>
++              </ul>
++              <p :if={@signups == []} class="text-sm text-base-content/45">
++                Nobody yet — be the first shoreline on the list.
++              </p>
++            </div>
++          </.card>
++
++          <.card variant="ghost" body_class="gap-4">
++            <:eyebrow>Fleet log</:eyebrow>
++            <:title>Activity</:title>
++            <p class="text-sm text-base-content/60">
++              Every signup and every countdown tick, newest first, last ten kept.
++            </p>
++
++            <div id="activity-panel" class="max-h-80 overflow-y-auto pr-1">
++              <LandingComponents.activity_feed id="activity" entries={@activity} />
++              <CompositeComponents.empty_state
++                :if={@activity == []}
++                icon="hero-radio"
++                title="Waiting on the first cycle"
++              >
++                The log fills as the countdown runs and addresses arrive.
++              </CompositeComponents.empty_state>
++            </div>
+           </.card>
+         </section>
++
++        <section class="flex flex-col items-center gap-5 rounded-3xl border border-base-300/70 bg-gradient-to-br from-base-200/70 to-base-100 px-6 py-12 text-center sm:px-10">
++          <div class="max-w-2xl space-y-3">
++            <.eyebrow>Standing by</.eyebrow>
++            <h2 class="text-3xl font-semibold leading-tight tracking-tight">
++              Six watersheds, one calibration standard
++            </h2>
++            <p class="text-base-content/70">
++              Tidepool runs on the same record your regulator asks for. Read how
++              the fleet, the numbers, and the people behind both are kept honest.
++            </p>
++          </div>
++          <.button variant="primary" navigate={~p"/about"}>Read the about page</.button>
++        </section>
+       </div>
+     </Layouts.app>
+     """
+diff --git a/lib/benchapp_web/router.ex b/lib/benchapp_web/router.ex
+index f563062..8c20fa8 100644
+--- a/lib/benchapp_web/router.ex
++++ b/lib/benchapp_web/router.ex
+@@ -18,6 +18,7 @@ defmodule BenchappWeb.Router do
+     pipe_through :browser
+ 
+     live "/", HomeLive, :index
++    live "/about", AboutLive, :index
+     live "/design", DesignSystemLive, :index
+     live "/custom-designs", CustomDesignsLive, :index
+   end
+diff --git a/test/benchapp_web/live/about_live_test.exs b/test/benchapp_web/live/about_live_test.exs
+new file mode 100644
+index 0000000..abab41e
+--- /dev/null
++++ b/test/benchapp_web/live/about_live_test.exs
+@@ -0,0 +1,38 @@
++defmodule BenchappWeb.AboutLiveTest do
++  @moduledoc """
++  `/about`: the shared layout, marked current in the nav, built from the same
++  registered composites.
++  """
++  use BenchappWeb.ConnCase, async: true
++
++  import BenchappWeb.LiveTestHelpers
++  import Phoenix.LiveViewTest
++
++  setup %{conn: conn} do
++    {:ok, view, html} = live(conn, ~p"/about")
++    {:ok, view: view, html: html}
++  end
++
++  test "renders on the shared layout", %{view: view, html: html} do
++    assert has_element?(view, "#main-nav")
++    assert has_element?(view, "#theme-toggle")
++    assert has_element?(view, "h1")
++    assert html =~ "re-derive"
++    assert html =~ "Tidepool"
++  end
++
++  test "marks the About link as the current page", %{view: view} do
++    assert render(view) |> IO.iodata_to_binary() =~ ~s|aria-current="page"|
++    assert current_marks(view) == 1
++  end
++
++  test "reuses the registered feature grid composite", %{view: view} do
++    assert has_element?(view, "#principle-grid")
++    assert has_element?(view, ~S|[data-component="BenchappWeb.CompositeComponents.feature_grid"]|)
++  end
++
++  test "the nav offers a live link back to the landing page", %{view: view} do
++    assert has_element?(view, ~S|#nav-menu a[href="/"]|)
++    assert render(view) |> IO.iodata_to_binary() =~ ~s|data-phx-link="redirect"|
++  end
++end
+diff --git a/test/benchapp_web/live/home_live/activity_feed_test.exs b/test/benchapp_web/live/home_live/activity_feed_test.exs
+new file mode 100644
+index 0000000..31c1b98
+--- /dev/null
++++ b/test/benchapp_web/live/home_live/activity_feed_test.exs
+@@ -0,0 +1,64 @@
++defmodule BenchappWeb.HomeLive.ActivityFeedTest do
++  @moduledoc """
++  The fleet log: `#activity` holds `<li>` entries, newest first, at most ten,
++  one per signup and one per tick.
++  """
++  use BenchappWeb.ConnCase, async: true
++
++  import BenchappWeb.LiveTestHelpers
++  import Phoenix.LiveViewTest
++
++  test "starts empty", %{conn: conn} do
++    {:ok, view, _html} = live(conn, ~p"/")
++
++    assert has_element?(view, "#activity")
++    assert texts(view, "#activity li") == []
++  end
++
++  test "a signup logs one entry naming the address", %{conn: conn} do
++    {:ok, view, _html} = live(conn, ~p"/")
++
++    signup(view, "ada@lab.org")
++    entries = texts(view, "#activity li")
++
++    assert length(entries) == 1
++    assert hd(entries) =~ "ada@lab.org"
++  end
++
++  test "a tick logs one entry", %{conn: conn} do
++    {:ok, view, _html} = live(conn, ~p"/")
++
++    await_view(view, fn _html -> texts(view, "#activity li") != [] end)
++
++    assert [newest | _] = texts(view, "#activity li")
++    assert newest =~ "Sync cycle"
++  end
++
++  test "signups and ticks share one log, newest at the top", %{conn: conn} do
++    {:ok, view, _html} = live(conn, ~p"/")
++
++    await_view(view, fn _html -> texts(view, "#activity li") != [] end)
++    signup(view, "late@lab.org")
++
++    entries = texts(view, "#activity li")
++
++    assert length(entries) == 2
++    assert hd(entries) =~ "late@lab.org"
++    assert List.last(entries) =~ "Sync cycle"
++  end
++
++  test "the feed holds at most ten entries", %{conn: conn} do
++    {:ok, view, _html} = live(conn, ~p"/")
++
++    for index <- 1..12 do
++      signup(view, "crew#{index}@lab.org")
++    end
++
++    entries = texts(view, "#activity li")
++
++    assert length(entries) == 10
++    assert hd(entries) =~ "crew12@lab.org"
++    refute Enum.any?(entries, &(&1 =~ "crew1@lab.org"))
++    assert texts(view, "#stat-signups") == ["12"]
++  end
++end
+diff --git a/test/benchapp_web/live/home_live/countdown_test.exs b/test/benchapp_web/live/home_live/countdown_test.exs
+new file mode 100644
+index 0000000..afe2719
+--- /dev/null
++++ b/test/benchapp_web/live/home_live/countdown_test.exs
+@@ -0,0 +1,37 @@
++defmodule BenchappWeb.HomeLive.CountdownTest do
++  @moduledoc """
++  The launch-window countdown: starts at 100, one window per five seconds,
++  the number lives in `#countdown`.
++  """
++  use BenchappWeb.ConnCase, async: true
++
++  import BenchappWeb.LiveTestHelpers
++  import Phoenix.LiveViewTest
++
++  test "renders the countdown at its start value", %{conn: conn} do
++    {:ok, view, _html} = live(conn, ~p"/")
++
++    assert has_element?(view, "#countdown")
++    assert countdown_value(view) == 100
++  end
++
++  test "decrements by one on the five-second tick and counts the tick", %{conn: conn} do
++    {:ok, view, _html} = live(conn, ~p"/")
++
++    # The interval is 5_000ms in every environment, so this waits it out
++    # rather than stubbing it — see BenchappWeb.LiveTestHelpers.await_view/2.
++    await_view(view, fn _html -> countdown_value(view) == 99 end)
++
++    assert texts(view, "#stat-ticks") == ["1"]
++  end
++
++  test "keeps counting down with the tick tally in step", %{conn: conn} do
++    {:ok, view, _html} = live(conn, ~p"/")
++
++    await_view(view, fn _html -> countdown_value(view) <= 98 end, 13_000)
++
++    ticks = texts(view, "#stat-ticks") |> hd() |> String.to_integer()
++
++    assert ticks == 100 - countdown_value(view)
++  end
++end
+diff --git a/test/benchapp_web/live/home_live/signup_test.exs b/test/benchapp_web/live/home_live/signup_test.exs
+new file mode 100644
+index 0000000..666107c
+--- /dev/null
++++ b/test/benchapp_web/live/home_live/signup_test.exs
+@@ -0,0 +1,70 @@
++defmodule BenchappWeb.HomeLive.SignupTest do
++  @moduledoc """
++  The pilot-list form: `#signup-form`, one email input, `#signup-error` for
++  rejections, and `#signups` for the list that grows in place.
++  """
++  use BenchappWeb.ConnCase, async: true
++
++  import BenchappWeb.LiveTestHelpers
++  import Phoenix.LiveViewTest
++
++  test "the form holds exactly one email input", %{conn: conn} do
++    {:ok, view, _html} = live(conn, ~p"/")
++
++    assert has_element?(view, "#signup-form")
++    assert has_element?(view, ~S|#signup-form input[type="email"]|)
++    assert length(texts(view, "#signup-form input")) == 1
++  end
++
++  test "an invalid address is refused with an error and adds nothing", %{conn: conn} do
++    {:ok, view, _html} = live(conn, ~p"/")
++
++    signup(view, "nope-not-an-email")
++
++    assert has_element?(view, "#signup-error")
++    assert texts(view, "#signup-error") |> hd() =~ "email address"
++    assert texts(view, "#signups li") == []
++  end
++
++  test "a valid address joins the recent list without a reload", %{conn: conn} do
++    {:ok, view, _html} = live(conn, ~p"/")
++
++    assert texts(view, "#signups li") == []
++
++    signup(view, "ada@lab.org")
++
++    assert texts(view, "#signups li") == ["ada@lab.org"]
++    refute has_element?(view, "#signup-error")
++    assert has_element?(view, "#signup-form")
++  end
++
++  test "the same address twice is refused and stored once", %{conn: conn} do
++    {:ok, view, _html} = live(conn, ~p"/")
++
++    signup(view, "ada@lab.org")
++    signup(view, "ada@lab.org")
++
++    assert texts(view, "#signups li") == ["ada@lab.org"]
++    assert texts(view, "#signup-error") |> hd() =~ "already"
++  end
++
++  test "case and surrounding spaces do not make a second signup", %{conn: conn} do
++    {:ok, view, _html} = live(conn, ~p"/")
++
++    signup(view, "Ada@Lab.org")
++    signup(view, "  ada@lab.org  ")
++
++    assert texts(view, "#signups li") == ["ada@lab.org"]
++    assert has_element?(view, "#signup-error")
++  end
++
++  test "several addresses stack newest first", %{conn: conn} do
++    {:ok, view, _html} = live(conn, ~p"/")
++
++    signup(view, "first@lab.org")
++    signup(view, "second@lab.org")
++    signup(view, "third@lab.org")
++
++    assert texts(view, "#signups li") == ["third@lab.org", "second@lab.org", "first@lab.org"]
++  end
++end
+diff --git a/test/benchapp_web/live/home_live/stats_test.exs b/test/benchapp_web/live/home_live/stats_test.exs
+new file mode 100644
+index 0000000..85a9e70
+--- /dev/null
++++ b/test/benchapp_web/live/home_live/stats_test.exs
+@@ -0,0 +1,51 @@
++defmodule BenchappWeb.HomeLive.StatsTest do
++  @moduledoc """
++  The `#stats` strip: `#stat-signups` counts the live pilot list,
++  `#stat-ticks` counts the countdown's ticks — both read from the state the
++  page renders.
++  """
++  use BenchappWeb.ConnCase, async: true
++
++  import BenchappWeb.LiveTestHelpers
++  import Phoenix.LiveViewTest
++
++  test "reports zero signups and zero ticks at rest", %{conn: conn} do
++    {:ok, view, _html} = live(conn, ~p"/")
++
++    assert has_element?(view, "#stats")
++    assert texts(view, "#stat-signups") == ["0"]
++    assert texts(view, "#stat-ticks") == ["0"]
++  end
++
++  test "the signup figure tracks the list as addresses arrive", %{conn: conn} do
++    {:ok, view, _html} = live(conn, ~p"/")
++
++    signup(view, "one@lab.org")
++    assert texts(view, "#stat-signups") == ["1"]
++
++    signup(view, "two@lab.org")
++    assert texts(view, "#stat-signups") == ["2"]
++
++    # A refused address must not move the figure.
++    signup(view, "one@lab.org")
++    assert texts(view, "#stat-signups") == ["2"]
++  end
++
++  test "the tick figure moves with the countdown", %{conn: conn} do
++    {:ok, view, _html} = live(conn, ~p"/")
++
++    await_view(view, fn _html -> texts(view, "#stat-ticks") == ["1"] end)
++
++    assert countdown_value(view) == 99
++  end
++
++  test "both figures move together but count different things", %{conn: conn} do
++    {:ok, view, _html} = live(conn, ~p"/")
++
++    signup(view, "solo@lab.org")
++    await_view(view, fn _html -> texts(view, "#stat-ticks") == ["1"] end)
++
++    assert texts(view, "#stat-signups") == ["1"]
++    assert texts(view, "#stat-ticks") == ["1"]
++  end
++end
+diff --git a/test/benchapp_web/navigation_test.exs b/test/benchapp_web/navigation_test.exs
+new file mode 100644
+index 0000000..5e9d28f
+--- /dev/null
++++ b/test/benchapp_web/navigation_test.exs
+@@ -0,0 +1,75 @@
++defmodule BenchappWeb.NavigationTest do
++  @moduledoc """
++  The `#main-nav` chrome: current-page marking, the phone menu behind
++  `#nav-toggle`, the `#theme-toggle` target, and the composite the design
++  page advertises.
++  """
++  use BenchappWeb.ConnCase, async: true
++
++  import BenchappWeb.LiveTestHelpers
++  import Phoenix.LiveViewTest
++
++  test "exactly one link is current, per page", %{conn: conn} do
++    for {path, href} <- [
++          {~p"/", "/"},
++          {~p"/about", "/about"},
++          {~p"/design", "/design"},
++          {~p"/custom-designs", "/custom-designs"}
++        ] do
++      {:ok, view, _html} = live(conn, path)
++
++      html = render(view) |> IO.iodata_to_binary()
++      assert html =~ ~s|aria-current="page"|
++      assert html =~ ~s|href="#{href}"|
++      assert current_marks(view) == 1
++    end
++  end
++
++  test "the menu is in the document and collapsed behind #nav-toggle at rest", %{conn: conn} do
++    {:ok, view, html} = live(conn, ~p"/")
++
++    assert has_element?(view, ~S|#nav-toggle[aria-controls="nav-menu"]|)
++    assert html =~ ~s|aria-expanded="false"|
++    assert length(texts(view, "#nav-menu a")) == 4
++
++    # Collapsed only below `md`, and still present in the document.
++    assert html =~ "max-md:hidden"
++    assert html =~ "md:hidden"
++  end
++
++  test "#nav-toggle expands the menu, and collapses it again", %{conn: conn} do
++    {:ok, view, _html} = live(conn, ~p"/")
++
++    html = render_click(view, "toggle_nav")
++    assert html =~ ~s|aria-expanded="true"|
++    refute html =~ "max-md:hidden"
++
++    html = render_click(view, "toggle_nav")
++    assert html =~ ~s|aria-expanded="false"|
++    assert html =~ "max-md:hidden"
++  end
++
++  test "#theme-toggle answers a click on every page", %{conn: conn} do
++    for path <- [~p"/", ~p"/about", ~p"/design", ~p"/custom-designs"] do
++      {:ok, view, _html} = live(conn, path)
++
++      assert has_element?(view, "#theme-toggle")
++      assert has_element?(view, ~S|#theme-toggle[aria-label="Switch colour theme"]|)
++      assert render_click(view, "toggle_theme") =~ "Tidepool"
++    end
++  end
++
++  test "the feature grid is registered with a preview and shows on /custom-designs", %{conn: conn} do
++    data_component = "BenchappWeb.CompositeComponents.feature_grid"
++    entry = BenchappWeb.DesignManifest.fetch(BenchappWeb.CompositeComponents, :feature_grid)
++
++    assert %{} = entry
++    assert entry.data_component == data_component
++    assert is_function(entry.preview, 1)
++
++    {:ok, _view, html} = live(conn, ~p"/custom-designs")
++
++    assert html =~ data_component
++    assert html =~ "feature_grid"
++  end
++end
+diff --git a/test/support/live_test_helpers.ex b/test/support/live_test_helpers.ex
+new file mode 100644
+index 0000000..d7e8e31
+--- /dev/null
++++ b/test/support/live_test_helpers.ex
+@@ -0,0 +1,143 @@
++defmodule BenchappWeb.LiveTestHelpers do
++  @moduledoc """
++  Shared helpers for the landing page's LiveView tests: waiting on the
++  countdown's real timer, and reading the page back through the element ids
++  the components declare.
++
++  `Phoenix.LiveViewTest` has no "text of every match" API, and this build of
++  `LazyHTML` only queries whole documents, so `texts/2` scans the rendered
++  HTML for the id-scoped region it needs. The ids are the contract; that is
++  why the components carry them.
++  """
++  import ExUnit.Assertions, only: [flunk: 1]
++  import Phoenix.LiveViewTest
++
++  @doc """
++  Polls `view` until `matcher` accepts it, then returns the latest render.
++
++  The countdown is a plain `Process.send_after` at five seconds and the
++  interval is the same in `:test` on purpose (see `BenchappWeb.HomeLive`),
++  and `Phoenix.LiveViewTest` cannot advance a wall-clock timer. A test that
++  watches a tick therefore waits for it the way a browser does — bounded, so
++  a stopped timer fails the test instead of hanging the suite.
++  """
++  def await_view(view, matcher, timeout_ms \\ 9_000) do
++    deadline = System.monotonic_time(:millisecond) + timeout_ms
++    poll(view, matcher, deadline, timeout_ms)
++  end
++
++  defp poll(view, matcher, deadline, timeout_ms) do
++    html = render(view)
++
++    cond do
++      matcher.(html) ->
++        html
++
++      System.monotonic_time(:millisecond) >= deadline ->
++        flunk(
++          "LiveView never reached a matching state within #{timeout_ms}ms — " <>
++            "the five-second timer is the usual suspect."
++        )
++
++      true ->
++        Process.sleep(100)
++        poll(view, matcher, deadline, timeout_ms)
++    end
++  end
++
++  @doc """
++  One entry per match: inner text for `#id` or `#id tag`, and the attribute
++  string per match for a void tag such as `#signup-form input`.
++  """
++  def texts(view, selector) do
++    view |> render() |> texts_from(selector)
++  end
++
++  @doc "Same as `texts/2`, over an already rendered page."
++  def texts_from(html, selector) do
++    html = IO.iodata_to_binary(html)
++
++    case String.split(selector, " ", parts: 2) do
++      ["#" <> id] ->
++        html |> container(id) |> visible_texts()
++
++      ["#" <> id, tag] ->
++        html
++        |> container(id)
++        |> matches(tag)
++
++      [tag] ->
++        matches(html, tag)
++
++      _ ->
++        flunk("texts_from/2 expects a tag, \"#id\", or \"#id tag\", got: #{inspect(selector)}")
++    end
++  end
++
++  @doc "The `#countdown` figure as an integer."
++  def countdown_value(view), do: view |> texts("#countdown") |> hd() |> String.to_integer()
++
++  @doc """
++  How many links in `#nav-menu` carry `aria-current="page"`.
++
++  Counted on the container's raw markup — the ids and the ARIA marker are
++  what the chrome promises, so this reads them rather than their text.
++  """
++  def current_marks(view) do
++    view
++    |> render()
++    |> IO.iodata_to_binary()
++    |> raw_container("nav-menu")
++    |> String.split(~s|aria-current="page"|)
++    |> length()
++    |> Kernel.-(1)
++  end
++
++  @doc "Submits `email` through the pilot-list form."
++  def signup(view, email) do
++    view |> element("#signup-form") |> render_submit(%{"signup" => %{"email" => email}})
++  end
++
++  # The element with this id, up to its own closing tag. No container on this
++  # page nests a same-named container, so the non-greedy match is exact.
++  defp container(html, id) do
++    case Regex.run(
++           ~r/<([a-z0-9]+)[^>]*\bid="#{Regex.escape(id)}"[^>]*>(.*?)<\/\1>/s,
++           html
++         ) do
++      [_, _tag, inner] -> inner
++      _ -> ""
++    end
++  end
++
++  # Same slice as `container/2`, but with the tags left on.
++  defp raw_container(html, id) do
++    case Regex.run(
++           ~r/<([a-z0-9]+)[^>]*\bid="#{Regex.escape(id)}"[^>]*>(.*?)<\/\1>/s,
++           html
++         ) do
++      [_, _tag, inner] -> inner
++      _ -> ""
++    end
++  end
++
++  @void_tags ~w(input img br hr)
++
++  defp matches(inner, tag) when tag in @void_tags do
++    Regex.scan(~r/<#{tag}\b([^>]*)>/, inner) |> Enum.map(&(&1 |> Enum.at(1) |> String.trim()))
++  end
++
++  defp matches(inner, tag) do
++    Regex.scan(~r/<#{tag}\b[^>]*>(.*?)<\/#{tag}>/s, inner)
++    |> Enum.map(&(&1 |> Enum.at(1) |> strip()))
++  end
++
++  defp visible_texts(inner), do: [strip(inner)]
++
++  defp strip(html) do
++    html
++    |> String.replace(~r/<[^>]*>/s, "")
++    |> String.replace(~r/\s+/, " ")
++    |> String.trim()
++  end
++end

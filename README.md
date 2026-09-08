@@ -13,7 +13,7 @@ screenshots are all in the repo.
 | read | for |
 |---|---|
 | [`COMPARISON.md`](COMPARISON.md) | The comparison written for people deciding which model to run: bug fixes, a full application build with tools, both at each model's lowest and highest reasoning effort. Who is fastest and why, who thinks and how, what effort buys and costs. |
-| [`REALWORLD.md`](REALWORLD.md) | What throughput looks like inside a working session, round by round: context growth, cache hits, seconds per round, tok/s you actually wait on, against the headline decode numbers. |
+| [`REALWORLD.md`](REALWORLD.md) | What throughput looks like inside a working session, round by round: context growth, cache hits, seconds per round, tok/s you actually wait on, against the headline decode numbers. Includes what changed when tool results stopped being summarised. |
 | [`results/2026-09-06-design/DESIGN_REVIEW.md`](results/2026-09-06-design/DESIGN_REVIEW.md) | The design bench: the same three models building the JobyCorp website from one brief and one design direction, ranked by a blind three-pass rubric review. |
 
 ## Status (2026-09-07)
@@ -27,8 +27,8 @@ screenshots are all in the repo.
   verbatim tool results, their own vision, browser hands, server jobs, and
   a budget countdown; its rows start a new table rather than continuing
   the old one. One GLM fixture pass in round 5 awaits a clean re-run.
-- **Real-world throughput: complete** for the round-4 sessions; ledger
-  exports exist for round 5 as well.
+- **Real-world throughput: complete**, rebuilt on the round-6 sessions
+  (the current harness); ledger exports exist for rounds 4 and 5 too.
 - **Design bench: round 1 complete**, gates and rubric review in. The
   public vote on the anonymised composites is recorded when it closes.
 - **Raw inference (Phase A)** was measured once, in round 1, with a
@@ -43,7 +43,7 @@ screenshots are all in the repo.
 | **Bug fixes** (17 seeded-bug Elixir modules, hidden tests) | Can the agent read a spec, find the bug, fix it minimally, and stop | At `low` and `max`: GLM 17/17, DeepSeek 17/17, Qwen 16/17 (the same fixture both times). Effort did not change a score; it made the fixes slower. |
 | **Application** (a Phoenix LiveView landing site to a 19-check contract, ~100 tool calls) | Can the agent plan, build, test, boot, and finish a real task with tools | All three 19/19 at both efforts. At `low`: GLM 18 min, DeepSeek 24, Qwen 28. At `max`: GLM 39, DeepSeek 45, Qwen 63. Effort bought tests, composites, and page identity, not correctness, at about twice the wall. |
 | **Tool use** (round 6: the same task with vision, browser hands, and server jobs on the wire) | When given tools, how well does the agent use them | DeepSeek looked at its page 17 times and shipped no visual defects; GLM looked 0 times, finished in 14 minutes, and shipped four; Qwen looked 7 rounds' worth, then cut verification when it read the clock. |
-| **Real-world throughput** (per-round ledger of the app sessions) | What a session feels like | 35 to 40 tok/s per round end to end for DeepSeek and Qwen, 19 for GLM; 95 to 98% prefix-cache hits keep a 90k-token round at about one second to first token; the slow rounds are the planning rounds. |
+| **Real-world throughput** (per-round ledger of the app sessions) | What a session feels like | 32 to 36 tok/s per round end to end for DeepSeek and Qwen, 20 for GLM; 93 to 98% prefix-cache hits keep a 146k-token round under two seconds to first token, so a context seven times larger costs about 10% of throughput; the slow rounds are the planning rounds. |
 | **Design** (the JobyCorp website from one brief and one `DESIGN.md`, three pages, both themes, both widths) | Can the agent execute a design direction, judged by mechanical gates and a blind rubric | Gates: Qwen 19/19, DeepSeek 19/19, GLM 18/19 (light-theme table headers at 4.24:1). Rubric mean of 5: Qwen 4.54, DeepSeek 4.08, GLM 3.75. |
 
 Two lessons that apply to any agent harness, learned the hard way in

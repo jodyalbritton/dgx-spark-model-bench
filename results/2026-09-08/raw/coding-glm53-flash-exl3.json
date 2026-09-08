@@ -1,0 +1,1193 @@
+{
+  "label": "glm53-flash-exl3",
+  "root": "/Users/jody/dgx-spark-model-bench/results/2026-09-08",
+  "kind": "coding",
+  "app": {
+    "refused": 0,
+    "rounds": 61,
+    "ending": "summary",
+    "tool_time_by_tool": {
+      "bash": 48041,
+      "edit": 9,
+      "job": 29064,
+      "preview": 863,
+      "read": 4,
+      "todo": 6,
+      "write": 14
+    },
+    "session_id": "8fa581ce-8fba-4597-89d2-204742d1ccc0",
+    "completion_tokens": 16643,
+    "nudges": 0,
+    "turns": 1,
+    "uncached_prompt_tokens": 162704,
+    "rounds_after_green": 15,
+    "ttft_ms": 2875,
+    "duration_ms": 892305,
+    "diff": {
+      "files": 18,
+      "stat": " test/benchapp_web/live/about_live_test.exs         |  26 ++ |  test/benchapp_web/live/home_live_test.exs          | 139 +++++++++ |  18 files changed, 628 insertions(+), 168 deletions(-)",
+      "patch": "raw/diff-glm53-flash-exl3.patch",
+      "insertions": 628,
+      "deletions": 168
+    },
+    "pass": true,
+    "name": "app",
+    "scores": {
+      "tests_added": 14,
+      "components_added": 1,
+      "lint_warnings": 0,
+      "page_height": 1652,
+      "tests_total": 18
+    },
+    "final": "All checks pass: mobile menu toggles, theme control works at both widths, dark/light themes render correctly, and the countdown ticks live (100→96 during inspection).\n\n**Summary:** Built the JobyKit demo landing site \"Lumen\" in `benchapp` — custom `main-nav` layout with `nav-toggle`/`theme-toggle`, hero, live 5s-tick countdown, in-memory signup form with validation/dedup (`signup-error`, `signups`), live stats strip (`stat-signups`, `stat-ticks`), capped newest-first activity feed, a `feature_grid` composite registered in the DesignManifest with a `/design` preview, an `/about` page, 18 passing LiveView tests, green `mix precommit` and `joby_kit.lint`, dev server live on port 4099.",
+    "screenshots": {
+      "glm53-flash-exl3-desktop-dark.png": "/Users/jody/dgx-spark-model-bench/results/2026-09-08/screenshots/glm53-flash-exl3-desktop-dark.png",
+      "glm53-flash-exl3-desktop-light-after-12s.png": "/Users/jody/dgx-spark-model-bench/results/2026-09-08/screenshots/glm53-flash-exl3-desktop-light-after-12s.png",
+      "glm53-flash-exl3-desktop-light.png": "/Users/jody/dgx-spark-model-bench/results/2026-09-08/screenshots/glm53-flash-exl3-desktop-light.png",
+      "glm53-flash-exl3-full-light.png": "/Users/jody/dgx-spark-model-bench/results/2026-09-08/screenshots/glm53-flash-exl3-full-light.png",
+      "glm53-flash-exl3-mobile-full-light.png": "/Users/jody/dgx-spark-model-bench/results/2026-09-08/screenshots/glm53-flash-exl3-mobile-full-light.png",
+      "glm53-flash-exl3-mobile-light.png": "/Users/jody/dgx-spark-model-bench/results/2026-09-08/screenshots/glm53-flash-exl3-mobile-light.png"
+    },
+    "last_call": null,
+    "reasoning_tokens": 6453,
+    "cached_tokens": 1974784,
+    "cached_reported": true,
+    "wall_ms": 892320,
+    "render": {
+      "mobile": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "connected": true,
+        "countdown": "100",
+        "height": 3024,
+        "nav": true,
+        "nav_links_visible": true,
+        "theme": "light",
+        "theme_toggle": true,
+        "theme_toggle_visible": true,
+        "title": "Lumen — Light for deep work · JobyKit",
+        "toggle_visible": true
+      },
+      "after": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "connected": true,
+        "countdown": "98",
+        "height": 1674,
+        "nav": true,
+        "nav_links_visible": true,
+        "theme": "light",
+        "theme_toggle": true,
+        "theme_toggle_visible": true,
+        "title": "Lumen — Light for deep work · JobyKit",
+        "toggle_visible": false
+      },
+      "light": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "connected": true,
+        "countdown": "100",
+        "height": 1652,
+        "nav": true,
+        "nav_links_visible": true,
+        "theme": "light",
+        "theme_toggle": true,
+        "theme_toggle_visible": true,
+        "title": "Lumen — Light for deep work · JobyKit",
+        "toggle_visible": false
+      },
+      "dark": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "connected": true,
+        "countdown": "100",
+        "height": 1652,
+        "nav": true,
+        "nav_links_visible": true,
+        "theme": "dark",
+        "theme_toggle": true,
+        "theme_toggle_visible": true,
+        "title": "Lumen — Light for deep work · JobyKit",
+        "toggle_visible": false
+      }
+    },
+    "checks_total": 19,
+    "assistant_messages": 61,
+    "failed": 3,
+    "checks_passed": 19,
+    "green_at": 46,
+    "failures": [
+      {
+        "text": "old_string not found in file (line 75 contains old_string's first line — read from there)",
+        "class": "failed",
+        "tool": "edit"
+      },
+      {
+        "text": "exit 1\nsed: 2: \"test/benchapp_web/live/ ...\": undefined label 'est/benchapp_web/live/home_live_test.exs'\n",
+        "class": "failed",
+        "tool": "bash"
+      },
+      {
+        "text": "no job 2 — job(action: \"list\") shows what exists",
+        "class": "failed",
+        "tool": "job"
+      }
+    ],
+    "tool_calls": 69,
+    "reasoning_reported": false,
+    "final_line": "**Summary:** Built the JobyKit demo landing site \"Lumen\" in `benchapp` — custom `main-nav` layout with `nav-toggle`/`theme-toggle`, hero, live 5s-tick countdown, in-memory signup form with validation/dedup (`signup-error`, `signups`), live stats strip (`stat-signups`, `stat-ticks`), capped newest-first activity feed, a `feature_grid` composite registered in the DesignManifest with a `/design` preview, an `/about` page, 18 passing LiveView tests, green `mix precommit` and `joby_kit.lint`, dev server live on port 4099.",
+    "checks": {
+      "compile": {
+        "pass": true,
+        "detail": ""
+      },
+      "generated": {
+        "pass": true
+      },
+      "lint": {
+        "pass": true,
+        "detail": "JobyKit lint — BenchappWeb.DesignManifest |  |   ✓ Clean. Wrapper contract holds across the manifest."
+      },
+      "stats": {
+        "pass": true,
+        "detail": "hidden LiveView test passed"
+      },
+      "tick": {
+        "pass": true,
+        "detail": "hidden LiveView test passed"
+      },
+      "test": {
+        "pass": true,
+        "detail": ".................. | Finished in 0.1 seconds (0.1s async, 0.00s sync) | 18 tests, 0 failures"
+      },
+      "activity": {
+        "pass": true,
+        "detail": "hidden LiveView test passed"
+      },
+      "countdown": {
+        "pass": true,
+        "detail": "HomeLive: start 100, 5 s tick, timer message"
+      },
+      "boots": {
+        "pass": true,
+        "detail": "GET / 200 with a nav"
+      },
+      "composite_registered": {
+        "pass": true,
+        "detail": "1 app component(s) registered beyond the generator's"
+      },
+      "layout_replaced": {
+        "pass": true,
+        "detail": "the generator's stock nav+footer markers are gone from Layouts.app"
+      },
+      "nav": {
+        "pass": true,
+        "detail": "a nav element or JobyKit nav in a source under lib/benchapp_web"
+      },
+      "tests_added": {
+        "pass": true,
+        "detail": "18 tests ran, 4 are the generator's"
+      },
+      "dark_theme": {
+        "pass": true,
+        "detail": "data-theme \"light\" → \"dark\", body bg rgba(0, 0, 0, 0) → rgba(0, 0, 0, 0)"
+      },
+      "mobile_nav": {
+        "pass": true,
+        "detail": "at 390 px: nav-toggle visible true, nav links visible true"
+      },
+      "theme_toggle_mobile": {
+        "pass": true,
+        "detail": "at 390 px: theme-toggle present true, visible true"
+      },
+      "tick_rendered": {
+        "pass": true,
+        "detail": "countdown \"100\" at load, \"98\" after 12 s (connected true)"
+      },
+      "signup": {
+        "pass": true,
+        "detail": "hidden LiveView test passed"
+      },
+      "about": {
+        "pass": true,
+        "detail": "hidden LiveView test passed"
+      }
+    },
+    "completion_tok_s": 18.7,
+    "tool_time_ms": 78001,
+    "outcome": "done",
+    "work_dir": "/Users/jody/dgx-spark-model-bench/results/2026-09-08/work/glm53-flash-exl3",
+    "tools": {
+      "bash": 30,
+      "edit": 15,
+      "job": 4,
+      "preview": 7,
+      "read": 7,
+      "todo": 1,
+      "write": 5
+    },
+    "prompt_tokens": 2137488
+  },
+  "summary": {
+    "app_checks_total": 19,
+    "app_checks_passed": 19,
+    "app_wall_ms": 892320,
+    "app_outcome": "done",
+    "fixtures_passed": 17,
+    "fixtures_total": 17,
+    "fixtures_wall_ms": 666091,
+    "fixtures_capped": 0,
+    "fixtures_timed_out": 0,
+    "by_band": {
+      "easy": {
+        "total": 3,
+        "passed": 3
+      },
+      "hard": {
+        "total": 7,
+        "passed": 7
+      },
+      "medium": {
+        "total": 7,
+        "passed": 7
+      }
+    },
+    "fixtures_abandoned": 0
+  },
+  "model": "Mia-AiLab/GLM-5.3-Flash-EXL3-TR3-4bpw:exl3",
+  "harness": {
+    "memory": "off",
+    "port": "4099",
+    "tools": "native",
+    "system_prompt": "You are helm, an agent at the conn of the JobyCorp fleet. Be direct and concise.\n\nWorking method: survey before you read. `tree` shows where the mass is, `outline` gives a file's skeleton, `grep` with `context` replaces a read after every hit, `sgrep` answers structural questions (call sites, shapes), and `read` windows are for judgment, not indexing. Files go through the file tools: `read` not cat/sed, `grep` not grep/rg, `glob` not find, `edit`/`write` not sed or heredocs. Bash runs things: builds, tests, mix tasks. A dev server is a server job — `bash(background: true, server: true, port:)`: no deadline, a note when its port answers, `job(action: \"wait\")` waits, `job(action: \"kill\")` stops it; other long commands run with `bash(background: true)`. Never detach a process yourself, and never signal one you did not start. Several tool calls in one round are welcome when they are independent. Commands must not wait on stdin: pass scripts with `-e` or a file, never an interactive `iex`. Read enough to act, act, verify, and stop.",
+    "effort": "low",
+    "mcp": false,
+    "app_rounds_cap": 128,
+    "last_call": "Round cap reached — this is the last call. Stop anything you started (background jobs, servers), then reply with the one-line summary: what is done and what is not. No further work.",
+    "last_call_rounds": 4,
+    "nudge": "Continue until every requirement in the task is done, then reply with the one-line summary.",
+    "nudge_policy": "once, only after a narrated or blank ending; otherwise abandoned",
+    "app_prompt": "# Phoenix Elixir app benchmark\n\nJobyKit is already installed. The app you build is the artifact being\nbenchmarked: a modern demo landing site for a fictional product of your\nchoice. It is not a tool for running benchmarks; no benchmark-themed\nfeatures or copy.\n\n## Setup\n\n1. In the current working directory run `mix joby_kit.new benchapp`, then work inside the `benchapp` directory it creates. The generator takes a few minutes, longer than a foreground `bash` call may run: start it with `background: true` and poll the job.\n2. Remove the stock JobyKit demo content: the generator's `simple_nav` header and \"built with\" footer in `lib/benchapp_web/components/layouts.ex`, and the welcome content of HomeLive in `lib/benchapp_web/live/home_live.ex`. Keep the `/design` and `/custom-designs` pages.\n\n## Requirements\n\nMobile and desktop views, and working light and dark themes, throughout.\n\n3. A top navigation bar in `Layouts.app` with id `main-nav` that marks the current page's link with `aria-current=\"page\"`, has a menu that works at phone widths behind a toggle button with id `nav-toggle`, and a theme toggle with id `theme-toggle` usable at both widths.\n4. HomeLive as a landing page with a hero.\n5. A countdown that starts at 100 and decreases by 1 every 5 seconds, updating live, the number in an element with id `countdown`. The five-second tick holds in every environment, including test — the hidden tests wait for it; do not park or stub the timer in configuration.\n6. A newsletter signup form with id `signup-form` and one email input. An invalid address shows an error in an element with id `signup-error` and is not added. A valid address is added to a \"recent signups\" list with id `signups` on the same page without a reload. The same address submitted twice shows the error and is not added again. In-memory is fine; no database.\n7. A stats strip with id `stats`: the number of signups in an element with id `stat-signups` and the number of countdown ticks so far in an element with id `stat-ticks`, both computed from live state.\n8. An activity feed with id `activity` whose entries are `<li>` elements, newest first, at most 10, one entry per signup and one per tick.\n9. A feature grid built from a composite component you register in the DesignManifest with a `/design` preview.\n10. A second page at `/about`, linked from the nav, on the same layout.\n\n## Tests\n\n11. Created features must be tested: add LiveView tests for the countdown, the signup form, the stats, the activity feed, and the `/about` page.\n\n## Constraints\n\n- The dev server must run on port 4099; the `PORT` environment variable is already set to 4099. Do not use any other port.\n- Do not stop or kill processes you did not start.\n- When your own tests and `mix precommit` pass, reply with a one-line summary. Do not re-verify: a green suite and a green precommit are the finish line.\n",
+    "fixture_prompt": "The file `solution.ex` contains a module whose intended behavior is documented in its `@moduledoc`. The `@moduledoc` is the complete specification. The module has at least one bug.\n\n1. Fix `solution.ex` in place, changing as little as possible.\n2. Keep the module name and the public API exactly as they are.\n3. Do not use the `consult` tool.\n4. When you are done, reply with a one-line summary.\n",
+    "app_deadline_ms": 3600000,
+    "fixture_deadline_ms": 600000,
+    "fixture_rounds_cap": 35,
+    "hidden_tests_sha": "6ed2e858",
+    "last_call_grace_ms": 180000,
+    "prompt_sha": "39413706",
+    "warm_fixture": "clamp",
+    "wire_tools": [
+      "read",
+      "edit",
+      "write",
+      "bash",
+      "grep",
+      "sgrep",
+      "glob",
+      "tree",
+      "outline",
+      "changes",
+      "read_artifact",
+      "job",
+      "preview",
+      "web_search",
+      "todo",
+      "session_search",
+      "consult",
+      "agent"
+    ]
+  },
+  "app_prompt": "# Phoenix Elixir app benchmark\n\nJobyKit is already installed. The app you build is the artifact being\nbenchmarked: a modern demo landing site for a fictional product of your\nchoice. It is not a tool for running benchmarks; no benchmark-themed\nfeatures or copy.\n\n## Setup\n\n1. In the current working directory run `mix joby_kit.new benchapp`, then work inside the `benchapp` directory it creates. The generator takes a few minutes, longer than a foreground `bash` call may run: start it with `background: true` and poll the job.\n2. Remove the stock JobyKit demo content: the generator's `simple_nav` header and \"built with\" footer in `lib/benchapp_web/components/layouts.ex`, and the welcome content of HomeLive in `lib/benchapp_web/live/home_live.ex`. Keep the `/design` and `/custom-designs` pages.\n\n## Requirements\n\nMobile and desktop views, and working light and dark themes, throughout.\n\n3. A top navigation bar in `Layouts.app` with id `main-nav` that marks the current page's link with `aria-current=\"page\"`, has a menu that works at phone widths behind a toggle button with id `nav-toggle`, and a theme toggle with id `theme-toggle` usable at both widths.\n4. HomeLive as a landing page with a hero.\n5. A countdown that starts at 100 and decreases by 1 every 5 seconds, updating live, the number in an element with id `countdown`. The five-second tick holds in every environment, including test — the hidden tests wait for it; do not park or stub the timer in configuration.\n6. A newsletter signup form with id `signup-form` and one email input. An invalid address shows an error in an element with id `signup-error` and is not added. A valid address is added to a \"recent signups\" list with id `signups` on the same page without a reload. The same address submitted twice shows the error and is not added again. In-memory is fine; no database.\n7. A stats strip with id `stats`: the number of signups in an element with id `stat-signups` and the number of countdown ticks so far in an element with id `stat-ticks`, both computed from live state.\n8. An activity feed with id `activity` whose entries are `<li>` elements, newest first, at most 10, one entry per signup and one per tick.\n9. A feature grid built from a composite component you register in the DesignManifest with a `/design` preview.\n10. A second page at `/about`, linked from the nav, on the same layout.\n\n## Tests\n\n11. Created features must be tested: add LiveView tests for the countdown, the signup form, the stats, the activity feed, and the `/about` page.\n\n## Constraints\n\n- The dev server must run on port 4099; the `PORT` environment variable is already set to 4099. Do not use any other port.\n- Do not stop or kill processes you did not start.\n- When your own tests and `mix precommit` pass, reply with a one-line summary. Do not re-verify: a green suite and a green precommit are the finish line.\n",
+  "helm_dirty": false,
+  "helm_sha": "1f72e76",
+  "finished_utc": "2026-09-08T10:25:30Z",
+  "fixtures": [
+    {
+      "refused": 0,
+      "rounds": 3,
+      "ending": "summary",
+      "tool_time_by_tool": {
+        "edit": 1,
+        "read": 0
+      },
+      "session_id": "f906f128-8a40-4c4d-b393-db2426b1da4b",
+      "completion_tokens": 106,
+      "nudges": 0,
+      "turns": 1,
+      "uncached_prompt_tokens": 5749,
+      "rounds_after_green": null,
+      "ttft_ms": 2159,
+      "duration_ms": 10741,
+      "pass": true,
+      "name": "clamp",
+      "final": "Fixed the swapped bounds in `Clamp.clamp/3` (now `max(lo)` then `min(hi)`), so out-of-range values clamp correctly.",
+      "last_call": null,
+      "reasoning_tokens": 9,
+      "cached_tokens": 10752,
+      "band": "easy",
+      "cached_reported": true,
+      "wall_ms": 10747,
+      "oracle": {
+        "pass": true
+      },
+      "draft": "defmodule Clamp do\n  @moduledoc \"\"\"\n  `clamp(x, lo, hi)` returns x limited to the inclusive range lo..hi:\n  x below lo returns lo, x above hi returns hi, otherwise x itself.\n  lo <= hi is guaranteed by the caller.\n  \"\"\"\n\n  def clamp(x, lo, hi) do\n    x |> max(lo) |> min(hi)\n  end\nend\n",
+      "assistant_messages": 3,
+      "failed": 0,
+      "green_at": null,
+      "failures": [],
+      "tool_calls": 2,
+      "reasoning_reported": false,
+      "final_line": "Fixed the swapped bounds in `Clamp.clamp/3` (now `max(lo)` then `min(hi)`), so out-of-range values clamp correctly.",
+      "completion_tok_s": 9.9,
+      "tool_time_ms": 1,
+      "outcome": "done",
+      "tools": {
+        "edit": 1,
+        "read": 1
+      },
+      "prompt_tokens": 16501
+    },
+    {
+      "refused": 0,
+      "rounds": 4,
+      "ending": "summary",
+      "tool_time_by_tool": {
+        "bash": 222,
+        "edit": 1,
+        "read": 1
+      },
+      "session_id": "d34f7251-039f-4570-9ebd-fee64a11669f",
+      "completion_tokens": 185,
+      "nudges": 0,
+      "turns": 1,
+      "uncached_prompt_tokens": 7891,
+      "rounds_after_green": null,
+      "ttft_ms": 2261,
+      "duration_ms": 14528,
+      "pass": true,
+      "name": "first_or",
+      "final": "Fixed: `hd(list) || default` no longer collapses falsy heads to the default — the function now returns the head for any non-empty list, `default` only for `[]`.",
+      "last_call": null,
+      "reasoning_tokens": 3,
+      "cached_tokens": 14336,
+      "band": "easy",
+      "cached_reported": true,
+      "wall_ms": 14534,
+      "oracle": {
+        "pass": true
+      },
+      "draft": "defmodule FirstOr do\n  @moduledoc \"\"\"\n  `first_or(list, default)` returns the first element of the list, or\n  the default when the list is empty. Falsy elements (nil, false) are\n  legitimate values: `first_or([false], :d)` is `false`,\n  `first_or([nil, 2], :d)` is `nil`.\n  \"\"\"\n\n  def first_or(list, default) do\n    case list do\n      [] -> default\n      [h | _] -> h\n    end\n  end\nend\n",
+      "assistant_messages": 4,
+      "failed": 0,
+      "green_at": null,
+      "failures": [],
+      "tool_calls": 3,
+      "reasoning_reported": false,
+      "final_line": "Fixed: `hd(list) || default` no longer collapses falsy heads to the default — the function now returns the head for any non-empty list, `default` only for `[]`.",
+      "completion_tok_s": 12.7,
+      "tool_time_ms": 224,
+      "outcome": "done",
+      "tools": {
+        "bash": 1,
+        "edit": 1,
+        "read": 1
+      },
+      "prompt_tokens": 22227
+    },
+    {
+      "refused": 0,
+      "rounds": 4,
+      "ending": "summary",
+      "tool_time_by_tool": {
+        "bash": 511,
+        "edit": 0,
+        "read": 0
+      },
+      "session_id": "180f3fc2-f086-409c-bbc7-48e204bd5495",
+      "completion_tokens": 241,
+      "nudges": 0,
+      "turns": 1,
+      "uncached_prompt_tokens": 8051,
+      "rounds_after_green": null,
+      "ttft_ms": 2295,
+      "duration_ms": 17904,
+      "pass": true,
+      "name": "parse_int",
+      "final": "Fixed: replaced `String.to_integer/1` with trim + `Integer.parse/2` that accepts only a full integer and returns `:error` otherwise.",
+      "last_call": null,
+      "reasoning_tokens": 3,
+      "cached_tokens": 14336,
+      "band": "easy",
+      "cached_reported": true,
+      "wall_ms": 17909,
+      "oracle": {
+        "pass": true
+      },
+      "draft": "defmodule ParseInt do\n  @moduledoc \"\"\"\n  `parse(string)` parses a base-10 integer, tolerating surrounding\n  whitespace. Returns the integer, or `:error` when the trimmed string\n  is not exactly one integer (trailing garbage is an error).\n  Examples: \"42\" => 42, \"  -7 \" => -7, \"abc\" => :error, \"4a\" => :error,\n  \"\" => :error.\n  \"\"\"\n\n  def parse(string) do\n    case String.trim(string) do\n      \"\" -> :error\n      trimmed ->\n        case Integer.parse(trimmed) do\n          {int, \"\"} -> int\n          _ -> :error\n        end\n    end\n  end\nend\n",
+      "assistant_messages": 4,
+      "failed": 0,
+      "green_at": null,
+      "failures": [],
+      "tool_calls": 3,
+      "reasoning_reported": false,
+      "final_line": "Fixed: replaced `String.to_integer/1` with trim + `Integer.parse/2` that accepts only a full integer and returns `:error` otherwise.",
+      "completion_tok_s": 13.5,
+      "tool_time_ms": 511,
+      "outcome": "done",
+      "tools": {
+        "bash": 1,
+        "edit": 1,
+        "read": 1
+      },
+      "prompt_tokens": 22387
+    },
+    {
+      "refused": 0,
+      "rounds": 8,
+      "ending": "summary",
+      "tool_time_by_tool": {
+        "bash": 1168,
+        "edit": 0,
+        "read": 1,
+        "write": 2
+      },
+      "session_id": "54de2417-7fd0-4412-a0b1-3d0a78d689df",
+      "completion_tokens": 888,
+      "nudges": 0,
+      "turns": 1,
+      "uncached_prompt_tokens": 20969,
+      "rounds_after_green": null,
+      "ttft_ms": 2195,
+      "duration_ms": 58196,
+      "pass": true,
+      "name": "pricing",
+      "final": "Fixed `Pricing.total`: validated quantity, unit_cents, and discount_pct (nonneg integers, 0–100) in a single guard, and waived shipping when quantity is 0 — all tests pass.",
+      "last_call": null,
+      "reasoning_tokens": 59,
+      "cached_tokens": 28672,
+      "band": "medium",
+      "cached_reported": true,
+      "wall_ms": 58201,
+      "oracle": {
+        "pass": true
+      },
+      "draft": "defmodule Pricing do\n  @moduledoc \"\"\"\n  Storefront pricing, all values integer cents.\n\n  `total(quantity, unit_cents, discount_pct \\\\ 0)`:\n  merchandise = quantity * unit_cents, discounted by discount_pct\n  percent (integer 0..100 — anything else must raise), plus a fixed\n  499-cent shipping fee. Shipping is excluded from the discount and is\n  waived entirely when quantity is 0. Quantity and unit_cents are\n  nonnegative integers; anything else must raise.\n  \"\"\"\n\n  def total(quantity, unit_cents, discount_pct \\\\ 0)\n      when is_integer(quantity) and is_integer(unit_cents) and is_integer(discount_pct) and\n             quantity >= 0 and unit_cents >= 0 and discount_pct >= 0 and discount_pct <= 100 do\n    gross = quantity * unit_cents\n    discounted = gross - div(gross * discount_pct, 100)\n    max(discounted, 0) + if(quantity == 0, do: 0, else: shipping_cents())\n  end\n\n  defp shipping_cents, do: 499\nend\n",
+      "assistant_messages": 8,
+      "failed": 1,
+      "green_at": null,
+      "failures": [
+        {
+          "text": "exit 1\n    error: module Pricing is not loaded and could not be found\n    │\n  4 │   import Pricing\n    │   ^\n    │\n    └─ scratch/t.exs:4:3: T (module)\n\n** (Com",
+          "class": "failed",
+          "tool": "bash"
+        }
+      ],
+      "tool_calls": 7,
+      "reasoning_reported": false,
+      "final_line": "Fixed `Pricing.total`: validated quantity, unit_cents, and discount_pct (nonneg integers, 0–100) in a single guard, and waived shipping when quantity is 0 — all tests pass.",
+      "completion_tok_s": 15.3,
+      "tool_time_ms": 1171,
+      "outcome": "done",
+      "tools": {
+        "bash": 4,
+        "edit": 1,
+        "read": 1,
+        "write": 1
+      },
+      "prompt_tokens": 49641
+    },
+    {
+      "refused": 0,
+      "rounds": 7,
+      "ending": "summary",
+      "tool_time_by_tool": {
+        "bash": 600,
+        "edit": 1,
+        "read": 0
+      },
+      "session_id": "36d773c8-ae38-4509-bd01-87a827f7ed47",
+      "completion_tokens": 1145,
+      "nudges": 0,
+      "turns": 1,
+      "uncached_prompt_tokens": 17454,
+      "rounds_after_green": null,
+      "ttft_ms": 2381,
+      "duration_ms": 62065,
+      "pass": true,
+      "name": "split_bill",
+      "final": "Fixed: now splits with floored division and gives the remainder one each to the earliest (largest) shares — `split(100,3) => [34,33,33]`, sums exact even for negatives; verified in Elixir.",
+      "last_call": null,
+      "reasoning_tokens": 534,
+      "cached_tokens": 25088,
+      "band": "medium",
+      "cached_reported": true,
+      "wall_ms": 62071,
+      "oracle": {
+        "pass": true
+      },
+      "draft": "defmodule SplitBill do\n  @moduledoc \"\"\"\n  `split(total_cents, n)` splits an integer amount of cents across n\n  people (n >= 1) into a list of n integer shares that sum EXACTLY to\n  total_cents. The remainder cents are distributed one each to the\n  earliest shares, so shares differ by at most 1 and are ordered\n  largest-first. Example: split(100, 3) => [34, 33, 33].\n  \"\"\"\n\n  def split(total_cents, n) when n >= 1 do\n    share = Integer.floor_div(total_cents, n)\n    rem = Integer.mod(total_cents, n)\n    List.duplicate(share + 1, rem) ++ List.duplicate(share, n - rem)\n  end\nend\n",
+      "assistant_messages": 7,
+      "failed": 1,
+      "green_at": null,
+      "failures": [
+        {
+          "text": "exit 1\n** (UndefinedFunctionError) function SplitBill.split/2 is undefined (module SplitBill is not available). Make sure the module name is correct and has bee",
+          "class": "failed",
+          "tool": "bash"
+        }
+      ],
+      "tool_calls": 6,
+      "reasoning_reported": false,
+      "final_line": "Fixed: now splits with floored division and gives the remainder one each to the earliest (largest) shares — `split(100,3) => [34,33,33]`, sums exact even for negatives; verified in Elixir.",
+      "completion_tok_s": 18.4,
+      "tool_time_ms": 601,
+      "outcome": "done",
+      "tools": {
+        "bash": 3,
+        "edit": 2,
+        "read": 1
+      },
+      "prompt_tokens": 42542
+    },
+    {
+      "refused": 0,
+      "rounds": 5,
+      "ending": "summary",
+      "tool_time_by_tool": {
+        "bash": 391,
+        "edit": 0,
+        "read": 0
+      },
+      "session_id": "2857ff16-1e89-4167-beaa-0fd376d601fc",
+      "completion_tokens": 354,
+      "nudges": 0,
+      "turns": 1,
+      "uncached_prompt_tokens": 10766,
+      "rounds_after_green": null,
+      "ttft_ms": 2241,
+      "duration_ms": 22920,
+      "pass": true,
+      "name": "month_end",
+      "final": "Fixed: December now rolls over to January of the next year (and `Date.days_in_month` handles leap years) — verified ~D[2024-01-15]→~D[2024-02-29], ~D[2023-12-05]→~D[2024-01-31].",
+      "last_call": null,
+      "reasoning_tokens": 14,
+      "cached_tokens": 17920,
+      "band": "medium",
+      "cached_reported": true,
+      "wall_ms": 22926,
+      "oracle": {
+        "pass": true
+      },
+      "draft": "defmodule MonthEnd do\n  @moduledoc \"\"\"\n  `last_day_of_next_month(date)` returns the %Date{} for the last day\n  of the month FOLLOWING the given date's month, handling year\n  rollover (December -> January of the next year) and leap years\n  (e.g. ~D[2024-01-15] => ~D[2024-02-29]).\n  \"\"\"\n\n  def last_day_of_next_month(%Date{} = date) do\n    {year, month} =\n      if date.month == 12, do: {date.year + 1, 1}, else: {date.year, date.month + 1}\n\n    next = %{date | year: year, month: month}\n    %{next | day: Date.days_in_month(next)}\n  end\nend\n",
+      "assistant_messages": 5,
+      "failed": 1,
+      "green_at": null,
+      "failures": [
+        {
+          "text": "exit 1\n** (UndefinedFunctionError) function MonthEnd.last_day_of_next_month/1 is undefined (module MonthEnd is not available). Make sure the module name is corr",
+          "class": "failed",
+          "tool": "bash"
+        }
+      ],
+      "tool_calls": 4,
+      "reasoning_reported": false,
+      "final_line": "Fixed: December now rolls over to January of the next year (and `Date.days_in_month` handles leap years) — verified ~D[2024-01-15]→~D[2024-02-29], ~D[2023-12-05]→~D[2024-01-31].",
+      "completion_tok_s": 15.4,
+      "tool_time_ms": 391,
+      "outcome": "done",
+      "tools": {
+        "bash": 2,
+        "edit": 1,
+        "read": 1
+      },
+      "prompt_tokens": 28686
+    },
+    {
+      "refused": 0,
+      "rounds": 4,
+      "ending": "summary",
+      "tool_time_by_tool": {
+        "bash": 291,
+        "edit": 1,
+        "read": 0
+      },
+      "session_id": "46f46baa-da9f-4545-9b97-3ab698465049",
+      "completion_tokens": 375,
+      "nudges": 0,
+      "turns": 1,
+      "uncached_prompt_tokens": 8459,
+      "rounds_after_green": null,
+      "ttft_ms": 2197,
+      "duration_ms": 22091,
+      "pass": true,
+      "name": "binary_search",
+      "final": "Fixed `solution.ex`: changed the recursion base case from `lo >= hi` to `lo > hi` so a one-element search window (`lo == hi`) is checked instead of missed — all cases verified with tests.",
+      "last_call": null,
+      "reasoning_tokens": 19,
+      "cached_tokens": 14336,
+      "band": "medium",
+      "cached_reported": true,
+      "wall_ms": 22095,
+      "oracle": {
+        "pass": true
+      },
+      "draft": "defmodule BinarySearch do\n  @moduledoc \"\"\"\n  `find(tuple, target)` searches a sorted tuple of integers and\n  returns the zero-based index of target, or nil when absent. Must be\n  O(log n) — binary search over `elem/2`, no linear scans.\n  \"\"\"\n\n  def find(tuple, target), do: search(tuple, target, 0, tuple_size(tuple) - 1)\n\n  defp search(_tuple, _target, lo, hi) when lo > hi, do: nil\n\n  defp search(tuple, target, lo, hi) do\n    mid = div(lo + hi, 2)\n\n    case elem(tuple, mid) do\n      ^target -> mid\n      value when value < target -> search(tuple, target, mid + 1, hi)\n      _greater -> search(tuple, target, lo, mid - 1)\n    end\n  end\nend\n",
+      "assistant_messages": 4,
+      "failed": 0,
+      "green_at": null,
+      "failures": [],
+      "tool_calls": 3,
+      "reasoning_reported": false,
+      "final_line": "Fixed `solution.ex`: changed the recursion base case from `lo >= hi` to `lo > hi` so a one-element search window (`lo == hi`) is checked instead of missed — all cases verified with tests.",
+      "completion_tok_s": 17.0,
+      "tool_time_ms": 292,
+      "outcome": "done",
+      "tools": {
+        "bash": 1,
+        "edit": 1,
+        "read": 1
+      },
+      "prompt_tokens": 22795
+    },
+    {
+      "refused": 0,
+      "rounds": 21,
+      "ending": "summary",
+      "tool_time_by_tool": {
+        "bash": 2132,
+        "edit": 6,
+        "read": 2
+      },
+      "session_id": "7c3f331a-db9c-4461-b55d-856f735bc1db",
+      "completion_tokens": 3674,
+      "nudges": 0,
+      "turns": 1,
+      "uncached_prompt_tokens": 44332,
+      "rounds_after_green": null,
+      "ttft_ms": 2422,
+      "duration_ms": 174513,
+      "pass": true,
+      "name": "interval_merge",
+      "final": "Fixed: merged unsorted input is now sorted by start before reducing, and the touching-interval condition was corrected to `start <= cur_stop`; all spec cases verified passing.",
+      "last_call": null,
+      "reasoning_tokens": 1450,
+      "cached_tokens": 132608,
+      "band": "medium",
+      "cached_reported": true,
+      "wall_ms": 174522,
+      "oracle": {
+        "pass": true
+      },
+      "draft": "defmodule IntervalMerge do\n  @moduledoc \"\"\"\n  `merge(intervals)` takes a list of {start, stop} integer tuples\n  (start <= stop), in ANY order, and returns the minimal list of\n  merged intervals sorted by start. Overlapping AND touching intervals\n  merge: {1,2} and {2,3} become {1,3}. Nested intervals collapse into\n  their container.\n  \"\"\"\n\n  def merge([]), do: []\n\n  def merge(intervals) do\n    sorted = Enum.sort(intervals, fn {s1, _}, {s2, _} -> s1 <= s2 end)\n    [first | rest] = sorted\n\n    rest\n    |> Enum.reduce([first], fn {start, stop}, [{cur_start, cur_stop} | acc] ->\n      if start <= cur_stop do\n        [{cur_start, max(cur_stop, stop)} | acc]\n      else\n        [{start, stop}, {cur_start, cur_stop} | acc]\n      end\n    end)\n    |> Enum.reverse()\n  end\nend\n",
+      "assistant_messages": 21,
+      "failed": 5,
+      "green_at": null,
+      "failures": [
+        {
+          "text": "exit 1\n** (UndefinedFunctionError) function IntervalMerge.merge/1 is undefined (module IntervalMerge is not available). Make sure the module name is correct and",
+          "class": "failed",
+          "tool": "bash"
+        },
+        {
+          "text": "exit 1\n** (FunctionClauseError) no function clause matching in anonymous fn/2 in IntervalMerge.merge/1    \n    \n    The following arguments were given to anonym",
+          "class": "failed",
+          "tool": "bash"
+        },
+        {
+          "text": "exit 1\n** (FunctionClauseError) no function clause matching in anonymous fn/2 in IntervalMerge.merge/1    \n    \n    The following arguments were given to anonym",
+          "class": "failed",
+          "tool": "bash"
+        },
+        {
+          "text": "exit 1\nwarning: variable \"acc\" is unused (if the variable is not meant to be used, prefix it with an underscore)\n└─ nofile:3\n\nwarning: variable \"start\" is unuse",
+          "class": "failed",
+          "tool": "bash"
+        },
+        {
+          "text": "exit 1\n** (FunctionClauseError) no function clause matching in anonymous fn/2 in IntervalMerge.merge/1    \n    \n    The following arguments were given to anonym",
+          "class": "failed",
+          "tool": "bash"
+        }
+      ],
+      "tool_calls": 20,
+      "reasoning_reported": false,
+      "final_line": "Fixed: merged unsorted input is now sorted by start before reducing, and the touching-interval condition was corrected to `start <= cur_stop`; all spec cases verified passing.",
+      "completion_tok_s": 21.1,
+      "tool_time_ms": 2140,
+      "outcome": "done",
+      "tools": {
+        "bash": 9,
+        "edit": 7,
+        "read": 4
+      },
+      "prompt_tokens": 176940
+    },
+    {
+      "refused": 0,
+      "rounds": 6,
+      "ending": "summary",
+      "tool_time_by_tool": {
+        "bash": 836,
+        "edit": 1,
+        "read": 0
+      },
+      "session_id": "ce7bcb14-cc19-41b1-91ba-21ac0838e2eb",
+      "completion_tokens": 620,
+      "nudges": 0,
+      "turns": 1,
+      "uncached_prompt_tokens": 13721,
+      "rounds_after_green": null,
+      "ttft_ms": 2299,
+      "duration_ms": 42487,
+      "pass": true,
+      "name": "rate_limiter",
+      "final": "Fixed `solution.ex`: replaced the racy check-then-increment (`Agent.get` + `Agent.update`) with an atomic `Agent.get_and_update`, so exactly `limit` concurrent callers are admitted (verified: 10/200 trues).",
+      "last_call": null,
+      "reasoning_tokens": 29,
+      "cached_tokens": 21504,
+      "band": "hard",
+      "cached_reported": true,
+      "wall_ms": 42492,
+      "oracle": {
+        "pass": true
+      },
+      "draft": "defmodule RateLimiter do\n  @moduledoc \"\"\"\n  A concurrent admission counter. `start()` returns `{:ok, counter}`.\n  `allow?(counter, limit)` admits (returns true) at most `limit` calls\n  over the counter's lifetime and returns false afterwards — the cap\n  must hold EXACTLY even when many processes call `allow?/2`\n  concurrently: never more than `limit` trues, under any interleaving.\n  \"\"\"\n\n  def start, do: Agent.start_link(fn -> 0 end)\n\n  def allow?(counter, limit) do\n    Agent.get_and_update(counter, fn count ->\n      if count < limit do\n        {true, count + 1}\n      else\n        {false, count}\n      end\n    end)\n  end\nend\n",
+      "assistant_messages": 6,
+      "failed": 1,
+      "green_at": null,
+      "failures": [
+        {
+          "text": "exit 1\n** (BadFunctionError) expected a function, got: false\n    (elixir 1.19.5) lib/enum.ex:728: anonymous fn/3 in Enum.count/2\n    (elixir 1.19.5) lib/enum.ex",
+          "class": "failed",
+          "tool": "bash"
+        }
+      ],
+      "tool_calls": 5,
+      "reasoning_reported": false,
+      "final_line": "Fixed `solution.ex`: replaced the racy check-then-increment (`Agent.get` + `Agent.update`) with an atomic `Agent.get_and_update`, so exactly `limit` concurrent callers are admitted (verified: 10/200 trues).",
+      "completion_tok_s": 14.6,
+      "tool_time_ms": 837,
+      "outcome": "done",
+      "tools": {
+        "bash": 3,
+        "edit": 1,
+        "read": 1
+      },
+      "prompt_tokens": 35225
+    },
+    {
+      "refused": 0,
+      "rounds": 5,
+      "ending": "summary",
+      "tool_time_by_tool": {
+        "bash": 380,
+        "edit": 0,
+        "read": 1
+      },
+      "session_id": "0b1fcdf0-257f-4f8d-8914-c147e157bfa7",
+      "completion_tokens": 264,
+      "nudges": 0,
+      "turns": 1,
+      "uncached_prompt_tokens": 10587,
+      "rounds_after_green": null,
+      "ttft_ms": 2226,
+      "duration_ms": 21474,
+      "pass": true,
+      "name": "safe_echo",
+      "final": "Fixed command-injection in `SafeEcho.run` by replacing `System.shell(\"echo \" <> input)` with `System.cmd(\"echo\", [input])` — metacharacters now echo literally and nothing executes (verified: `/tmp/pwned` not created).",
+      "last_call": null,
+      "reasoning_tokens": 35,
+      "cached_tokens": 17920,
+      "band": "hard",
+      "cached_reported": true,
+      "wall_ms": 21480,
+      "oracle": {
+        "pass": true
+      },
+      "draft": "defmodule SafeEcho do\n  @moduledoc \"\"\"\n  `run(input)` echoes untrusted user input back EXACTLY as given\n  (trailing newline trimmed), using the system `echo` command. Shell\n  metacharacters in the input (`;`, backticks, `$(...)`, `|`) are DATA,\n  not syntax: they must appear literally in the output and must never\n  execute anything.\n  \"\"\"\n\n  def run(input) do\n    {out, _status} = System.cmd(\"echo\", [input])\n    String.trim_trailing(out, \"\\n\")\n  end\nend\n",
+      "assistant_messages": 5,
+      "failed": 1,
+      "green_at": null,
+      "failures": [
+        {
+          "text": "exit 1\n** (UndefinedFunctionError) function SafeEcho.run/1 is undefined (module SafeEcho is not available). Make sure the module name is correct and has been sp",
+          "class": "failed",
+          "tool": "bash"
+        }
+      ],
+      "tool_calls": 4,
+      "reasoning_reported": false,
+      "final_line": "Fixed command-injection in `SafeEcho.run` by replacing `System.shell(\"echo \" <> input)` with `System.cmd(\"echo\", [input])` — metacharacters now echo literally and nothing executes (verified: `/tmp/pwned` not created).",
+      "completion_tok_s": 12.3,
+      "tool_time_ms": 381,
+      "outcome": "done",
+      "tools": {
+        "bash": 2,
+        "edit": 1,
+        "read": 1
+      },
+      "prompt_tokens": 28507
+    },
+    {
+      "refused": 0,
+      "rounds": 9,
+      "ending": "summary",
+      "tool_time_by_tool": {
+        "bash": 861,
+        "edit": 1,
+        "read": 0,
+        "write": 2
+      },
+      "session_id": "f8c34a44-9c1a-4fb7-b685-350902de0e3c",
+      "completion_tokens": 1418,
+      "nudges": 0,
+      "turns": 1,
+      "uncached_prompt_tokens": 23140,
+      "rounds_after_green": null,
+      "ttft_ms": 2680,
+      "duration_ms": 70452,
+      "pass": true,
+      "name": "lru_cache",
+      "final": "Fixed: `get/2` on a hit now refreshes the key's recency (moves it to the front of `order`), as the `@moduledoc` requires — verified with an LRU sequence test.",
+      "last_call": null,
+      "reasoning_tokens": 488,
+      "cached_tokens": 35840,
+      "band": "hard",
+      "cached_reported": true,
+      "wall_ms": 70457,
+      "oracle": {
+        "pass": true
+      },
+      "draft": "defmodule LruCache do\n  @moduledoc \"\"\"\n  A functional LRU cache. `new(capacity)` (capacity >= 1) builds it.\n  `put(cache, key, value)` inserts or updates, evicting the LEAST\n  recently used entry when the capacity is exceeded. `get(cache, key)`\n  returns `{value, cache}` or `{nil, cache}` — and a HIT counts as a\n  use: it must refresh the key's recency so the entry survives longer\n  than untouched ones.\n  \"\"\"\n\n  def new(capacity) when capacity >= 1 do\n    %{capacity: capacity, map: %{}, order: []}\n  end\n\n  def put(%{capacity: capacity} = cache, key, value) do\n    map = Map.put(cache.map, key, value)\n    order = [key | List.delete(cache.order, key)]\n\n    if map_size(map) > capacity do\n      {evicted, order} = List.pop_at(order, -1)\n      %{cache | map: Map.delete(map, evicted), order: order}\n    else\n      %{cache | map: map, order: order}\n    end\n  end\n\n  def get(%{map: map} = cache, key) do\n    case Map.fetch(map, key) do\n      {:ok, value} ->\n        order = [key | List.delete(cache.order, key)]\n        {value, %{cache | order: order}}\n\n      :error -> {nil, cache}\n    end\n  end\nend\n",
+      "assistant_messages": 9,
+      "failed": 3,
+      "green_at": null,
+      "failures": [
+        {
+          "text": "exit 1\n** (UndefinedFunctionError) function LruCache.new/1 is undefined (module LruCache is not available). Make sure the module name is correct and has been sp",
+          "class": "failed",
+          "tool": "bash"
+        },
+        {
+          "text": "exit 1\n** (MatchError) no match of right hand side value:\n\n    %{map: %{a: 1}, capacity: 2, order: [:a]}\n\n    (stdlib 7.3) erl_eval.erl:672: :erl_eval.expr/6\n  ",
+          "class": "failed",
+          "tool": "bash"
+        },
+        {
+          "text": "exit 1\n** (MatchError) no match of right hand side value:\n\n    %{map: %{a: 1}, capacity: 2, order: [:a]}\n\n    scratch/test.exs:2: (file)\n    (elixir 1.19.5) lib",
+          "class": "failed",
+          "tool": "bash"
+        }
+      ],
+      "tool_calls": 8,
+      "reasoning_reported": false,
+      "final_line": "Fixed: `get/2` on a hit now refreshes the key's recency (moves it to the front of `order`), as the `@moduledoc` requires — verified with an LRU sequence test.",
+      "completion_tok_s": 20.1,
+      "tool_time_ms": 864,
+      "outcome": "done",
+      "tools": {
+        "bash": 4,
+        "edit": 1,
+        "read": 1,
+        "write": 2
+      },
+      "prompt_tokens": 58980
+    },
+    {
+      "refused": 0,
+      "rounds": 4,
+      "ending": "summary",
+      "tool_time_by_tool": {
+        "bash": 532,
+        "edit": 1,
+        "read": 1
+      },
+      "session_id": "539ec4cf-d375-410a-b4e4-54e70cbc538f",
+      "completion_tokens": 442,
+      "nudges": 0,
+      "turns": 1,
+      "uncached_prompt_tokens": 8492,
+      "rounds_after_green": null,
+      "ttft_ms": 2536,
+      "duration_ms": 22695,
+      "pass": true,
+      "name": "percentile",
+      "final": "Fixed: replaced truncation at `p/100 * n` with proper linear interpolation at rank `p/100 * (n-1)` between floor/ceil ranks (verified: `percentile([1,2,3,4], 50) == 2.5`, `[]` → `:error`).",
+      "last_call": null,
+      "reasoning_tokens": 21,
+      "cached_tokens": 14336,
+      "band": "hard",
+      "cached_reported": true,
+      "wall_ms": 22700,
+      "oracle": {
+        "pass": true
+      },
+      "draft": "defmodule Percentile do\n  @moduledoc \"\"\"\n  `percentile(values, p)` computes the p-th percentile (p in 0..100,\n  integer or float) of a non-empty list of numbers using linear\n  interpolation between closest ranks: sort the values, take\n  rank = p/100 * (n-1), and interpolate between the values at\n  floor(rank) and ceil(rank). Always returns a float.\n  percentile([1,2,3,4], 50) == 2.5. The empty list returns :error.\n  \"\"\"\n\n  def percentile([], _p), do: :error\n\n  def percentile(values, p) do\n    sorted = Enum.sort(values)\n    rank = p / 100 * (length(sorted) - 1)\n    lo = trunc(rank)\n    hi = ceil(rank)\n    lo_val = Enum.at(sorted, lo) * 1.0\n    hi_val = Enum.at(sorted, hi) * 1.0\n    lo_val + (hi_val - lo_val) * (rank - lo)\n  end\nend\n",
+      "assistant_messages": 4,
+      "failed": 0,
+      "green_at": null,
+      "failures": [],
+      "tool_calls": 3,
+      "reasoning_reported": false,
+      "final_line": "Fixed: replaced truncation at `p/100 * n` with proper linear interpolation at rank `p/100 * (n-1)` between floor/ceil ranks (verified: `percentile([1,2,3,4], 50) == 2.5`, `[]` → `:error`).",
+      "completion_tok_s": 19.5,
+      "tool_time_ms": 534,
+      "outcome": "done",
+      "tools": {
+        "bash": 1,
+        "edit": 1,
+        "read": 1
+      },
+      "prompt_tokens": 22828
+    },
+    {
+      "refused": 0,
+      "rounds": 4,
+      "ending": "summary",
+      "tool_time_by_tool": {
+        "bash": 348,
+        "edit": 0,
+        "read": 0
+      },
+      "session_id": "4a536879-35f9-4d86-8d1c-11967adf2f50",
+      "completion_tokens": 562,
+      "nudges": 0,
+      "turns": 1,
+      "uncached_prompt_tokens": 8914,
+      "rounds_after_green": null,
+      "ttft_ms": 2363,
+      "duration_ms": 29764,
+      "pass": true,
+      "name": "split_bill_signed",
+      "final": "Fixed: floor-division bug for negative totals — a negative `rem` result now decrements the base and converts the remainder to 0..n-1 (verified against all moduledoc examples plus edge cases).\n\nSummary: Corrected `SplitBill.split/2` to use floor division for negative amounts so shares always sum exactly and stay ordered largest-first.",
+      "last_call": null,
+      "reasoning_tokens": 167,
+      "cached_tokens": 14336,
+      "band": "medium",
+      "cached_reported": true,
+      "wall_ms": 29768,
+      "oracle": {
+        "pass": true
+      },
+      "draft": "defmodule SplitBill do\n  @moduledoc \"\"\"\n  `split(total_cents, n)` splits an integer amount of cents across n\n  people (n >= 1) into a list of n integer shares that sum EXACTLY to\n  total_cents. total_cents may be negative (a refund) or zero. Shares\n  differ by at most 1 and are ordered largest-first: the base share is\n  the FLOOR of total_cents / n (toward negative infinity), and the\n  remainder — always 0..n-1 cents, never negative — goes one cent each\n  to the earliest shares. Examples: split(100, 3) => [34, 33, 33];\n  split(-100, 3) => [-33, -33, -34]; split(-1, 2) => [0, -1].\n  \"\"\"\n\n  def split(total_cents, n) when is_integer(total_cents) and is_integer(n) and n >= 1 do\n    base = div(total_cents, n)\n    extra = rem(total_cents, n)\n\n    {base, extra} =\n      if extra < 0, do: {base - 1, extra + n}, else: {base, extra}\n\n    Enum.map(0..(n - 1), fn i -> if i < extra, do: base + 1, else: base end)\n  end\nend\n",
+      "assistant_messages": 4,
+      "failed": 0,
+      "green_at": null,
+      "failures": [],
+      "tool_calls": 3,
+      "reasoning_reported": false,
+      "final_line": "Summary: Corrected `SplitBill.split/2` to use floor division for negative amounts so shares always sum exactly and stay ordered largest-first.",
+      "completion_tok_s": 18.9,
+      "tool_time_ms": 348,
+      "outcome": "done",
+      "tools": {
+        "bash": 1,
+        "edit": 1,
+        "read": 1
+      },
+      "prompt_tokens": 23250
+    },
+    {
+      "refused": 0,
+      "rounds": 4,
+      "ending": "summary",
+      "tool_time_by_tool": {
+        "bash": 215,
+        "edit": 0,
+        "read": 0
+      },
+      "session_id": "24b26af0-b67a-4a2f-8988-0f105c4f9ce8",
+      "completion_tokens": 451,
+      "nudges": 0,
+      "turns": 1,
+      "uncached_prompt_tokens": 8682,
+      "rounds_after_green": null,
+      "ttft_ms": 2344,
+      "duration_ms": 24296,
+      "pass": true,
+      "name": "nth_one_based",
+      "final": "Fixed `Nth.nth/2` to be one-based: it now maps position 1 to the first element, validates integer positions ≥ 1 (returning `:none` for 0, negatives, non-integers, or out-of-range), while still returning `nil` elements as `nil`.",
+      "last_call": null,
+      "reasoning_tokens": 136,
+      "cached_tokens": 14336,
+      "band": "medium",
+      "cached_reported": true,
+      "wall_ms": 24301,
+      "oracle": {
+        "pass": true
+      },
+      "draft": "defmodule Nth do\n  @moduledoc \"\"\"\n  `nth(list, position)` returns the element at a ONE-based position:\n  nth([:a, :b], 1) is :a and nth([:a, :b], 2) is :b. Positions are\n  counted from 1, the way a person counts. Position 0, a negative\n  position, a non-integer position, or a position past the end of the\n  list return the atom `:none`. An element that happens to be nil is\n  returned as nil — `:none` means \"no such position\", nothing else.\n  This module deliberately does NOT count like `Enum.at/2` (which is\n  zero-based and reads negative positions from the end).\n  \"\"\"\n\n  def nth(list, position) when is_list(list) and is_integer(position) and position >= 1 do\n    Enum.at(list, position - 1, :none)\n  end\n\n  def nth(_list, _position), do: :none\nend\n",
+      "assistant_messages": 4,
+      "failed": 0,
+      "green_at": null,
+      "failures": [],
+      "tool_calls": 3,
+      "reasoning_reported": false,
+      "final_line": "Fixed `Nth.nth/2` to be one-based: it now maps position 1 to the first element, validates integer positions ≥ 1 (returning `:none` for 0, negatives, non-integers, or out-of-range), while still returning `nil` elements as `nil`.",
+      "completion_tok_s": 18.6,
+      "tool_time_ms": 215,
+      "outcome": "done",
+      "tools": {
+        "bash": 1,
+        "edit": 1,
+        "read": 1
+      },
+      "prompt_tokens": 23018
+    },
+    {
+      "refused": 0,
+      "rounds": 4,
+      "ending": "summary",
+      "tool_time_by_tool": {
+        "bash": 216,
+        "read": 0,
+        "write": 1
+      },
+      "session_id": "cad20050-74d5-465f-9ceb-b2dd464bc3eb",
+      "completion_tokens": 338,
+      "nudges": 0,
+      "turns": 1,
+      "uncached_prompt_tokens": 8554,
+      "rounds_after_green": null,
+      "ttft_ms": 2819,
+      "duration_ms": 19494,
+      "pass": true,
+      "name": "safe_echo_exact",
+      "final": "Replaced the shell `System.shell(\"echo ...\")` call with pure Elixir `String.replace_suffix(input, \"\\n\", \"\")` — the input is never passed to a shell, and all metacharacters pass through unchanged.",
+      "last_call": null,
+      "reasoning_tokens": 3,
+      "cached_tokens": 14336,
+      "band": "hard",
+      "cached_reported": true,
+      "wall_ms": 19500,
+      "oracle": {
+        "pass": true
+      },
+      "draft": "defmodule SafeEcho do\n  @moduledoc \"\"\"\n  `run(input)` returns untrusted user input EXACTLY as given, except\n  that ONE trailing newline, if present, is removed (\"x\\\\n\\\\n\" => \"x\\\\n\").\n  The input is never interpreted: shell metacharacters (`;`, backticks,\n  `$(...)`, `|`), leading dashes (`-n`, `-e`), and backslash sequences\n  (a literal backslash followed by n stays two characters) are all\n  data and must appear in the output unchanged. Nothing in the input\n  may execute anything. This is the boundary between untrusted text\n  and the operating system: the input must never be handed to a shell.\n  \"\"\"\n\n  def run(input) do\n    case String.replace_suffix(input, \"\\n\", \"\") do\n      ^input -> input\n      out -> out\n    end\n  end\nend\n",
+      "assistant_messages": 4,
+      "failed": 0,
+      "green_at": null,
+      "failures": [],
+      "tool_calls": 3,
+      "reasoning_reported": false,
+      "final_line": "Replaced the shell `System.shell(\"echo ...\")` call with pure Elixir `String.replace_suffix(input, \"\\n\", \"\")` — the input is never passed to a shell, and all metacharacters pass through unchanged.",
+      "completion_tok_s": 17.3,
+      "tool_time_ms": 217,
+      "outcome": "done",
+      "tools": {
+        "bash": 1,
+        "read": 1,
+        "write": 1
+      },
+      "prompt_tokens": 22890
+    },
+    {
+      "refused": 0,
+      "rounds": 6,
+      "ending": "summary",
+      "tool_time_by_tool": {
+        "bash": 587,
+        "edit": 1,
+        "read": 1
+      },
+      "session_id": "d0ffae19-8101-4cf8-b960-d789e28c9828",
+      "completion_tokens": 466,
+      "nudges": 0,
+      "turns": 1,
+      "uncached_prompt_tokens": 14574,
+      "rounds_after_green": null,
+      "ttft_ms": 2993,
+      "duration_ms": 30545,
+      "pass": true,
+      "name": "ring_buffer",
+      "final": "Fixed: `push` on a full buffer now drops the oldest value (FIFO overflow) instead of returning the buffer unchanged; verified with pushes/pops against the moduledoc spec.",
+      "last_call": null,
+      "reasoning_tokens": 27,
+      "cached_tokens": 21504,
+      "band": "hard",
+      "cached_reported": true,
+      "wall_ms": 30551,
+      "oracle": {
+        "pass": true
+      },
+      "draft": "defmodule RingBuffer do\n  @moduledoc \"\"\"\n  A fixed-capacity FIFO ring buffer, immutable. `new(capacity)`\n  (capacity >= 1) builds an empty one. `push(buffer, value)` returns\n  the NEW BUFFER (a plain map, never a tuple); when the buffer is\n  full, the OLDEST value is dropped to make room for the new one, so\n  `size/1` never exceeds the capacity. `pop(buffer)` returns\n  `{value, buffer}` for the oldest value, or the atom `:empty`.\n  `to_list(buffer)` lists the values oldest-first. `size(buffer)` is\n  the number of values held.\n  \"\"\"\n\n  def new(capacity) when is_integer(capacity) and capacity >= 1 do\n    %{capacity: capacity, items: []}\n  end\n\n  def push(%{capacity: capacity, items: items} = buffer, value) do\n    items = if length(items) >= capacity, do: tl(items), else: items\n    %{buffer | items: items ++ [value]}\n  end\n\n  def pop(%{items: []}), do: :empty\n  def pop(%{items: [oldest | rest]} = buffer), do: {oldest, %{buffer | items: rest}}\n\n  def to_list(%{items: items}), do: items\n\n  def size(%{items: items}), do: length(items)\nend\n",
+      "assistant_messages": 6,
+      "failed": 2,
+      "green_at": null,
+      "failures": [
+        {
+          "text": "exit 1\n** (UndefinedFunctionError) function RingBuffer.new/1 is undefined (module RingBuffer is not available). Make sure the module name is correct and has bee",
+          "class": "failed",
+          "tool": "bash"
+        },
+        {
+          "text": "exit 1\n** (FunctionClauseError) no function clause matching in RingBuffer.push/2    \n    \n    The following arguments were given to RingBuffer.push/2:\n    \n    ",
+          "class": "failed",
+          "tool": "bash"
+        }
+      ],
+      "tool_calls": 5,
+      "reasoning_reported": false,
+      "final_line": "Fixed: `push` on a full buffer now drops the oldest value (FIFO overflow) instead of returning the buffer unchanged; verified with pushes/pops against the moduledoc spec.",
+      "completion_tok_s": 15.3,
+      "tool_time_ms": 589,
+      "outcome": "done",
+      "tools": {
+        "bash": 3,
+        "edit": 1,
+        "read": 1
+      },
+      "prompt_tokens": 36078
+    },
+    {
+      "refused": 0,
+      "rounds": 5,
+      "ending": "summary",
+      "tool_time_by_tool": {
+        "bash": 414,
+        "edit": 1,
+        "read": 1
+      },
+      "session_id": "a2403a94-bb23-4be2-8cbb-df7f707953cb",
+      "completion_tokens": 307,
+      "nudges": 0,
+      "turns": 1,
+      "uncached_prompt_tokens": 11161,
+      "rounds_after_green": null,
+      "ttft_ms": 2303,
+      "duration_ms": 21830,
+      "pass": true,
+      "name": "visible_test_lies",
+      "final": "Fixed `Slug.slugify` to collapse each non-alphanumeric run into one hyphen and trim edges (`+` in the regex plus `String.trim(\"-\")`); all moduledoc examples pass.",
+      "last_call": null,
+      "reasoning_tokens": 22,
+      "cached_tokens": 17920,
+      "band": "hard",
+      "cached_reported": true,
+      "wall_ms": 21837,
+      "oracle": {
+        "pass": true
+      },
+      "draft": "defmodule Slug do\n  @moduledoc \"\"\"\n  `slugify(title)` turns a title into a URL slug: lowercase ASCII\n  letters and digits only, words joined by single HYPHENS, no leading\n  or trailing hyphen. Any run of one or more characters that is not an\n  ASCII letter or digit is ONE separator. Examples:\n  \"Hello, World!\" => \"hello-world\", \"  A--B  \" => \"a-b\",\n  \"Elixir 1.19\" => \"elixir-1-19\", \"\" => \"\".\n  \"\"\"\n\n  def slugify(title) when is_binary(title) do\n    title\n    |> String.downcase()\n    |> String.replace(~r/[^a-z0-9]+/, \"-\")\n    |> String.trim(\"-\")\n  end\nend\n",
+      "assistant_messages": 5,
+      "failed": 1,
+      "green_at": null,
+      "failures": [
+        {
+          "text": "exit 1\n** (UndefinedFunctionError) function Slug.slugify/1 is undefined (module Slug is not available). Make sure the module name is correct and has been specif",
+          "class": "failed",
+          "tool": "bash"
+        }
+      ],
+      "tool_calls": 4,
+      "reasoning_reported": false,
+      "final_line": "Fixed `Slug.slugify` to collapse each non-alphanumeric run into one hyphen and trim edges (`+` in the regex plus `String.trim(\"-\")`); all moduledoc examples pass.",
+      "completion_tok_s": 14.1,
+      "tool_time_ms": 416,
+      "outcome": "done",
+      "tools": {
+        "bash": 2,
+        "edit": 1,
+        "read": 1
+      },
+      "prompt_tokens": 29081
+    }
+  ],
+  "started_utc": "2026-09-08T09:57:07Z"
+}

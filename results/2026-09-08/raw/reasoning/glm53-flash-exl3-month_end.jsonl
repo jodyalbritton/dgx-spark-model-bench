@@ -1,0 +1,5 @@
+{"round":1,"seq":1,"tools":["read"],"content":null,"reasoning":null}
+{"round":2,"seq":3,"tools":["edit"],"content":null,"reasoning":"Bug: month 12 → 13; also no year rollover. Fix minimally."}
+{"round":3,"seq":5,"tools":["bash"],"content":null,"reasoning":null}
+{"round":4,"seq":7,"tools":["bash"],"content":null,"reasoning":null}
+{"round":5,"seq":9,"tools":[],"content":"Fixed: December now rolls over to January of the next year (and `Date.days_in_month` handles leap years) — verified ~D[2024-01-15]→~D[2024-02-29], ~D[2023-12-05]→~D[2024-01-31].","reasoning":null}

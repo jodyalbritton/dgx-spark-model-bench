@@ -6,25 +6,27 @@ loop and it is a fair way to compare serving configs. It is not what you wait
 on when a model is doing work.
 
 This page shows the same three models on the same two DGX Sparks doing the
-application task from `COMPARISON.md`: 77 to 102 tool-calling rounds each,
+application task from `COMPARISON.md`: 62 to 105 tool-calling rounds each,
 thinking on, context growing every round as the model reads, edits, builds,
 and tests. Every number is read from the agent's per-round ledger for the
-round-4 sessions; the CSVs are in `results/2026-09-05-r2/raw/rounds/`.
+round-6 sessions (`results/2026-09-07/`, the current harness); the CSVs are
+in `results/2026-09-07/raw/rounds/`, and the round-4 sessions on the previous
+harness are in `results/2026-09-05-r2/raw/rounds/` for comparison.
 
 ## The shape of a working session
 
 ![prompt tokens per round](docs/realworld-context-per-round.svg)
 
 Every round re-reads everything that came before: the system prompt, the
-task, every file the model has read, every edit, every test result, and
+task, every file the model has read, every tool result, every edit, and
 (for these three) its own reasoning from earlier in the turn. The context
-grows from about 5k tokens on round 1 to 60k (GLM), 91k (DeepSeek), or
-116k (Qwen) by the end. The median round in each session already carries
-40k to 75k tokens of context.
+grows from about 6k tokens on round 1 to 56k (GLM), 145k (Qwen), or 146k
+(DeepSeek) by the end. The median round in each session already carries
+46k to 104k tokens of context.
 
 That is the number a serving benchmark's prefill row should be read
-against: not "how fast is a 16k cold prefill," but "how fast is a 75k
-warm one, every ten seconds, for half an hour."
+against: not "how fast is a 16k cold prefill," but "how fast is a 100k
+warm one, every eight seconds, for half an hour."
 
 ## What you wait on
 
@@ -32,47 +34,80 @@ warm one, every ten seconds, for half an hour."
 
 | per round, application task | DeepSeek-V4-Flash | Qwen3.8-Flash-Next | GLM-5.3-Flash |
 |---|---:|---:|---:|
-| rounds | 77 | 102 | 93 |
-| context, median / final | 64k / 91k | 76k / 116k | 41k / 60k |
-| prefix-cache hit rate over the turn | **97.8%** | 95.2% | 94.9% |
-| new (uncached) prompt tokens per round, median | **753** | 3,125 | 1,888 |
-| time to first token, median | **1.0 s** | 1.6 s | 3.0 s |
-| output tok/s per round, end to end, median | **40** | 35 | 19 |
-| same, on rounds under 20k context | 37 | 27 | 14 |
-| same, on rounds over 50k context | **40** | 36 | 15 |
-| seconds per round, median / p90 | 8.6 / 41 | 8.0 / 33 | **6.2 / 27** |
-| rounds longer than a minute | 5 | 2 | 3 |
-| output tokens per round, median | 335 | 257 | 71 |
-| whole task | 24.0 min | 27.6 min | **18.4 min** |
+| rounds | 105 | 105 | **62** |
+| context, median / final | 98k / 146k | 104k / 145k | 46k / 56k |
+| prefix-cache hit rate over the turn | **98.2%** | 94.7% | 93.2% |
+| new (uncached) prompt tokens per round, median | **1,013** | 3,960 | 2,606 |
+| time to first token, median | **1.6 s** | 2.3 s | 3.2 s |
+| output tok/s per round, end to end, median | **36.4** | 32.3 | 20.5 |
+| same, on rounds under 20k context | **41.8** | 34.1 | (too few rounds) |
+| same, on rounds over 50k context | **36.4** | 32.4 | 18.5 |
+| seconds per round, median / p90 | 8.0 / 43 | 9.7 / 54 | **6.4 / 33** |
+| rounds longer than a minute | 8 | 10 | **2** |
+| output tokens per round, median | 257 | 285 | 108 |
+| whole task | 34.5 min | 35.8 min | **14.1 min** |
 
 Three things this table says that a decode benchmark cannot:
 
-**Context size stopped mattering, because of the cache.** DeepSeek's rounds
-over 50k tokens of context were no slower than its rounds under 20k, and
-Qwen's were faster. With 95 to 98 percent of every prompt served from the
-prefix cache, a 91k-token round costs about one second before the first
-token, and the rest is generation. This is the single most important
-property of these engines for agent work, and it is invisible in a
-cold-prefill ladder. The one place it breaks is a round that adds a lot of
-new context at once: DeepSeek's slowest round read three large files
-(11k new tokens) and took two minutes.
+**A 146k-token context costs about 10% of throughput, not 5×.** Prefill
+alone would say a round carrying 146k tokens is many times more expensive
+than one carrying 20k. It is not, because 93 to 98 percent of every prompt
+is served from the prefix cache and only the new tokens are prefilled:
+DeepSeek's median round adds about a thousand new tokens to a 98k-token
+context and still reaches first token in 1.6 seconds. Across the whole
+range, throughput falls from about 42 tok/s at small contexts to about
+36 at 140k. That decline is real and it is gentle. It is also invisible in
+a cold-prefill ladder, which measures the case the cache exists to avoid.
 
 **End-to-end rate is well below the decode headline, and the gap is
 model-shaped.** DeepSeek's raw decode peaks near 75 tok/s and its median
-working round runs at 40. Qwen's engine is the fastest on this hardware and
-its median round is 35, because a fifth of every round is prefill of its
-own new reasoning. GLM's median round is 19 tok/s: it produces the fewest
-tokens per round (a median of 71), so per-request overhead and prefill
-dominate, and its engine's prefill is the slowest of the three. GLM still
-finished first, because 93 short rounds beat 77 long ones.
+working round runs at 36. Qwen's engine is the fastest on this hardware and
+its median round is 32, because it carries the largest per-round prompt
+(4k new tokens on top of a 104k context) and thinks on every round. GLM's
+median round is 20 tok/s: it produces the fewest tokens per round (a median
+of 108), so per-request overhead and prefill dominate, and its engine's
+prefill is the slowest of the three. GLM still finished first, in 14
+minutes, because 62 short rounds beat 105 long ones.
 
 **The long rounds are thinking, not reading.** Each model's slowest rounds
-were its planning rounds: Qwen's round 29, 293 seconds and 11k output
-tokens, is the one where it laid out the entire application; DeepSeek's
-round 29, 116 seconds and 5.5k tokens, is where it designed the main page.
-Those rounds are what a "reasoning tok/s" figure would describe, and they
-are a handful per session. The other ninety rounds are five to ten
-seconds each: a short thought, a tool call, a result.
+were its planning rounds: DeepSeek's round 15, 215 seconds and 7.8k output
+tokens, is where it laid out the application; Qwen's round 22, 147 seconds
+and 5.4k tokens, is the same moment in its run; GLM's longest round is 78
+seconds. Those rounds are what a "reasoning tok/s" figure would describe,
+and they are a handful per session. Most of the other rounds are six to
+ten seconds: a short thought, a tool call, a result.
+
+## What changed when tool results stopped being summarised
+
+Round 4 (`results/2026-09-05-r2/`) ran the same task with the same models
+at the same effort, on a harness that paraphrased large tool results
+through a summarising tier. Round 6 hands them over verbatim under a
+window-scaled ceiling. The models read more, and the cost lands almost
+entirely on the cache rather than on the clock:
+
+| round 4 → round 6 | DeepSeek | Qwen | GLM |
+|---|---|---|---|
+| context, median | 64k → **98k** | 76k → **104k** | 41k → 46k |
+| context, final | 91k → **146k** | 116k → **145k** | 60k → 56k |
+| uncached prompt, whole task | 97k → **184k** | 343k → **509k** | 193k → 180k |
+| prefix-cache hit | 97.8% → 98.2% | 95.2% → 94.7% | 94.9% → 93.2% |
+| seconds per round, median | 8.6 → 8.0 | 8.0 → 9.7 | 6.2 → 6.4 |
+| output tok/s, median | 40.0 → 36.4 | 34.5 → 32.3 | 19.0 → 20.5 |
+| rounds | 77 → 105 | 102 → 105 | 93 → **62** |
+| whole task | 24.0 → 34.5 min | 27.6 → 35.8 min | 18.4 → **14.1 min** |
+
+DeepSeek's and Qwen's contexts grew by half again and their uncached
+prompt roughly doubled, while seconds per round moved by a second or less
+in either direction. Whole-task wall did grow, but the reason is rounds,
+not round cost: DeepSeek spent 28 extra rounds looking at its own pages
+with the new browser tools, and Qwen spent its extra rounds on a longer
+survey. GLM read the least of the three on both harnesses, so verbatim
+results barely touched it, and it finished a third faster than before.
+
+The practical reading: **on this hardware, letting an agent read whole
+files instead of summaries is close to free per round**, as long as the
+prefix cache is on and the conversation is append-only. What costs is
+deciding to take more turns.
 
 ## How to read a headline number after this
 
@@ -85,10 +120,9 @@ seconds each: a short thought, a tool call, a result.
   Under load with several users, that matters more than it does here.
 - An aggregate figure across 4 or 16 streams tells you how many such
   sessions the box can carry at once, not how any one of them feels.
-- What a session feels like is seconds per round: six to nine at the
+- What a session feels like is seconds per round: six to ten at the
   median for all three, with a tail of long rounds where the model
-  thinks, and a wall of 18 to 28 minutes for a task of about a hundred
-  rounds.
+  thinks, and a wall of 14 to 36 minutes for a task of 60 to 105 rounds.
 
 ## Method
 
@@ -99,7 +133,8 @@ and helm's client-side `duration_ms` and `ttft_ms`. Output tok/s per round
 is `completion_tokens / duration_ms`, which includes prefill, network, and
 the gateway; it is the rate you experience, not the engine's decode rate.
 Rounds with fewer than 64 output tokens are excluded from the tok/s
-medians. Time to first token is recorded on every Qwen round and on about
-half of the others (the ledger drops it on some tool-call rounds), so the
-TTFT medians for DeepSeek and GLM are over the rounds that have it. The
-charts are static SVG; the CSVs carry every value.
+medians. Time to first token is recorded on every Qwen round and on most
+of the others (the ledger drops it on some tool-call rounds), so the TTFT
+medians for DeepSeek and GLM are over the rounds that have it. The charts
+are static SVG, regenerated by `design/tools/realworld_charts.py <round>`;
+the CSVs carry every value.
