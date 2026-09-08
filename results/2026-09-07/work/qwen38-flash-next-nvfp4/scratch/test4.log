@@ -1,0 +1,13 @@
+Running ExUnit with seed: 591792, max_cases: 36
+
+    error: undefined function count/1 (expected BenchappWeb.HomeLiveTest to define such a function or for it to be imported, but none are available)
+    │
+ 18 │   defp count_of(view, selector), do: view |> element(selector, :count) |> count()
+    │                                                                           ^^^^^
+    │
+    └─ test/benchapp_web/live/home_live_test.exs:18:75: BenchappWeb.HomeLiveTest.count_of/2
+
+
+== Compilation error in file test/benchapp_web/live/home_live_test.exs ==
+** (CompileError) test/benchapp_web/live/home_live_test.exs: cannot compile module BenchappWeb.HomeLiveTest (errors have been logged)
+

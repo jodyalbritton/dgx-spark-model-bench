@@ -1,0 +1,8 @@
+Compiling 9 files (.ex)
+Generated benchapp app
+warning: mtime (modified time) for "/Users/jody/dgx-spark-model-bench/results/2026-09-07/work/qwen38-flash-next-nvfp4/benchapp/lib/benchapp_web/components/layouts.ex" was set to the future, resetting to now
+Running ExUnit with seed: 714582, max_cases: 36
+
+....................
+Finished in 0.1 seconds (0.1s async, 0.00s sync)
+20 tests, 0 failures

@@ -1,0 +1,114 @@
+Compiling 23 files (.ex)
+Generated benchapp app
+Running ExUnit with seed: 5292, max_cases: 36
+
+    error: undefined function text/1 (expected BenchappWeb.HomeLiveTest to define such a function or for it to be imported, but none are available)
+    │
+ 45 │       assert element(view, "#stat-ticks") |> text() == "100"
+    │                                              ^^^^
+    │
+    └─ test/benchapp_web/live/home_live_test.exs:45:46: BenchappWeb.HomeLiveTest."test countdown holds at zero once the gate closes"/1
+
+    error: undefined function text/1 (expected BenchappWeb.HomeLiveTest to define such a function or for it to be imported, but none are available)
+    │
+ 44 │       assert element(view, "#countdown") |> text() == "0"
+    │                                             ^^^^
+    │
+    └─ test/benchapp_web/live/home_live_test.exs:44:45: BenchappWeb.HomeLiveTest."test countdown holds at zero once the gate closes"/1
+
+    error: undefined function text/1 (expected BenchappWeb.HomeLiveTest to define such a function or for it to be imported, but none are available)
+    │
+ 41 │       assert element(view, "#countdown") |> text() == "0"
+    │                                             ^^^^
+    │
+    └─ test/benchapp_web/live/home_live_test.exs:41:45: BenchappWeb.HomeLiveTest."test countdown holds at zero once the gate closes"/1
+
+    error: undefined function text/1 (expected BenchappWeb.HomeLiveTest to define such a function or for it to be imported, but none are available)
+    │
+ 24 │       assert element(view, "#countdown") |> text() == "100"
+    │                                             ^^^^
+    │
+    └─ test/benchapp_web/live/home_live_test.exs:24:45: BenchappWeb.HomeLiveTest."test countdown starts at 100 in #countdown"/1
+
+    error: undefined function text/1 (expected BenchappWeb.HomeLiveTest to define such a function or for it to be imported, but none are available)
+    │
+ 34 │       assert element(view, "#countdown") |> text() == "98"
+    │                                             ^^^^
+    │
+    └─ test/benchapp_web/live/home_live_test.exs:34:45: BenchappWeb.HomeLiveTest."test countdown steps down by one on every tick"/1
+
+    error: undefined function text/1 (expected BenchappWeb.HomeLiveTest to define such a function or for it to be imported, but none are available)
+    │
+ 31 │       assert element(view, "#countdown") |> text() == "99"
+    │                                             ^^^^
+    │
+    └─ test/benchapp_web/live/home_live_test.exs:31:45: BenchappWeb.HomeLiveTest."test countdown steps down by one on every tick"/1
+
+    error: undefined function text/1 (expected BenchappWeb.HomeLiveTest to define such a function or for it to be imported, but none are available)
+    │
+ 84 │       assert element(view, "#stat-signups") |> text() == "1"
+    │                                                ^^^^
+    │
+    └─ test/benchapp_web/live/home_live_test.exs:84:48: BenchappWeb.HomeLiveTest."test signup form a valid address is added to #signups without a reload"/1
+
+    error: undefined function text/1 (expected BenchappWeb.HomeLiveTest to define such a function or for it to be imported, but none are available)
+    │
+ 65 │       assert element(view, "#stat-signups") |> text() == "0"
+    │                                                ^^^^
+    │
+    └─ test/benchapp_web/live/home_live_test.exs:65:48: BenchappWeb.HomeLiveTest."test signup form an invalid address shows #signup-error and is not added"/1
+
+    error: undefined function text/1 (expected BenchappWeb.HomeLiveTest to define such a function or for it to be imported, but none are available)
+    │
+ 95 │       assert element(view, "#stat-signups") |> text() == "1"
+    │                                                ^^^^
+    │
+    └─ test/benchapp_web/live/home_live_test.exs:95:48: BenchappWeb.HomeLiveTest."test signup form the same address twice shows the error and is not added again"/1
+
+    error: undefined function count/1 (expected BenchappWeb.HomeLiveTest to define such a function or for it to be imported, but none are available)
+    │
+ 16 │     view |> element(selector, :count) |> count()
+    │                                          ^^^^^
+    │
+    └─ test/benchapp_web/live/home_live_test.exs:16:42: BenchappWeb.HomeLiveTest.count/2
+
+     error: undefined function text/1 (expected BenchappWeb.HomeLiveTest to define such a function or for it to be imported, but none are available)
+     │
+ 121 │       assert element(view, "#stat-ticks") |> text() == "1"
+     │                                              ^^^^
+     │
+     └─ test/benchapp_web/live/home_live_test.exs:121:46: BenchappWeb.HomeLiveTest."test stats strip #stats reports signup and tick counts from live state"/1
+
+     error: undefined function text/1 (expected BenchappWeb.HomeLiveTest to define such a function or for it to be imported, but none are available)
+     │
+ 120 │       assert element(view, "#stat-signups") |> text() == "1"
+     │                                                ^^^^
+     │
+     └─ test/benchapp_web/live/home_live_test.exs:120:48: BenchappWeb.HomeLiveTest."test stats strip #stats reports signup and tick counts from live state"/1
+
+    error: undefined function render_send/2 (expected BenchappWeb.HomeLiveTest to define such a function or for it to be imported, but none are available)
+    │
+  9 │   defp tick(view), do: render_send(view, :tick)
+    │                        ^^^^^^^^^^^
+    │
+    └─ test/benchapp_web/live/home_live_test.exs:9:24: BenchappWeb.HomeLiveTest.tick/1
+
+     error: undefined function text/1 (expected BenchappWeb.HomeLiveTest to define such a function or for it to be imported, but none are available)
+     │
+ 115 │       assert element(view, "#stat-ticks") |> text() == "0"
+     │                                              ^^^^
+     │
+     └─ test/benchapp_web/live/home_live_test.exs:115:46: BenchappWeb.HomeLiveTest."test stats strip #stats reports signup and tick counts from live state"/1
+
+     error: undefined function text/1 (expected BenchappWeb.HomeLiveTest to define such a function or for it to be imported, but none are available)
+     │
+ 114 │       assert element(view, "#stat-signups") |> text() == "0"
+     │                                                ^^^^
+     │
+     └─ test/benchapp_web/live/home_live_test.exs:114:48: BenchappWeb.HomeLiveTest."test stats strip #stats reports signup and tick counts from live state"/1
+
+
+== Compilation error in file test/benchapp_web/live/home_live_test.exs ==
+** (CompileError) test/benchapp_web/live/home_live_test.exs: cannot compile module BenchappWeb.HomeLiveTest (errors have been logged)
+
+exit=1

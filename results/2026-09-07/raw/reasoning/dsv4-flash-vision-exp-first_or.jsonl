@@ -1,0 +1,3 @@
+{"round":1,"seq":1,"tools":["read"],"content":null,"reasoning":null}
+{"round":2,"seq":3,"tools":["edit"],"content":null,"reasoning":"The bug: `hd(list) || default` returns default for falsy elements like nil/false, but the spec says falsy elements are legitimate values. So `first_or([false], :d)` should return `false`, not `:d`.\n\nFix using a case on empty list.\n\n```elixir\ndef first_or(list, default) do\n  case list do\n    [] -> default\n    [head | _] -> head\n  end\nend\n```"}
+{"round":3,"seq":5,"tools":[],"content":"Fixed `first_or` so falsy elements (nil, false) are returned as legitimate values instead of falling through to the default, by matching on the list's head explicitly.","reasoning":null}

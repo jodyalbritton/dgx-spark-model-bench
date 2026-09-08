@@ -1,0 +1,9 @@
+Compiling 9 files (.ex)
+     warning: module attribute @features was set but never used
+     │
+ 102 │   @features [
+     │   ~~~~~~~~~~~
+     │
+     └─ lib/benchapp_web/live/home_live.ex:102: BenchappWeb.HomeLive (module)
+
+Compilation failed due to warnings while using the --warnings-as-errors option

@@ -1,0 +1,180 @@
+Running ExUnit with seed: 591701, max_cases: 36
+
+..
+
+  1) test signup form the same address twice shows the error and is not added again (BenchappWeb.HomeLiveTest)
+     test/benchapp_web/live/home_live_test.exs:102
+     Assertion with == failed
+     code:  assert count_of(view, "#signups li") == 1
+     left:  0
+     right: 1
+     stacktrace:
+       test/benchapp_web/live/home_live_test.exs:109: (test)
+
+..
+
+  2) test activity feed records one entry per signup and per tick, newest first (BenchappWeb.HomeLiveTest)
+     test/benchapp_web/live/home_live_test.exs:141
+     Assertion with == failed
+     code:  assert count_of(view, "#activity li") == 2
+     left:  0
+     right: 2
+     stacktrace:
+       test/benchapp_web/live/home_live_test.exs:149: (test)
+
+
+
+  3) test signup form a second distinct address is accepted (BenchappWeb.HomeLiveTest)
+     test/benchapp_web/live/home_live_test.exs:113
+     Assertion with == failed
+     code:  assert count_of(view, "#signups li") == 2
+     left:  0
+     right: 2
+     stacktrace:
+       test/benchapp_web/live/home_live_test.exs:120: (test)
+
+
+
+  4) test signup form a valid address is added to #signups without a reload (BenchappWeb.HomeLiveTest)
+     test/benchapp_web/live/home_live_test.exs:91
+     ** (FunctionClauseError) no function clause matching in String.trim/1
+
+     The following arguments were given to String.trim/1:
+
+         # 1
+         nil
+
+     Attempted function clauses (showing 1 out of 1):
+
+         def trim(string) when -is_binary(string)-
+
+     code: assert text_of(view, "#stat-signups") == "1"
+     stacktrace:
+       (elixir 1.19.5) lib/string.ex:1380: String.trim/1
+       test/benchapp_web/live/home_live_test.exs:99: (test)
+
+
+
+  5) test activity feed keeps at most ten entries (BenchappWeb.HomeLiveTest)
+     test/benchapp_web/live/home_live_test.exs:154
+     Assertion with == failed
+     code:  assert count_of(view, "#activity li") == 10
+     left:  0
+     right: 10
+     stacktrace:
+       test/benchapp_web/live/home_live_test.exs:159: (test)
+
+
+
+  6) test signup form has one email input (BenchappWeb.HomeLiveTest)
+     test/benchapp_web/live/home_live_test.exs:64
+     Assertion with == failed
+     code:  assert count_of(view, ~S|#signup-form input[type="email"]|) == 1
+     left:  0
+     right: 1
+     stacktrace:
+       test/benchapp_web/live/home_live_test.exs:68: (test)
+
+
+
+  7) test countdown starts at 100 in #countdown (BenchappWeb.HomeLiveTest)
+     test/benchapp_web/live/home_live_test.exs:34
+     ** (FunctionClauseError) no function clause matching in String.trim/1
+
+     The following arguments were given to String.trim/1:
+
+         # 1
+         nil
+
+     Attempted function clauses (showing 1 out of 1):
+
+         def trim(string) when -is_binary(string)-
+
+     code: assert text_of(view, "#countdown") == "100"
+     stacktrace:
+       (elixir 1.19.5) lib/string.ex:1380: String.trim/1
+       test/benchapp_web/live/home_live_test.exs:38: (test)
+
+
+
+  8) test signup form an invalid address shows #signup-error and is not added (BenchappWeb.HomeLiveTest)
+     test/benchapp_web/live/home_live_test.exs:72
+     ** (FunctionClauseError) no function clause matching in String.trim/1
+
+     The following arguments were given to String.trim/1:
+
+         # 1
+         nil
+
+     Attempted function clauses (showing 1 out of 1):
+
+         def trim(string) when -is_binary(string)-
+
+     code: assert text_of(view, "#stat-signups") == "0"
+     stacktrace:
+       (elixir 1.19.5) lib/string.ex:1380: String.trim/1
+       test/benchapp_web/live/home_live_test.exs:79: (test)
+
+
+
+  9) test countdown holds at zero once the gate closes (BenchappWeb.HomeLiveTest)
+     test/benchapp_web/live/home_live_test.exs:51
+     ** (FunctionClauseError) no function clause matching in String.trim/1
+
+     The following arguments were given to String.trim/1:
+
+         # 1
+         nil
+
+     Attempted function clauses (showing 1 out of 1):
+
+         def trim(string) when -is_binary(string)-
+
+     code: assert text_of(view, "#countdown") == "0"
+     stacktrace:
+       (elixir 1.19.5) lib/string.ex:1380: String.trim/1
+       test/benchapp_web/live/home_live_test.exs:55: (test)
+
+.
+
+ 10) test stats strip #stats reports signup and tick counts from live state (BenchappWeb.HomeLiveTest)
+     test/benchapp_web/live/home_live_test.exs:125
+     ** (FunctionClauseError) no function clause matching in String.trim/1
+
+     The following arguments were given to String.trim/1:
+
+         # 1
+         nil
+
+     Attempted function clauses (showing 1 out of 1):
+
+         def trim(string) when -is_binary(string)-
+
+     code: assert text_of(view, "#stat-signups") == "0"
+     stacktrace:
+       (elixir 1.19.5) lib/string.ex:1380: String.trim/1
+       test/benchapp_web/live/home_live_test.exs:129: (test)
+
+
+
+ 11) test countdown steps down by one on every tick (BenchappWeb.HomeLiveTest)
+     test/benchapp_web/live/home_live_test.exs:41
+     ** (FunctionClauseError) no function clause matching in String.trim/1
+
+     The following arguments were given to String.trim/1:
+
+         # 1
+         nil
+
+     Attempted function clauses (showing 1 out of 1):
+
+         def trim(string) when -is_binary(string)-
+
+     code: assert text_of(view, "#countdown") == "99"
+     stacktrace:
+       (elixir 1.19.5) lib/string.ex:1380: String.trim/1
+       test/benchapp_web/live/home_live_test.exs:45: (test)
+
+
+Finished in 0.1 seconds (0.1s async, 0.00s sync)
+16 tests, 11 failures

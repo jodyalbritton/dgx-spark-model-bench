@@ -1,0 +1,212 @@
+<!-- jobykit:start -->
+## JobyKit guidelines
+
+This project uses [JobyKit](https://github.com/jobycorp/joby_kit) — an
+opinionated, agentic-first design system that wraps daisyUI and exposes a
+machine-readable manifest of every UI component the app supports.
+
+### Read these first, every session
+
+Before writing **any** UI markup, execute these in order:
+
+1. **`curl http://localhost:PORT/design.json`** — fetch the component
+   manifest. Read what's already registered before you reach for raw
+   markup.
+2. **Open `/design`** in a browser — kit-curated wrappers (`<.button>`,
+   `<.input>`, `<.icon>`, `<.card>`, …) with rendered previews and the
+   wrapper contract.
+3. **Open `/custom-designs`** — this app's generic composites and
+   domain components.
+4. **After writing UI, run `mix joby_kit.lint`** — confirms the
+   contract holds end-to-end. Its `:raw_html_primitive` rule catches
+   raw `<button>` / `<input>` / `<textarea>` / `<select>` outside a
+   wrapper definition; the other rules catch missing `data-component`,
+   missing `attr :rest, :global`, and unregistered components.
+
+### Symptoms you skipped step 1
+
+If any of these are true after writing UI, you skipped the manifest. The
+fix is mechanical: lift the inline functions into a host component
+module, declare the wrapper contract on each, register them in
+`design_manifest.ex`, re-run `mix joby_kit.lint`.
+
+- **Private functions in a LiveView's render** (e.g. `avatar/1`,
+  `message/1`, `composer/1`, `conversation_row/1`). Those are domain
+  composites — they belong in
+  `<app>_web/components/<area>_components.ex`, registered with
+  `category: :domain`.
+- **Raw `<button>`, `<input>`, `<a class="btn">`, `<div class="card">`,
+  `<span class="badge">`, `<header class="navbar">`** — the kit ships
+  wrappers for all of these (`<.button>`, `<.input>`, `<.card>`, …).
+  Reach for the wrapper.
+- **New components without `data-component`, `attr :rest, :global`, or
+  a manifest entry.** Those three together are the wrapper contract;
+  components missing them are invisible to agents and to
+  `/design.json`.
+- **Class strings duplicated across pages.** Same `class="..."` on the
+  same semantic UI object on two pages → lift it into a component.
+
+### Intent
+
+JobyKit is not here to make every app look like generic daisyUI. It is
+here to make existing UI contracts discoverable and reusable.
+
+Agents should first ask: "Does this app already have a component for
+this job?" The manifest and catalogs answer that question.
+
+### Design freedom is the point
+
+JobyKit wrappers carry the **contract** (typed attrs, `data-component`,
+manifest entry). They are deliberately **style-agnostic**. Visual style
+— typography rhythm, motion, palette accents, layout, hierarchy,
+illustrative touches — is the host app's prerogative, and should be
+**distinctive**. Generic AI aesthetic is the failure mode this kit is
+meant to prevent.
+
+The build order below tells you *which component to reach for*. It does
+**not** tell you what the page should look like. Apply design judgment
+(or invoke a frontend-design skill) when building app surfaces.
+
+### Composition vs. creation
+
+- **Composition** — arranging existing wrappers using Tailwind for
+  layout, spacing, motion, and visual hierarchy. **No restriction.**
+  This is where design happens. A page may use as much creative
+  Tailwind as it wants, as long as every primitive flows through a
+  wrapper.
+- **Creation** — making a new visual primitive (a button family, a
+  card variant, a chat bubble). Funnels through the wrapper layer
+  (steps 3–4 of the build order) so the manifest stays the source of
+  truth.
+
+Components also carry **behavior**, not just visual identity:
+accessibility, form integration, LiveView hooks, and testable IDs.
+Reaching for raw markup when a wrapper exists drops those guarantees
+alongside the contract.
+
+Test: if you wrote `<button class="…">` when `<.button>` exists, that
+is creation masquerading as composition. Lift it into the wrapper or
+use the existing one. The same rule applies to raw Tailwind: if the
+same semantic UI object appears with the same classes on more than one
+page, lift it into a component.
+
+### Five-step build order (in order, every time)
+
+1. **Domain composite exists?** Use it. Lives in a domain-scoped
+   component module in this app. Surfaces on `/custom-designs`.
+2. **Generic composite exists?** Use it. Lives in the host's composite
+   module. Surfaces on `/custom-designs`.
+3. **Core wrapper exists?** Use it. Lives in
+   `<app>_web/components/core_components.ex` or in
+   `JobyKit.CoreComponents`. Surfaces on `/design`.
+4. **daisyUI primitive exists?** If it will be used in more than one
+   place, or carries persistent visual decisions, wrap it as a core
+   component first (register it in `<app>_web/design_manifest.ex`)
+   and then use the wrapper. For one-off scaffolding inside a single
+   page, the primitive can be used directly — but if you catch
+   yourself repeating it, lift it. The daisyUI catalogue at the
+   bottom of `/design` lists every primitive.
+5. **None of the above?** Build from Tailwind + theme tokens. Expose
+   the result as a core wrapper (kit page) or generic/domain composite
+   (custom-designs page) and register it in the manifest.
+
+**Before adding a new component, check whether an existing one almost
+fits.** Extending a wrapper with a new variant, size, or attr is
+preferable to creating a parallel one. The manifest's `attrs` and
+`slots` fields tell you what's already there; a new variant should be
+a deliberate addition, not a duplicate.
+
+### Wrapper contract (every component must satisfy)
+
+1. Declare every prop with `attr` (use `values:` constraints for
+   variant/tone/size enums).
+2. Carry `data-component="App.Module.function"` on the root element.
+3. Accept `:rest, :global` so callers can pass id/class/aria-*/phx-*.
+4. **Wrapper internals** compose daisyUI primitives + theme tokens —
+   that keeps the wrapper style-coherent everywhere it's used. **Page
+   composition** (the file calling the wrapper) is free to use
+   Tailwind for layout, motion, gradients, and visual hierarchy. That
+   is where style lives.
+5. Register every component in `<app>_web/design_manifest.ex`.
+   Components missing from the manifest are invisible to agents. Run
+   `mix joby_kit.lint` to verify the contract holds before merging.
+
+### When you genuinely need raw HTML
+
+Inside a wrapper definition — a `def` whose root element carries
+`data-component` — raw HTML primitives are the wrapper's body. That is
+how wrappers work, and `:raw_html_primitive` does not flag them.
+
+Outside wrapper territory, a raw `<button>`, `<input>`, `<textarea>`,
+or `<select>` is a lint warning. For a genuine one-off, silence it on
+that line rather than restructuring:
+
+- In `.heex`: `<%!-- jobykit:allow-raw-html --%>` on the same line or
+  the line immediately before.
+- In an `~H` sigil inside `.ex`: `# jobykit:allow-raw-html` on the
+  preceding line.
+
+The marker is a signed exception, not a bypass. If you reach for it
+twice for the same element, that element is a wrapper waiting to be
+registered.
+
+### Testing
+
+Test what's in the contract — attrs, slots, behavior, observable IDs
+— not fragile class strings. The class composition inside a wrapper
+is the host's design prerogative and will change; the wrapper's API
+is what callers depend on. Use `data-component` attributes and
+explicit IDs as selectors instead of CSS classes.
+
+### Where new components go
+
+- **Core wrappers** (one per daisyUI primitive) →
+  `core_components.ex`, registered with `category: :core`. Surface on
+  `/design`.
+- **Generic composites** (multi-primitive patterns reused across
+  domains) → a `composite_components.ex` (or similar), registered
+  with `category: :composite`. Surface on `/custom-designs`.
+- **Domain composites** (tied to a single product area) → a
+  domain-scoped component module, registered with `category: :domain`.
+  Surface on `/custom-designs`.
+
+**Never** add new components to `/design` directly — it's the
+kit-curated surface and stays uniform across every JobyKit consumer.
+
+### daisyUI vs raw Tailwind (for primitives)
+
+This app uses daisyUI as the substrate for **primitives** (buttons,
+badges, alerts, cards, stats, progress, etc.). When you need one of
+those, reach for the corresponding core wrapper. Roll your own
+Tailwind primitive only when nothing in daisyUI fits — and then
+expose the result as a wrapper so future markup composes through the
+wrapper, not the raw classes.
+
+This rule is about the *primitive layer*. Tailwind utilities for
+layout, spacing, motion, gradients, and visual hierarchy on the page
+that *composes* those wrappers are encouraged — see "Composition vs.
+creation" above.
+
+### When you build a new wrapper: own your box, nothing outside it
+
+The rule the kit follows, and the one your components should:
+
+- **No outer margins on a component root.** Spacing between things
+  belongs to the parent — `space-y-*` or `gap-*`. A component that
+  ships `mb-2` forces every caller to undo it, and callers usually
+  can't: if `class` lands on an inner element, the margin is
+  unreachable and people nudge neighbouring elements instead.
+- **No typography opinions on slot content.** Wrapping a slot in
+  `text-sm text-base-content/70` is right for prose and wrong for a
+  table, a form, or a stat. Make it opt-in (`prose`) or expose a hook
+  (`body_class`).
+- **`class` targets the root**, like every other wrapper. If the inner
+  control also needs styling, give it its own attr (`input_class`).
+- **Variants carry meaning, not colour.** `tone="danger"` survives a
+  theme change; `class="text-red-500"` doesn't.
+
+This isn't style preference. Across three consumer apps, adoption
+tracked it exactly: the components with no spacing or typography
+opinions got hundreds of uses, and the ones with them got bypassed —
+127 hand-rolled panels against 10 uses of `<.card>` in one app.
+<!-- jobykit:end -->

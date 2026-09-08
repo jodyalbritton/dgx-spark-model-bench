@@ -1,0 +1,192 @@
+Running ExUnit with seed: 487077, max_cases: 36
+
+.
+
+  1) test stats strip #stats reports signup and tick counts from live state (BenchappWeb.HomeLiveTest)
+     test/benchapp_web/live/home_live_test.exs:123
+     ** (FunctionClauseError) no function clause matching in String.trim/1
+
+     The following arguments were given to String.trim/1:
+
+         # 1
+         nil
+
+     Attempted function clauses (showing 1 out of 1):
+
+         def trim(string) when -is_binary(string)-
+
+     code: assert text_of(view, "#stat-signups") == "0"
+     stacktrace:
+       (elixir 1.19.5) lib/string.ex:1380: String.trim/1
+       test/benchapp_web/live/home_live_test.exs:127: (test)
+
+.
+
+  2) test countdown steps down by one on every tick (BenchappWeb.HomeLiveTest)
+     test/benchapp_web/live/home_live_test.exs:39
+     ** (FunctionClauseError) no function clause matching in String.trim/1
+
+     The following arguments were given to String.trim/1:
+
+         # 1
+         nil
+
+     Attempted function clauses (showing 1 out of 1):
+
+         def trim(string) when -is_binary(string)-
+
+     code: assert text_of(view, "#countdown") == "99"
+     stacktrace:
+       (elixir 1.19.5) lib/string.ex:1380: String.trim/1
+       test/benchapp_web/live/home_live_test.exs:43: (test)
+
+.
+
+  3) test activity feed records one entry per signup and per tick, newest first (BenchappWeb.HomeLiveTest)
+     test/benchapp_web/live/home_live_test.exs:139
+     Assertion with == failed
+     code:  assert count_of(view, "#activity li") == 2
+     left:  0
+     right: 2
+     stacktrace:
+       test/benchapp_web/live/home_live_test.exs:147: (test)
+
+
+
+  4) test signup form an invalid address shows #signup-error and is not added (BenchappWeb.HomeLiveTest)
+     test/benchapp_web/live/home_live_test.exs:70
+     ** (FunctionClauseError) no function clause matching in String.trim/1
+
+     The following arguments were given to String.trim/1:
+
+         # 1
+         nil
+
+     Attempted function clauses (showing 1 out of 1):
+
+         def trim(string) when -is_binary(string)-
+
+     code: assert text_of(view, "#stat-signups") == "0"
+     stacktrace:
+       (elixir 1.19.5) lib/string.ex:1380: String.trim/1
+       test/benchapp_web/live/home_live_test.exs:77: (test)
+
+
+
+  5) test activity feed keeps at most ten entries (BenchappWeb.HomeLiveTest)
+     test/benchapp_web/live/home_live_test.exs:152
+     Assertion with == failed
+     code:  assert count_of(view, "#activity li") == 10
+     left:  0
+     right: 10
+     stacktrace:
+       test/benchapp_web/live/home_live_test.exs:157: (test)
+
+
+
+  6) test signup form a valid address is added to #signups without a reload (BenchappWeb.HomeLiveTest)
+     test/benchapp_web/live/home_live_test.exs:89
+     ** (FunctionClauseError) no function clause matching in String.trim/1
+
+     The following arguments were given to String.trim/1:
+
+         # 1
+         nil
+
+     Attempted function clauses (showing 1 out of 1):
+
+         def trim(string) when -is_binary(string)-
+
+     code: assert text_of(view, "#stat-signups") == "1"
+     stacktrace:
+       (elixir 1.19.5) lib/string.ex:1380: String.trim/1
+       test/benchapp_web/live/home_live_test.exs:97: (test)
+
+
+
+  7) test countdown starts at 100 in #countdown (BenchappWeb.HomeLiveTest)
+     test/benchapp_web/live/home_live_test.exs:32
+     ** (FunctionClauseError) no function clause matching in String.trim/1
+
+     The following arguments were given to String.trim/1:
+
+         # 1
+         nil
+
+     Attempted function clauses (showing 1 out of 1):
+
+         def trim(string) when -is_binary(string)-
+
+     code: assert text_of(view, "#countdown") == "100"
+     stacktrace:
+       (elixir 1.19.5) lib/string.ex:1380: String.trim/1
+       test/benchapp_web/live/home_live_test.exs:36: (test)
+
+
+
+  8) test signup form a second distinct address is accepted (BenchappWeb.HomeLiveTest)
+     test/benchapp_web/live/home_live_test.exs:111
+     Assertion with == failed
+     code:  assert count_of(view, "#signups li") == 2
+     left:  0
+     right: 2
+     stacktrace:
+       test/benchapp_web/live/home_live_test.exs:118: (test)
+
+
+
+  9) test signup form the same address twice shows the error and is not added again (BenchappWeb.HomeLiveTest)
+     test/benchapp_web/live/home_live_test.exs:100
+     Assertion with == failed
+     code:  assert count_of(view, "#signups li") == 1
+     left:  0
+     right: 1
+     stacktrace:
+       test/benchapp_web/live/home_live_test.exs:107: (test)
+
+
+
+ 10) test signup form has one email input (BenchappWeb.HomeLiveTest)
+     test/benchapp_web/live/home_live_test.exs:62
+     Assertion with == failed
+     code:  assert count_of(view, ~S|#signup-form input[type="email"]|) == 1
+     left:  0
+     right: 1
+     stacktrace:
+       test/benchapp_web/live/home_live_test.exs:66: (test)
+
+
+
+ 11) test countdown holds at zero once the gate closes (BenchappWeb.HomeLiveTest)
+     test/benchapp_web/live/home_live_test.exs:49
+     ** (FunctionClauseError) no function clause matching in String.trim/1
+
+     The following arguments were given to String.trim/1:
+
+         # 1
+         nil
+
+     Attempted function clauses (showing 1 out of 1):
+
+         def trim(string) when -is_binary(string)-
+
+     code: assert text_of(view, "#countdown") == "0"
+     stacktrace:
+       (elixir 1.19.5) lib/string.ex:1380: String.trim/1
+       test/benchapp_web/live/home_live_test.exs:53: (test)
+
+
+
+ 12) test navigates to the about page from the nav (BenchappWeb.AboutLiveTest)
+     test/benchapp_web/live/about_live_test.exs:30
+     ** (ArgumentError) expected BenchappWeb.HomeLive to patch to "/about", but got none
+     code: assert_patch(view, ~p"/about")
+     stacktrace:
+       (phoenix_live_view 1.2.11) lib/phoenix_live_view/test/live_view_test.ex:1591: Phoenix.LiveViewTest.assert_navigation/4
+       (phoenix_live_view 1.2.11) lib/phoenix_live_view/test/live_view_test.ex:1463: Phoenix.LiveViewTest.assert_patch/3
+       test/benchapp_web/live/about_live_test.exs:37: (test)
+
+.
+Finished in 0.4 seconds (0.4s async, 0.00s sync)
+16 tests, 12 failures
+exit=2

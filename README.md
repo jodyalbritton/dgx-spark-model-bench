@@ -18,12 +18,15 @@ screenshots are all in the repo.
 
 ## Status (2026-09-07)
 
-- **Coding bench: complete.** Five rounds. Rounds 1 to 3 were harness
-  shakedown (effort not sent, reasoning discarded between rounds, GLM's
-  thinking off through a serving default); rounds 4 and 5 are the fair
-  runs, at `low` and at each model's maximum. All six runs pass every
-  graded check. One GLM fixture pass in round 5 awaits a clean re-run after
-  a staging fix.
+- **Coding bench: five rounds complete on the first harness, one on the
+  second.** Rounds 1 to 3 were harness shakedown (effort not sent,
+  reasoning discarded between rounds, GLM's thinking off through a serving
+  default); rounds 4 and 5 are the fair runs, at `low` and at each model's
+  maximum, and all six of those runs pass every graded check. Round 6
+  (2026-09-07) re-baselines at `low` on a harness that gives the models
+  verbatim tool results, their own vision, browser hands, server jobs, and
+  a budget countdown; its rows start a new table rather than continuing
+  the old one. One GLM fixture pass in round 5 awaits a clean re-run.
 - **Real-world throughput: complete** for the round-4 sessions; ledger
   exports exist for round 5 as well.
 - **Design bench: round 1 complete**, gates and rubric review in. The
@@ -39,6 +42,7 @@ screenshots are all in the repo.
 | **Raw inference** (`design/spark_bench.py`, round 1) | TTFT, prefill and decode tok/s at 256 to 154k tokens, 4-stream concurrency, one reasoning probe | Qwen's NVFP4 build has the fastest prefill (2.7k tok/s vs 1.8k DeepSeek, 1.1k GLM) and the best concurrency; decode is a near tie at 50 to 65 tok/s; DeepSeek has the lowest fixed overhead. |
 | **Bug fixes** (17 seeded-bug Elixir modules, hidden tests) | Can the agent read a spec, find the bug, fix it minimally, and stop | At `low` and `max`: GLM 17/17, DeepSeek 17/17, Qwen 16/17 (the same fixture both times). Effort did not change a score; it made the fixes slower. |
 | **Application** (a Phoenix LiveView landing site to a 19-check contract, ~100 tool calls) | Can the agent plan, build, test, boot, and finish a real task with tools | All three 19/19 at both efforts. At `low`: GLM 18 min, DeepSeek 24, Qwen 28. At `max`: GLM 39, DeepSeek 45, Qwen 63. Effort bought tests, composites, and page identity, not correctness, at about twice the wall. |
+| **Tool use** (round 6: the same task with vision, browser hands, and server jobs on the wire) | When given tools, how well does the agent use them | DeepSeek looked at its page 17 times and shipped no visual defects; GLM looked 0 times, finished in 14 minutes, and shipped four; Qwen looked 7 rounds' worth, then cut verification when it read the clock. |
 | **Real-world throughput** (per-round ledger of the app sessions) | What a session feels like | 35 to 40 tok/s per round end to end for DeepSeek and Qwen, 19 for GLM; 95 to 98% prefix-cache hits keep a 90k-token round at about one second to first token; the slow rounds are the planning rounds. |
 | **Design** (the JobyCorp website from one brief and one `DESIGN.md`, three pages, both themes, both widths) | Can the agent execute a design direction, judged by mechanical gates and a blind rubric | Gates: Qwen 19/19, DeepSeek 19/19, GLM 18/19 (light-theme table headers at 4.24:1). Rubric mean of 5: Qwen 4.54, DeepSeek 4.08, GLM 3.75. |
 
@@ -93,6 +97,7 @@ review; twelve screenshots per model under the round's `screenshots/`.
 | [`2026-09-05`](results/2026-09-05/) | Round 3: effort explicit (`low`), endings classified, reasoning counted | DeepSeek 19/19; GLM 15/19 at the cap; Qwen abandoned because the harness discarded its reasoning between rounds. DeepSeek `high` row superseded. |
 | [`2026-09-05-r2`](results/2026-09-05-r2/) | **Round 4: the fair `low` run** (reasoning echoed within the turn; GLM's thinking on for the first time) | All three 19/19; GLM and DeepSeek 17/17, Qwen 16/17. [`REPORT.md`](results/2026-09-05-r2/REPORT.md) · [`DESIGN_REVIEW.md`](results/2026-09-05-r2/DESIGN_REVIEW.md) |
 | [`2026-09-05-r3`](results/2026-09-05-r3/) | **Round 5: the fair `max` run** (150-round / 90-min cap, last call, stopping instruction) | All three 19/19; GLM and DeepSeek 17/17, Qwen 16/17. [`REPORT.md`](results/2026-09-05-r3/REPORT.md) · [`DESIGN_REVIEW.md`](results/2026-09-05-r3/DESIGN_REVIEW.md) |
+| [`2026-09-07`](results/2026-09-07/) | **Coding round 6: re-baseline at `low` on the second harness** (verbatim results, native vision, browser hands, server jobs, approval pin, budget countdown) | GLM 16/17 + 19/19 in 62 rounds / 14 min with no previews; DeepSeek 17/17 + 19/19 with a 15-round visual review; Qwen 16/17 + 16/19 after parking its timer under test. [`REPORT.md`](results/2026-09-07/REPORT.md) |
 | [`2026-09-06-design`](results/2026-09-06-design/) | **Design bench, round 1** | Gates 19 / 19 / 18; rubric Qwen 4.54, DeepSeek 4.08, GLM 3.75. [`DESIGN_REVIEW.md`](results/2026-09-06-design/DESIGN_REVIEW.md) · [`RESULTS.md`](results/2026-09-06-design/RESULTS.md) |
 | `dryrun` | Unscored harness dry run before round 2 | Found the narrated-ending case that led to the nudge. |
 
