@@ -132,14 +132,19 @@ def coding_section(L):
             L.append(note)
     L.append("")
     L.append("### Speed\n")
-    L.append("| model | fixtures wall (s) | median fixture (s) | app wall (s) | app rounds | app tool calls | app TTFT (s) | app completion tok/s |")
-    L.append("|---|---:|---:|---:|---:|---:|---:|---:|")
+    L.append("| model | fixtures wall (s) | median fixture (s) | app wall (s) | app rounds | green at | app tool calls | tool time (s) | files touched | app TTFT (s) | app completion tok/s |")
+    L.append("|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|")
     for r in runs:
         fx = r["fixtures"]; app = r.get("app") or {}
         walls = sorted(f["wall_ms"] for f in fx)
         med = walls[len(walls)//2] if walls else None
+        # T31/T33: the finish line, tool time and the diff against the reference generation — absent before
+        green = f"R{app['green_at']} (+{app.get('rounds_after_green', 0)})" if app.get("green_at") else ("—" if "green_at" in app else "n/a")
+        tool_time = secs(app.get("tool_time_ms")) if app.get("tool_time_ms") is not None else "n/a"
+        diff = app.get("diff") or {}
+        touched = f"{diff['files']} (+{diff.get('insertions', 0)}/−{diff.get('deletions', 0)})" if diff.get("files") is not None else "n/a"
         L.append(f"| {r['label']} | {secs(r['summary']['fixtures_wall_ms'])} | {secs(med)} | {secs(app.get('wall_ms'))} | "
-                 f"{app.get('rounds', '—')} | {app.get('tool_calls', '—')} | {secs(app.get('ttft_ms'))} | {fmt(app.get('completion_tok_s'))} |")
+                 f"{app.get('rounds', '—')} | {green} | {app.get('tool_calls', '—')} | {tool_time} | {touched} | {secs(app.get('ttft_ms'))} | {fmt(app.get('completion_tok_s'))} |")
     L.append("")
     L.append("### Spend (tokens)\n")
     L.append("| model | fixtures uncached prompt | fixtures completion | fixtures reasoning | app prompt | app cached | app uncached prompt | app completion | app reasoning |")
@@ -209,7 +214,9 @@ def design_section(L):
     for r in runs:
         h = r.get("harness") or {}
         L.append(f"- **{r['label']}** — helm `{r.get('helm_sha','?')}`{' (dirty tree)' if r.get('helm_dirty') else ''}, brief `{h.get('prompt_sha','?')}`, DESIGN.md `{h.get('design_sha','?')}`, base `{h.get('base_sha','?')}` (joby_kit {h.get('joby_kit_version','?')}), "
-                 f"effort {h.get('effort','?')}, vision {h.get('vision_model','?')}, cap {h.get('site_rounds_cap','?')} rounds / {secs(h.get('site_deadline_ms'))} s, {r['started_utc']} → {r.get('finished_utc') or '(running)'}")
+                 f"effort {h.get('effort','?')}, vision {h.get('vision', 'describe')} ({h.get('vision_model','?')}), digest {h.get('digest_mode', 'gate')}, "
+                 f"bash approval {(h.get('approvals') or {}).get('bash', 'seat default')}, browser {(h.get('browser') or {}).get('viewport', '?')}/{(h.get('browser') or {}).get('scheme', '?')}, "
+                 f"cap {h.get('site_rounds_cap','?')} rounds / {secs(h.get('site_deadline_ms'))} s, {r['started_utc']} → {r.get('finished_utc') or '(running)'}")
     L.append("")
     L.append("### Gates\n")
     L.append("| model | gates | static (8) | rendered (11) | scores |")
@@ -258,15 +265,22 @@ def design_section(L):
         L.append("_Not yet reviewed: `Helm.Evals.Design.review_pack()` seals the key and renders `screenshots/review/{A,B,C}.png`; the reviewer writes `DESIGN_REVIEW.md` and `raw/review/review.json` (`{label: {line: score}}`) after the key is opened; `raw/review/vote.json` (`{label: votes}`) records the X vote._")
     L.append("")
     L.append("### Speed and tokens\n")
-    L.append("| model | outcome (ending, nudges) | rounds | wall (s) | tool calls | uncached prompt | completion | reasoning | tools |")
-    L.append("|---|---|---:|---:|---:|---:|---:|---:|---|")
+    L.append("| model | outcome (ending, nudges) | rounds | green at | wall (s) | tool time (s) | tool calls | files touched | uncached prompt | completion | reasoning | tools |")
+    L.append("|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|")
     for r in runs:
         site = r.get("site") or {}
         outcome = site.get("outcome", "—") + (f" ({site['ending']}, {site.get('nudges', 0)} nudge{'s' if site.get('nudges', 0) != 1 else ''})" if site.get("ending") else "")
         if site.get("last_call"):
             lc = site["last_call"]; outcome += f"; last call {lc.get('outcome')} in {lc.get('rounds')} round{'s' if lc.get('rounds') != 1 else ''}"
         tools = ", ".join(f"{k} {v}" for k, v in sorted((site.get("tools") or {}).items(), key=lambda kv: -kv[1]))
-        L.append(f"| {r['label']} | {outcome} | {site.get('rounds','—')} | {secs(site.get('wall_ms'))} | {site.get('tool_calls','—')} | {site.get('uncached_prompt_tokens') if site.get('uncached_prompt_tokens') is not None else 'not reported'} | {site.get('completion_tokens','—')} | {site.get('reasoning_tokens','—')} | {tools or '—'} |")
+        # T31: the finish line, the tool time, the diff — absent on rounds before helm T31
+        green = f"R{site['green_at']} (+{site.get('rounds_after_green', 0)})" if site.get("green_at") else ("—" if "green_at" in site else "n/a")
+        tool_time = secs(site.get("tool_time_ms")) if site.get("tool_time_ms") is not None else "n/a"
+        diff = site.get("diff") or {}
+        touched = f"{diff['files']} (+{diff.get('insertions', 0)}/−{diff.get('deletions', 0)})" if diff.get("files") is not None else "n/a"
+        L.append(f"| {r['label']} | {outcome} | {site.get('rounds','—')} | {green} | {secs(site.get('wall_ms'))} | {tool_time} | {site.get('tool_calls','—')} | {touched} | {site.get('uncached_prompt_tokens') if site.get('uncached_prompt_tokens') is not None else 'not reported'} | {site.get('completion_tokens','—')} | {site.get('reasoning_tokens','—')} | {tools or '—'} |")
+    L.append("")
+    L.append("*green at* = the round at which `mix precommit` was last green and `joby_kit.lint` last clean (the brief's finish line), and how many rounds followed; *tool time* = wall time inside tool calls; *files touched* = the model's diff against the staged base (`raw/diff-<label>.patch`).")
     L.append("")
     L.append("Screenshots per site: `screenshots/<label>-{home,research,about}-{light,dark}-{desktop,phone}.png`; the anonymised composites in `screenshots/review/`.")
 

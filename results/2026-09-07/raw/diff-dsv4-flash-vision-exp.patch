@@ -1,0 +1,1092 @@
+diff --git a/AGENTS.md b/AGENTS.md
+index a4321b3..341e79d 100644
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -35,6 +35,14 @@ This is a web application written using the Phoenix web framework.
+   - You must import the vendor deps into app.js and app.css to use them
+   - **Never write inline <script>custom js</script> tags within templates**
+ 
++### UI/UX & design guidelines
++
++- **Produce world-class UI designs** with a focus on usability, aesthetics, and modern design principles
++- Implement **subtle micro-interactions** (e.g., button hover effects, and smooth transitions)
++- Ensure **clean typography, spacing, and layout balance** for a refined, premium look
++- Focus on **delightful details** like hover effects, loading states, and smooth page transitions
++
++
+ <!-- usage-rules-start -->
+ 
+ <!-- phoenix:elixir-start -->
+diff --git a/assets/css/app.css b/assets/css/app.css
+index 4661553..35d59be 100644
+--- a/assets/css/app.css
++++ b/assets/css/app.css
+@@ -8,7 +8,7 @@
+ @source "../../lib/benchapp_web";
+ /* Required for Tailwind to automatically pick up changes in colocated CSS files in dev */
+ @source "../../_build/dev/phoenix-colocated/benchapp/*/";
+-@source "../../deps/joby_kit/lib";
++@source "/Users/jody/dgx-spark-model-bench/results/2026-09-07/work/dsv4-flash-vision-exp/benchapp/deps/joby_kit/lib";
+ 
+ /* A Tailwind plugin that makes "hero-#{ICON}" classes available.
+    The heroicons installation itself is managed by your mix.exs */
+diff --git a/config/config.exs b/config/config.exs
+index 031dc80..da32576 100644
+--- a/config/config.exs
++++ b/config/config.exs
+@@ -20,7 +20,7 @@ config :benchapp, BenchappWeb.Endpoint,
+     layout: false
+   ],
+   pubsub_server: Benchapp.PubSub,
+-  live_view: [signing_salt: "IfJKBy77"]
++  live_view: [signing_salt: "ZiqgARwu"]
+ 
+ # Configure LiveView
+ config :phoenix_live_view,
+diff --git a/config/dev.exs b/config/dev.exs
+index d791c76..92a62f9 100644
+--- a/config/dev.exs
++++ b/config/dev.exs
+@@ -23,7 +23,7 @@ config :benchapp, BenchappWeb.Endpoint,
+   check_origin: false,
+   code_reloader: true,
+   debug_errors: true,
+-  secret_key_base: "gtEEOv45vykMyX/R6S57IgBG2EG7onE2sWqCoWGhLKwPSiAN2agv6lggHszJCQTM",
++  secret_key_base: "uO95U38cAsRPuDDcze/RAm7GWET6QdUABfyY4QFj4hz/I/o/+k+/li7hEeZZrcyc",
+   watchers: [
+     esbuild: {Esbuild, :install_and_run, [:benchapp, ~w(--sourcemap=inline --watch)]},
+     tailwind: {Tailwind, :install_and_run, [:benchapp, ~w(--watch)]}
+diff --git a/config/test.exs b/config/test.exs
+index 4f35f5a..3b7b7d3 100644
+--- a/config/test.exs
++++ b/config/test.exs
+@@ -17,7 +17,7 @@ config :benchapp, Benchapp.Repo,
+ # you can enable the server option below.
+ config :benchapp, BenchappWeb.Endpoint,
+   http: [ip: {127, 0, 0, 1}, port: 4002],
+-  secret_key_base: "JPfy2kFKEm5R17iCANJHfGYe03jhrUFtnMTpEIKdt6T+UOziekYrkAkpY/ZGOHdn",
++  secret_key_base: "uFQxbIJiMBwAirrVUf9Pqi8Ul0sy178rHdpLOK8ByqtmGWWNLwjBHnNCFc7RNddA",
+   server: false
+ 
+ # In test we don't send emails
+diff --git a/lib/benchapp_web/components/composite_components.ex b/lib/benchapp_web/components/composite_components.ex
+index 37013da..bdec6e6 100644
+--- a/lib/benchapp_web/components/composite_components.ex
++++ b/lib/benchapp_web/components/composite_components.ex
+@@ -80,4 +80,58 @@ defmodule BenchappWeb.CompositeComponents do
+     </div>
+     """
+   end
++
++  @doc """
++  A responsive grid of feature tiles. Each tile is an icon, a title, and
++  supporting copy. Use it for capability highlights, value props, or a
++  "what's inside" section on a landing page.
++
++      <.feature_grid>
++        <:feature icon="hero-bolt" title="Instant sync">
++          Changes land everywhere in real time.
++        </:feature>
++        <:feature icon="hero-sparkles" title="Delightful">
++          Small touches that make work feel good.
++        </:feature>
++      </.feature_grid>
++
++  `cols` picks the tile density; the grid collapses to a single column on
++  phone widths.
++  """
++  attr :class, :any, default: nil
++  attr :cols, :string, values: ~w(2 3), default: "3"
++  attr :rest, :global
++
++  slot :feature, required: true do
++    attr :icon, :string, doc: "Heroicon name."
++    attr :title, :string, required: true
++  end
++
++  def feature_grid(assigns) do
++    ~H"""
++    <div
++      data-component="BenchappWeb.CompositeComponents.feature_grid"
++      class={[
++        "grid gap-5 sm:gap-6",
++        @cols == "2" && "sm:grid-cols-2",
++        @cols == "3" && "sm:grid-cols-2 lg:grid-cols-3",
++        @class
++      ]}
++      {@rest}
++    >
++      <div
++        :for={feature <- @feature}
++        class="group rounded-2xl border border-base-300/60 bg-base-100/60 p-6 transition duration-200 hover:border-primary/40 hover:shadow-sm"
++      >
++        <span class="mb-4 flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
++          <CoreComponents.icon name={feature.icon || "hero-sparkles"} class="size-5" />
++        </span>
++        <h3 class="text-base font-semibold text-base-content">{feature.title}</h3>
++        <div class="mt-1.5 text-sm leading-relaxed text-base-content/65">
++          {render_slot(feature)}
++        </div>
++      </div>
++    </div>
++    """
++  end
+ end
+diff --git a/lib/benchapp_web/components/layouts.ex b/lib/benchapp_web/components/layouts.ex
+index 1b27aa1..60a871a 100644
+--- a/lib/benchapp_web/components/layouts.ex
++++ b/lib/benchapp_web/components/layouts.ex
+@@ -16,22 +16,84 @@ defmodule BenchappWeb.Layouts do
+ 
+   embed_templates "layouts/*"
+ 
++  @nav_links [
++    %{key: "home", label: "Home", href: "/"},
++    %{key: "about", label: "About", href: "/about"},
++    %{key: "design", label: "Design", href: "/design"},
++    %{key: "custom-designs", label: "Custom Designs", href: "/custom-designs"}
++  ]
++
+   attr :flash, :map, required: true
+   attr :current_scope, :map, default: nil
+   attr :active_nav, :string, default: nil
+   slot :inner_block, required: true
+ 
+   def app(assigns) do
++    assigns = assign(assigns, :nav_links, @nav_links)
++
+     ~H"""
+     <div class="flex min-h-dvh flex-col bg-base-100">
+       <div class="sticky top-0 z-40 border-b border-base-300 bg-base-100/90 backdrop-blur">
+-        <div class="mx-auto w-full max-w-5xl px-4 sm:px-6">
+-          <JobyKit.NavComponent.simple_nav active={@active_nav} brand="Benchapp">
+-            <:actions>
+-              <JobyKit.CoreComponents.theme_toggle />
+-            </:actions>
+-          </JobyKit.NavComponent.simple_nav>
+-        </div>
++        <nav id="main-nav" class="mx-auto w-full max-w-5xl px-4 sm:px-6">
++          <div class="navbar min-h-16 gap-2">
++            <div class="flex-1">
++              <.link
++                navigate={~p"/"}
++                class="btn btn-ghost px-2 text-lg font-semibold normal-case tracking-tight"
++              >
++                <span class="flex size-7 items-center justify-center rounded-lg bg-primary text-primary-content">
++                  <.icon name="hero-sparkles" class="size-4" />
++                </span>
++                Aster
++              </.link>
++            </div>
++
++            <ul class="hidden menu menu-horizontal gap-1 px-1 md:flex">
++              <li :for={link <- @nav_links}>
++                <.link
++                  navigate={link.href}
++                  aria-current={@active_nav == link.key && "page"}
++                  class={["rounded-field", @active_nav == link.key && "menu-active"]}
++                >
++                  {link.label}
++                </.link>
++              </li>
++            </ul>
++
++            <div class="flex items-center gap-1.5 pl-1">
++              <JobyKit.CoreComponents.theme_toggle id="theme-toggle" />
++              <.button
++                id="nav-toggle"
++                type="button"
++                variant="ghost"
++                shape="square"
++                size="sm"
++                class="md:hidden"
++                aria-label="Toggle menu"
++                aria-controls="mobile-menu"
++                aria-expanded="false"
++                phx-click={JS.toggle(to: "#mobile-menu")}
++              >
++                <.icon name="hero-bars-3" class="size-5" />
++              </.button>
++            </div>
++          </div>
++
++          <ul
++            id="mobile-menu"
++            class="menu w-full gap-1 border-t border-base-300 p-2 pb-4 hidden md:hidden"
++          >
++            <li :for={link <- @nav_links}>
++              <.link
++                navigate={link.href}
++                aria-current={@active_nav == link.key && "page"}
++                class={["rounded-field", @active_nav == link.key && "menu-active"]}
++              >
++                {link.label}
++              </.link>
++            </li>
++          </ul>
++        </nav>
+       </div>
+ 
+       <main class="flex-1">
+@@ -39,24 +101,12 @@ defmodule BenchappWeb.Layouts do
+       </main>
+ 
+       <footer class="border-t border-base-300">
+-        <div class="mx-auto flex max-w-5xl flex-col gap-3 px-4 py-6 text-xs text-base-content/60 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+-          <p>
+-            Benchapp · built with
+-            <.link
+-              href="https://github.com/jobycorp/joby_kit"
+-              class="link link-hover font-medium"
+-              target="_blank"
+-              rel="noopener"
+-            >
+-              JobyKit
+-            </.link>
+-          </p>
+-          <p class="flex gap-2 font-mono">
++        <div class="mx-auto flex max-w-5xl flex-col gap-3 px-4 py-8 text-xs text-base-content/60 sm:flex-row sm:items-center sm:justify-between sm:px-6">
++          <p>© {Date.utc_today().year} Aster Labs. All rights reserved.</p>
++          <p class="flex gap-3 font-mono">
+             <.link navigate={~p"/design"} class="link link-hover">/design</.link>
+             <span aria-hidden="true" class="opacity-40">·</span>
+             <.link navigate={~p"/custom-designs"} class="link link-hover">/custom-designs</.link>
+-            <span aria-hidden="true" class="opacity-40">·</span>
+-            <.link href={~p"/design.json"} class="link link-hover">/design.json</.link>
+           </p>
+         </div>
+       </footer>
+diff --git a/lib/benchapp_web/components/layouts/root.html.heex b/lib/benchapp_web/components/layouts/root.html.heex
+index 7aa32b2..25c9ae5 100644
+--- a/lib/benchapp_web/components/layouts/root.html.heex
++++ b/lib/benchapp_web/components/layouts/root.html.heex
+@@ -5,13 +5,13 @@
+     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+     <meta name="viewport" content="width=device-width, initial-scale=1" />
+     <meta name="csrf-token" content={get_csrf_token()} />
+-    <.live_title default="Benchapp" suffix=" · JobyKit">
++    <.live_title default="Aster" suffix=" · Aster">
+       {assigns[:page_title]}
+     </.live_title>
+     <link phx-track-static rel="stylesheet" href={~p"/assets/css/app.css"} />
+     <script defer phx-track-static type="text/javascript" src={~p"/assets/js/app.js"}>
+     </script>
+-    
++
+     <script>
+       (() => {
+         const systemTheme = () =>
+diff --git a/lib/benchapp_web/design_manifest.ex b/lib/benchapp_web/design_manifest.ex
+index 0b9312a..b29b9c3 100644
+--- a/lib/benchapp_web/design_manifest.ex
++++ b/lib/benchapp_web/design_manifest.ex
+@@ -17,13 +17,15 @@ defmodule BenchappWeb.DesignManifest do
+   alias BenchappWeb.CompositeComponents
+   alias BenchappWeb.DesignPreviews
+ 
+-  category :composite,
++  category(:composite,
+     label: "Generic composites",
+     description: "Multi-primitive patterns reused across domains."
++  )
+ 
+-  category :domain,
++  category(:domain,
+     label: "Domain composites",
+     description: "Composites tied to a product area."
++  )
+ 
+   # ----------------------------------------------------------------- composite
+   # `empty_state` is the worked example — a real composite that bundles
+@@ -35,10 +37,17 @@ defmodule BenchappWeb.DesignManifest do
+   # domain-specific ones in their own module (e.g.
+   # `BenchappWeb.ChatComponents`).
+ 
+-  component CompositeComponents, :empty_state,
++  component(CompositeComponents, :empty_state,
+     category: :composite,
+     summary: "Centered icon + title + optional action; fills empty containers.",
+     preview: &DesignPreviews.empty_state_preview/1
++  )
++
++  component(CompositeComponents, :feature_grid,
++    category: :composite,
++    summary: "Responsive grid of feature tiles (icon + title + copy).",
++    preview: &DesignPreviews.feature_grid_preview/1
++  )
+ 
+   # -------------------------------------------------------------------- domain
+   # Add domain composites here:
+diff --git a/lib/benchapp_web/design_previews.ex b/lib/benchapp_web/design_previews.ex
+index 613d9cd..b7fb208 100644
+--- a/lib/benchapp_web/design_previews.ex
++++ b/lib/benchapp_web/design_previews.ex
+@@ -28,19 +28,6 @@ defmodule BenchappWeb.DesignPreviews do
+   alias JobyKit.CoreComponents
+   alias BenchappWeb.CompositeComponents
+ 
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+   def empty_state_preview(assigns) do
+     ~H"""
+     <div class="grid gap-4 sm:grid-cols-2">
+@@ -61,4 +48,19 @@ defmodule BenchappWeb.DesignPreviews do
+     """
+   end
+ 
++  def feature_grid_preview(assigns) do
++    ~H"""
++    <CompositeComponents.feature_grid>
++      <:feature icon="hero-bolt" title="Instant sync">
++        Changes land everywhere the moment you make them.
++      </:feature>
++      <:feature icon="hero-shield-check" title="Private by default">
++        Your work stays yours. Granular sharing on every board.
++      </:feature>
++      <:feature icon="hero-sparkles" title="Delightful details">
++        Small touches that make long sessions feel effortless.
++      </:feature>
++    </CompositeComponents.feature_grid>
++    """
++  end
+ end
+diff --git a/lib/benchapp_web/endpoint.ex b/lib/benchapp_web/endpoint.ex
+index 9bc6db6..bcc7317 100644
+--- a/lib/benchapp_web/endpoint.ex
++++ b/lib/benchapp_web/endpoint.ex
+@@ -7,7 +7,7 @@ defmodule BenchappWeb.Endpoint do
+   @session_options [
+     store: :cookie,
+     key: "_benchapp_key",
+-    signing_salt: "eaAEKs3O",
++    signing_salt: "S6+DRs4G",
+     same_site: "Lax"
+   ]
+ 
+diff --git a/lib/benchapp_web/live/about_live.ex b/lib/benchapp_web/live/about_live.ex
+new file mode 100644
+index 0000000..dc10504
+--- /dev/null
++++ b/lib/benchapp_web/live/about_live.ex
+@@ -0,0 +1,84 @@
++defmodule BenchappWeb.AboutLive do
++  @moduledoc """
++  The Aster /about page — mission, story, and values. Shares the app
++  layout with the rest of the site.
++  """
++
++  use BenchappWeb, :live_view
++
++  @impl true
++  def mount(_params, _session, socket) do
++    {:ok, assign(socket, page_title: "About")}
++  end
++
++  @impl true
++  def handle_event(_event, _params, socket), do: {:noreply, socket}
++
++  @impl true
++  def render(assigns) do
++    ~H"""
++    <Layouts.app flash={@flash} active_nav="about">
++      <div class="mx-auto max-w-3xl px-4 py-14 sm:px-6">
++        <header class="space-y-5">
++          <.eyebrow>About Aster</.eyebrow>
++          <h1 class="text-4xl font-semibold tracking-tight sm:text-5xl">
++            We're building the calm home for creative work.
++          </h1>
++          <p class="max-w-2xl text-lg leading-relaxed text-base-content/70">
++            Teams move faster when the tools stay out of the way. Aster brings
++            the thinking, the planning, and the shipping together into a single
++            quiet place — so the work is what you remember, not the software.
++          </p>
++        </header>
++
++        <section class="mt-14 space-y-6">
++          <.header level="h2">
++            Our story
++            <:eyebrow>Where we started</:eyebrow>
++          </.header>
++          <p class="text-base-content/75">
++            Aster began as a side project to keep our own team honest: one
++            place for every brief, every decision, and every open thread. Once
++            it proved itself, we couldn't keep it to ourselves.
++          </p>
++          <p class="text-base-content/75">
++            Today we're a small, remote crew who believe good software is
++            quiet, considered, and a little personal. We sweat the
++            micro-interactions as much as the roadmap.
++          </p>
++        </section>
++
++        <section class="mt-14">
++          <.header level="h2">
++            What we value
++            <:eyebrow>Principles</:eyebrow>
++          </.header>
++          <.list title_class="font-semibold">
++            <:item title="Clarity over noise">
++              Every screen answers "what should I do next?" without asking.
++            </:item>
++            <:item title="Speed with calm">
++              Fast to use, gentle to live with. Nothing blinks at you.
++            </:item>
++            <:item title="Built for real teams">
++              Small by default, powerful when you grow. No bloated plans.
++            </:item>
++          </.list>
++        </section>
++
++        <section class="mt-14 rounded-2xl border border-base-300/60 bg-base-100/60 p-8">
++          <.eyebrow>Get in touch</.eyebrow>
++          <h2 class="mt-2 text-2xl font-semibold">Come say hello</h2>
++          <p class="mt-2 text-base-content/70">
++            Questions, ideas, or feedback — we read everything. Head to the
++            homepage to join the waitlist and be first in line.
++          </p>
++          <.button navigate={~p"/"} variant="primary" class="mt-5" size="lg">
++            Back to the homepage
++          </.button>
++        </section>
++      </div>
++    </Layouts.app>
++    """
++  end
++end
+diff --git a/lib/benchapp_web/live/custom_designs_live.ex b/lib/benchapp_web/live/custom_designs_live.ex
+index 33bac68..c09d621 100644
+--- a/lib/benchapp_web/live/custom_designs_live.ex
++++ b/lib/benchapp_web/live/custom_designs_live.ex
+@@ -25,14 +25,13 @@ defmodule BenchappWeb.CustomDesignsLive do
+   @impl true
+   def render(assigns) do
+     ~H"""
+-    <Layouts.app flash={@flash}>
++    <Layouts.app flash={@flash} active_nav="custom-designs">
+       <div id="custom-designs-page" class="space-y-8 p-4 sm:p-8">
+         <header>
+           <h1 class="text-3xl font-semibold leading-tight">Custom Designs</h1>
+           <p class="mt-2 max-w-3xl text-sm text-base-content/70">
+             This app's generic composites and domain components. Kit-curated
+-            wrappers and the contract live on
+-            <.link navigate={~p"/design"} class="link link-primary">/design</.link>.
++            wrappers and the contract live on <.link navigate={~p"/design"} class="link link-primary">/design</.link>.
+           </p>
+         </header>
+ 
+diff --git a/lib/benchapp_web/live/design_system_live.ex b/lib/benchapp_web/live/design_system_live.ex
+index efa439c..77cc6eb 100644
+--- a/lib/benchapp_web/live/design_system_live.ex
++++ b/lib/benchapp_web/live/design_system_live.ex
+@@ -20,14 +20,13 @@ defmodule BenchappWeb.DesignSystemLive do
+   @impl true
+   def render(assigns) do
+     ~H"""
+-    <Layouts.app flash={@flash}>
++    <Layouts.app flash={@flash} active_nav="design">
+       <div id="design-system-page" class="space-y-8 p-4 sm:p-8">
+         <header>
+           <h1 class="text-3xl font-semibold leading-tight">Design System</h1>
+           <p class="mt-2 max-w-3xl text-sm text-base-content/70">
+             JobyKit's curated wrapper inventory and contract. Composites and domain
+-            components live on
+-            <.link navigate={~p"/custom-designs"} class="link link-primary">/custom-designs</.link>.
++            components live on <.link navigate={~p"/custom-designs"} class="link link-primary">/custom-designs</.link>.
+           </p>
+         </header>
+ 
+diff --git a/lib/benchapp_web/live/home_live.ex b/lib/benchapp_web/live/home_live.ex
+index eac5262..5568875 100644
+--- a/lib/benchapp_web/live/home_live.ex
++++ b/lib/benchapp_web/live/home_live.ex
+@@ -1,147 +1,312 @@
+ defmodule BenchappWeb.HomeLive do
+   @moduledoc """
+-  Welcome page generated by `mix joby_kit.new`.
++  The Aster landing page. A hero, a live countdown, a newsletter
++  signup, a stats strip, an activity feed, and a feature grid.
+ 
+-  It doubles as the worked example: every block on it is built from a
+-  registered kit wrapper, and each section's eyebrow names the component
+-  that renders it. If you're an agent picking up this app, this page is
+-  the shortest correct answer to "how do I build UI here".
+-
+-  Edit freely — this file lives in your app, not in the kit. When you
+-  replace it, keep reaching for the wrappers it demonstrates.
++  The countdown and the signup form are fully live: the countdown ticks
++  down every five seconds, and every signup (or validation error) is
++  reflected in the course of the page without a reload.
+   """
+ 
+   use BenchappWeb, :live_view
+ 
+-  @build_order [
+-    %{step: "1", rule: "Domain composite exists?", detail: "Use it."},
+-    %{step: "2", rule: "Generic composite exists?", detail: "Use it — see /custom-designs."},
+-    %{step: "3", rule: "Core wrapper exists?", detail: "Use it — see /design."},
++  alias BenchappWeb.CompositeComponents
++
++  @tick_interval 5_000
++  @max_activity 10
++  @email_regex ~r/^[^\s@]+@[^\s@]+\.[^\s@]+$/
++
++  @features [
++    %{
++      icon: "hero-bolt",
++      title: "Instant sync",
++      text: "Boards, briefs, and decisions update everywhere the moment you make them."
++    },
++    %{
++      icon: "hero-shield-check",
++      title: "Private by default",
++      text: "Your work stays yours. Share only what you choose, on every board."
++    },
+     %{
+-      step: "4",
+-      rule: "daisyUI primitive exists?",
+-      detail: "Wrap it, register it in DesignManifest, then use it."
++      icon: "hero-squares-2x2",
++      title: "Made for your flow",
++      text: "Views that bend to how your team actually works — boards, lists, and more."
+     },
+     %{
+-      step: "5",
+-      rule: "None of the above?",
+-      detail: "Tailwind plus theme tokens — then expose the result as a wrapper and register it."
++      icon: "hero-cog-6-tooth",
++      title: "Deep integrations",
++      text: "Connect the tools you already use with one-click, out-of-the-box links."
++    },
++    %{
++      icon: "hero-chart-bar",
++      title: "Clarity at a glance",
++      text: "Live summaries surface what changed and what needs you next."
++    },
++    %{
++      icon: "hero-sparkles",
++      title: "Delightful details",
++      text: "Small moments that make long working sessions feel effortless."
+     }
+   ]
+ 
+-  @lint_snippet """
+-  # See what's already registered before building anything
+-  curl http://localhost:4000/design.json | jq '.components[].data_component'
+-
+-  # Then, after writing UI
+-  mix joby_kit.lint\
+-  """
+-
+   @impl true
+   def mount(_params, _session, socket) do
++    Process.send_after(self(), :tick, @tick_interval)
++
+     {:ok,
+      assign(socket,
+        page_title: "Home",
+-       build_order: @build_order,
+-       lint_snippet: @lint_snippet
++       countdown: 100,
++       ticks: 0,
++       signups: [],
++       activity: [],
++       signup_error: nil,
++       form: to_form(new_changeset(), as: :newsletter),
++       features: @features
+      )}
+   end
+ 
+   @impl true
++  def handle_info(:tick, socket) do
++    countdown = max(socket.assigns.countdown - 1, 0)
++    ticks = socket.assigns.ticks + 1
++
++    socket =
++      socket
++      |> assign(countdown: countdown, ticks: ticks)
++      |> add_activity(:tick, "Countdown ticked to #{countdown}")
++
++    Process.send_after(self(), :tick, @tick_interval)
++    {:noreply, socket}
++  end
++
++  @impl true
++  def handle_event("signup", params, socket) do
++    email = params["email"] || get_in(params, ["newsletter", "email"]) || ""
++    email = String.trim(email)
++
++    cond do
++      email == "" ->
++        {:noreply, set_signup_error(socket, email, "Please enter your email address.")}
++
++      not valid_email?(email) ->
++        {:noreply,
++         set_signup_error(socket, email, "That doesn't look like a valid email address.")}
++
++      email in socket.assigns.signups ->
++        {:noreply, set_signup_error(socket, email, "This email is already on the list.")}
++
++      true ->
++        socket =
++          socket
++          |> update(:signups, &[email | &1])
++          |> add_activity(:signup, "New signup: #{email}")
++          |> assign(:signup_error, nil)
++          |> assign(:form, to_form(new_changeset(), as: :newsletter))
++
++        {:noreply, socket}
++    end
++  end
++
+   def handle_event(_event, _params, socket), do: {:noreply, socket}
+ 
++  defp set_signup_error(socket, email, message) do
++    socket
++    |> assign(:form, to_form(new_changeset(%{"email" => email}), as: :newsletter))
++    |> assign(:signup_error, message)
++  end
++
++  defp add_activity(socket, kind, text) do
++    entry = %{kind: kind, text: text}
++
++    socket
++    |> update(:activity, fn list ->
++      [entry | list] |> Enum.take(@max_activity)
++    end)
++  end
++
++  defp valid_email?(email), do: Regex.match?(@email_regex, email)
++
++  defp new_changeset(params \\ %{}) do
++    {%{}, %{email: :string}}
++    |> Ecto.Changeset.cast(params, [:email])
++  end
++
+   @impl true
+   def render(assigns) do
+     ~H"""
+     <Layouts.app flash={@flash} active_nav="home">
+-      <div class="mx-auto max-w-5xl space-y-14 px-4 py-12 sm:px-6">
+-        <.header size="page">
+-          Benchapp
+-          <:eyebrow>benchapp</:eyebrow>
+-          <:subtitle>
+-            A Phoenix app wired to JobyKit. Every UI primitive flows through a
+-            registered wrapper, so the component inventory, the rendered page, and
+-            the JSON manifest never drift apart.
+-          </:subtitle>
+-          <:actions>
+-            <.button navigate={~p"/design"} variant="primary">Open the inventory</.button>
+-          </:actions>
+-        </.header>
+-
+-        <section class="space-y-4">
+-          <.header level="h2">
+-            Three surfaces
+-            <:eyebrow>Start here</:eyebrow>
+-            <:subtitle>
+-              Where the component inventory lives, for people and for agents.
+-              Each panel below is a <code class="font-mono text-xs">&lt;.card&gt;</code>.
+-            </:subtitle>
+-          </.header>
++      <div class="mx-auto max-w-5xl px-4 sm:px-6">
++        <section class="relative overflow-hidden pb-16 pt-16 sm:pb-24 sm:pt-20">
++          <div
++            aria-hidden="true"
++            class="pointer-events-none absolute inset-x-0 -top-24 -z-10 mx-auto size-[34rem] rounded-full bg-primary/20 blur-3xl"
++          >
++          </div>
++
++          <div class="grid items-center gap-10 lg:grid-cols-2">
++            <div class="space-y-6">
++              <.header
++                level="h1"
++                size="page"
++                title_class="text-4xl font-semibold tracking-tight sm:text-5xl"
++              >
++                The calm workspace for creative teams
++                <:eyebrow>Aster</:eyebrow>
++                <:subtitle>
++                  Plan, track, and ship projects without the chaos. Aster is
++                  the single, quiet home for your team's ideas and decisions.
++                </:subtitle>
++              </.header>
++
++              <div class="flex flex-wrap items-center gap-4">
++                <.button variant="primary" size="lg" href="#signup-form">
++                  Join the waitlist <.icon name="hero-arrow-down" class="size-4" />
++                </.button>
++                <.badge tone="ok">Early access opening soon</.badge>
++              </div>
++              <p class="text-sm text-base-content/60">Free for teams up to 10 people.</p>
++            </div>
+ 
+-          <div class="grid gap-4 md:grid-cols-3">
+-            <.card prose>
+-              <:eyebrow>Kit wrappers</:eyebrow>
+-              <:title><span class="font-mono text-base">/design</span></:title>
+-              The curated inventory every JobyKit app shares, with the wrapper
+-              contract and the daisyUI catalogue.
+-              <:actions>
+-                <.button navigate={~p"/design"} size="sm">Open</.button>
+-              </:actions>
+-            </.card>
+-
+-            <.card prose>
+-              <:eyebrow>This app's components</:eyebrow>
+-              <:title><span class="font-mono text-base">/custom-designs</span></:title>
+-              Composites and domain components you add, starting from the worked
+-              empty-state example.
+-              <:actions>
+-                <.button navigate={~p"/custom-designs"} size="sm">Open</.button>
+-              </:actions>
+-            </.card>
+-
+-            <.card prose>
+-              <:eyebrow>Machine-readable</:eyebrow>
+-              <:title><span class="font-mono text-base">/design.json</span></:title>
+-              The same inventory as JSON — attrs, slots, and source lines. Fetch
+-              it instead of parsing rendered HEEx.
+-              <:actions>
+-                <.button href={~p"/design.json"} size="sm">Open</.button>
+-              </:actions>
+-            </.card>
++            <div class="grid gap-4 sm:grid-cols-2">
++              <div class="col-span-2 rounded-2xl border border-base-300/60 bg-base-100/60 p-6 shadow-sm">
++                <.eyebrow>Launch countdown</.eyebrow>
++                <div id="countdown" class="mt-2 text-6xl font-semibold tabular-nums tracking-tight">
++                  {@countdown}
++                </div>
++                <p class="mt-1 text-sm text-base-content/60">
++                  Spots are released in waves. The countdown updates live.
++                </p>
++              </div>
++
++              <.card>
++                <:eyebrow>What you get</:eyebrow>
++                <:title>Everything in one place</:title>
++                Boards, briefs, docs, and decisions — together at last, with
++                nothing to switch between.
++              </.card>
++
++              <.card>
++                <:eyebrow>Built to last</:eyebrow>
++                <:title>Works everywhere</:title>
++                A responsive workspace that feels at home on any screen, in
++                light or dark.
++              </.card>
++            </div>
+           </div>
+         </section>
+ 
+-        <section class="space-y-4">
+-          <.header level="h2">
+-            Build order
+-            <:eyebrow>The rule</:eyebrow>
+-            <:subtitle>
+-              Work down the steps and stop at the first match — the order decides
+-              the answer. Rendered with <code class="font-mono text-xs">&lt;.list&gt;</code>.
+-            </:subtitle>
+-          </.header>
++        <section
++          id="stats"
++          class="grid gap-4 rounded-2xl border border-base-300/60 bg-base-100/60 p-6 sm:grid-cols-2"
++        >
++          <div class="flex items-center gap-3">
++            <span class="flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
++              <.icon name="hero-users" class="size-5" />
++            </span>
++            <div>
++              <div id="stat-signups" class="text-3xl font-semibold tabular-nums">
++                {length(@signups)}
++              </div>
++              <p class="text-sm text-base-content/60">Waitlist signups</p>
++            </div>
++          </div>
++          <div class="flex items-center gap-3">
++            <span class="flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
++              <.icon name="hero-clock" class="size-5" />
++            </span>
++            <div>
++              <div id="stat-ticks" class="text-3xl font-semibold tabular-nums">{@ticks}</div>
++              <p class="text-sm text-base-content/60">Countdown ticks</p>
++            </div>
++          </div>
++        </section>
+ 
+-          <.list>
+-            <:item :for={entry <- @build_order} title={"#{entry.step}. #{entry.rule}"}>
+-              {entry.detail}
+-            </:item>
+-          </.list>
++        <section class="grid gap-10 py-16 sm:py-20 lg:grid-cols-2">
++          <div class="space-y-6">
++            <.header level="h2">
++              Join the waitlist
++              <:eyebrow>Be first</:eyebrow>
++              <:subtitle>
++                Get early access and a lifetime founder discount. No spam.
++              </:subtitle>
++            </.header>
++
++            <.form for={@form} id="signup-form" phx-submit="signup">
++              <div class="flex flex-col gap-3 sm:flex-row">
++                <div class="flex-1">
++                  <.input
++                    field={@form[:email]}
++                    type="email"
++                    label="Email"
++                    placeholder="you@example.com"
++                    autocomplete="email"
++                    input_class={@signup_error && "input-error"}
++                  />
++                </div>
++                <.button type="submit" variant="primary">Sign up</.button>
++              </div>
++              <div :if={@signup_error} id="signup-error" class="mt-3 text-sm text-error" role="alert">
++                {assigns[:signup_error]}
++              </div>
++            </.form>
++
++            <div>
++              <h3 class="mb-3 text-sm font-semibold text-base-content/70">Recent signups</h3>
++              <ul
++                :if={@signups != []}
++                id="signups"
++                class="flex max-h-56 flex-col gap-2 overflow-y-auto"
++              >
++                <li :for={email <- @signups} class="flex items-center gap-2 text-sm">
++                  <span class="size-1.5 rounded-full bg-primary" aria-hidden="true"></span>
++                  <span class="truncate">{email}</span>
++                </li>
++              </ul>
++              <p :if={@signups == []} class="text-sm text-base-content/50">
++                No signups yet — be the first.
++              </p>
++            </div>
++          </div>
++
++          <div class="space-y-6">
++            <.header level="h2">
++              Live activity
++              <:eyebrow>What's happening</:eyebrow>
++              <:subtitle>Every signup and countdown tick, newest first.</:subtitle>
++            </.header>
++
++            <ul id="activity" class="flex flex-col gap-2">
++              <li
++                :for={entry <- @activity}
++                class="flex items-center gap-3 rounded-xl border border-base-300/50 bg-base-100/50 px-4 py-3"
++              >
++                <span class={[
++                  "size-2 shrink-0 rounded-full",
++                  entry.kind == "signup" && "bg-primary",
++                  entry.kind == "tick" && "bg-base-300"
++                ]} />
++                <span class="text-sm text-base-content/75">{entry.text}</span>
++              </li>
++              <li :if={@activity == []} class="text-sm text-base-content/50">
++                Nothing yet — activity appears here as it happens.
++              </li>
++            </ul>
++          </div>
+         </section>
+ 
+-        <section class="space-y-4">
++        <section class="space-y-8 pb-20">
+           <.header level="h2">
+-            Before you call it done
+-            <:eyebrow>Verify</:eyebrow>
+-            <:subtitle>
+-              The linter checks the contract end to end: registration, the
+-              <code class="font-mono text-xs">data-component</code> marker, global
+-              pass-through, and raw primitives that skipped a wrapper.
+-            </:subtitle>
++            Everything your team needs
++            <:eyebrow>Features</:eyebrow>
++            <:subtitle>Thoughtful by design, effortless in practice.</:subtitle>
+           </.header>
+ 
+-          <.card>
+-            <pre class="overflow-x-auto rounded-box bg-base-200 p-4 text-xs leading-relaxed"><code>{@lint_snippet}</code></pre>
+-          </.card>
++          <CompositeComponents.feature_grid :if={@features != []}>
++            <:feature :for={feature <- @features} icon={feature.icon} title={feature.title}>
++              {feature.text}
++            </:feature>
++          </CompositeComponents.feature_grid>
+         </section>
+       </div>
+     </Layouts.app>
+diff --git a/lib/benchapp_web/router.ex b/lib/benchapp_web/router.ex
+index f563062..8c20fa8 100644
+--- a/lib/benchapp_web/router.ex
++++ b/lib/benchapp_web/router.ex
+@@ -18,6 +18,7 @@ defmodule BenchappWeb.Router do
+     pipe_through :browser
+ 
+     live "/", HomeLive, :index
++    live "/about", AboutLive, :index
+     live "/design", DesignSystemLive, :index
+     live "/custom-designs", CustomDesignsLive, :index
+   end
+diff --git a/test/benchapp_web/live/about_live_test.exs b/test/benchapp_web/live/about_live_test.exs
+new file mode 100644
+index 0000000..3ea20cf
+--- /dev/null
++++ b/test/benchapp_web/live/about_live_test.exs
+@@ -0,0 +1,17 @@
++defmodule BenchappWeb.AboutLiveTest do
++  use BenchappWeb.ConnCase
++
++  import Phoenix.LiveViewTest
++
++  test "renders the about page on the shared layout", %{conn: conn} do
++    {:ok, view, html} = live(conn, "/about")
++    assert html =~ "About Aster"
++    assert view |> element("h1") |> render() =~ "calm home"
++    assert view |> has_element?("#main-nav")
++  end
++
++  test "marks the About link as current", %{conn: conn} do
++    {:ok, _view, html} = live(conn, "/about")
++    assert html =~ ~s(aria-current="page")
++  end
++end
+diff --git a/test/benchapp_web/live/home_live_test.exs b/test/benchapp_web/live/home_live_test.exs
+new file mode 100644
+index 0000000..378e06c
+--- /dev/null
++++ b/test/benchapp_web/live/home_live_test.exs
+@@ -0,0 +1,120 @@
++defmodule BenchappWeb.HomeLiveTest do
++  use BenchappWeb.ConnCase
++
++  import Phoenix.LiveViewTest
++
++  describe "countdown" do
++    test "starts at 100 and ticks down", %{conn: conn} do
++      {:ok, view, _html} = live(conn, "/")
++      assert view |> element("#countdown") |> render() =~ "100"
++
++      send(view.pid, :tick)
++      assert view |> element("#countdown") |> render() =~ "99"
++    end
++
++    test "increments the tick counter", %{conn: conn} do
++      {:ok, view, _html} = live(conn, "/")
++      assert view |> element("#stat-ticks") |> render() =~ "0"
++
++      send(view.pid, :tick)
++      assert view |> element("#stat-ticks") |> render() =~ "1"
++    end
++  end
++
++  describe "signup form" do
++    test "shows an error for an invalid address and does not add it", %{conn: conn} do
++      {:ok, view, _html} = live(conn, "/")
++
++      assert view
++             |> form("#signup-form", newsletter: %{email: "not-an-email"})
++             |> render_submit() =~ "valid email address"
++
++      assert view |> element("#signup-error") |> render() =~ "valid email address"
++      assert view |> element("#stat-signups") |> render() =~ "0"
++    end
++
++    test "adds a valid address to the signups list without a reload", %{conn: conn} do
++      {:ok, view, _html} = live(conn, "/")
++
++      assert view
++             |> form("#signup-form", newsletter: %{email: "ada@example.com"})
++             |> render_submit()
++
++      assert view |> element("#stat-signups") |> render() =~ "1"
++      assert view |> element("#signups") |> render() =~ "ada@example.com"
++    end
++
++    test "rejects a duplicate address", %{conn: conn} do
++      {:ok, view, _html} = live(conn, "/")
++
++      view
++      |> form("#signup-form", newsletter: %{email: "ada@example.com"})
++      |> render_submit()
++
++      assert view
++             |> form("#signup-form", newsletter: %{email: "ada@example.com"})
++             |> render_submit() =~ "already on the list"
++
++      assert view |> element("#stat-signups") |> render() =~ "1"
++    end
++  end
++
++  describe "stats" do
++    test "computes signup count and tick count from live state", %{conn: conn} do
++      {:ok, view, _html} = live(conn, "/")
++
++      assert view |> element("#stat-signups") |> render() =~ "0"
++      assert view |> element("#stat-ticks") |> render() =~ "0"
++
++      send(view.pid, :tick)
++      assert view |> element("#stat-ticks") |> render() =~ "1"
++
++      view
++      |> form("#signup-form", newsletter: %{email: "grace@example.com"})
++      |> render_submit()
++
++      assert view |> element("#stat-signups") |> render() =~ "1"
++    end
++  end
++
++  describe "activity feed" do
++    test "records an entry per tick, newest first", %{conn: conn} do
++      {:ok, view, _html} = live(conn, "/")
++
++      send(view.pid, :tick)
++      html = render(view)
++      assert html =~ "Countdown ticked to 99"
++
++      send(view.pid, :tick)
++      html = render(view)
++      assert html =~ "Countdown ticked to 98"
++      # newest first: "ticked to 98" appears before "ticked to 99"
++      idx_98 = :binary.match(html, "ticked to 98") |> elem(0)
++      idx_99 = :binary.match(html, "ticked to 99") |> elem(0)
++      assert idx_98 < idx_99
++    end
++
++    test "records one entry per signup", %{conn: conn} do
++      {:ok, view, _html} = live(conn, "/")
++
++      view
++      |> form("#signup-form", newsletter: %{email: "ada@example.com"})
++      |> render_submit()
++
++      assert view |> element("#activity") |> render() =~ "New signup: ada@example.com"
++    end
++
++    test "caps the feed at 10 entries", %{conn: conn} do
++      {:ok, view, _html} = live(conn, "/")
++
++      for _ <- 1..15 do
++        send(view.pid, :tick)
++        render(view)
++      end
++
++      html = render(view)
++      count = length(Regex.scan(~r/Countdown ticked to/, html))
++      assert count == 10
++    end
++  end
++end

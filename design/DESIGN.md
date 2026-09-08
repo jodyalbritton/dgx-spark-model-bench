@@ -231,8 +231,9 @@ nothing to reduce.
 
 ## The test
 
-Before calling a page done, look at it at 1440 and at 390, in both
-themes, and ask two things. Would a careful person believe this company
+As you build each page, look at it at 1440 and at 390, in both themes,
+and ask two things. Would a careful person believe this company
 measures things carefully? And would they remember the page tomorrow?
 If the first is no, remove something. If the second is no, the record
-card is not doing its job.
+card is not doing its job. This looking is part of the work, not a
+step after it: when precommit and lint are green, the work is done.

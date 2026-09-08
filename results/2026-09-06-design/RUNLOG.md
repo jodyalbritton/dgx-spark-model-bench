@@ -2,7 +2,7 @@
 
 Per `helm/docs/sprints/T28-design-bench.md` and `design/DESIGN_BENCH.md`: one brief (the JobyCorp website), one `DESIGN.md` (`design/DESIGN.md`, revised 2026-09-06 under the front-end design skill), a prepared JobyKit base per round, three models at their ceiling effort (`max`; Qwen's template ceiling `xhigh` via airo's clamp). Gates are mechanical; ranking is Claude's rubric review of anonymised composites, plus the X vote on the same images.
 
-`results/current` → this folder (the coding round `2026-09-05-r3` is complete except GLM's `visible_test_lies` re-run, which passes `root:` explicitly).
+`results/current` → this folder (the coding round `2026-09-05-r3` is closed; GLM's `visible_test_lies` re-run was dropped 2026-09-07 — both benches re-baseline after helm T31).
 
 joby_kit 0.3.3 (hex, 2026-09-06) carries the `CLAUDE.md` → `AGENTS.md` port; the generator archive `joby_kit_new` 0.3.0 pins `~> 0.3`, so the base resolves 0.3.3.
 

@@ -97,6 +97,8 @@ Finished 2026-09-06T07:36:36Z.
 
 Next: Qwen as jody loads it; then GLM's `visible_test_lies` re-run when GLM is next loaded.
 
+**Closed 2026-09-07 (jody):** the GLM `visible_test_lies` re-run is dropped. Round 5 stands as the pre-T29 baseline; the benches re-baseline on the T29–T31 harness (helm `docs/sprints/T31-bench-hygiene.md`, decision 4).
+
 ## Qwen — `RadixArk/Qwen3.8-Flash-Next-NVFP4:modelopt`, label `qwen38-flash-next-nvfp4`, effort `max` → template `xhigh`
 
 Loaded by jody 2026-09-06. **Qwen3.8's chat template accepts only `low`, `medium`, `xhigh` (its default and ceiling) and 400s on anything else** — a helm-shaped request at `max` or `high` fails outright ("Unexpected reasoning effort max. Supported types are xhigh (default), medium, and low."). Probe at `xhigh`: 4,899 bytes reasoning / 1,347 reasoning tokens on the coding prompt.

@@ -27,11 +27,11 @@ Checks with `—` did not exist on that run's harness. Screenshots per app: `scr
 
 ### Speed
 
-| model | fixtures wall (s) | median fixture (s) | app wall (s) | app rounds | app tool calls | app TTFT (s) | app completion tok/s |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| glm53-flash-exl3 | 511 | 26 | 844 | 62 | 74 | 3 | 20.8 |
-| qwen38-flash-next-nvfp4 | 609 | 31 | 2,148 | 105 | 129 | 1 | 37.7 |
-| dsv4-flash-vision-exp | 474 | 22 | 2,071 | 105 | 137 | 1 | 36.5 |
+| model | fixtures wall (s) | median fixture (s) | app wall (s) | app rounds | green at | app tool calls | tool time (s) | files touched | app TTFT (s) | app completion tok/s |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| glm53-flash-exl3 | 511 | 26 | 844 | 62 | R60 (+2) | 74 | 43 | 18 (+672/−170) | 3 | 20.8 |
+| qwen38-flash-next-nvfp4 | 609 | 31 | 2,148 | 105 | R103 (+2) | 129 | 22 | 20 (+996/−186) | 1 | 37.7 |
+| dsv4-flash-vision-exp | 474 | 22 | 2,071 | 105 | — | 137 | 53 | 18 (+665/−157) | 1 | 36.5 |
 
 ### Spend (tokens)
 
