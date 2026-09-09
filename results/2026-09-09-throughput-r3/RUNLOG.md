@@ -1,6 +1,6 @@
 # Run log — 2026-09-09 throughput, round 3 (clean harness)
 
-**Status: RUNNING.**
+**Status: COMPLETE** — three clean rows.
 
 Rounds 1 and 2 are superseded and their numbers should not be quoted.
 Both are kept in place with a banner, because the correction in round 2's
@@ -58,3 +58,195 @@ Qwen, including the monotonic structured-to-prose ordering.
 ## Rows
 
 Order is whatever jody loads. The cluster serves one model at a time.
+
+
+## Qwen 3.8 Flash Next — `qwen38-flash-next-nvfp4`
+
+Started 2026-09-09T22:43:53Z, finished 2026-09-09T22:49:21Z. `thinking_leaked: 0` on all
+15 cases — the condition round 2 failed.
+
+| arm | decode tok/s | acceptance |
+|---|---:|---:|
+| synthetic | 39.53 | 0.6964 |
+| json (schema enforced) | 36.51 | 0.6639 |
+| json_free | 36.36 | 0.6456 |
+| prose | 34.39 | 0.6162 |
+| ingest | 33.26 | 0.5277 |
+
+### The direction reverses once thinking is off
+
+| ratio | round 2 (thinking on) | round 3 (clean) |
+|---|---:|---:|
+| structured / prose | 0.985 | **1.062** |
+| guided / free | 0.922 | **1.004** |
+
+Structured JSON now decodes **faster** than prose on Qwen, and enforcing
+the schema costs nothing measurable. That is the original hypothesis —
+braces, quotes and commas are near-deterministic — and round 2 had it
+backwards because roughly a tenth of every Qwen completion was reasoning
+text, which is prose-shaped and diluted exactly the arm the claim is
+about.
+
+Acceptance says the same thing rather than merely agreeing: **json
+0.6639 against prose 0.6162.** Structured tokens really are more
+predictable for this model, and the decode ordering follows the
+acceptance ordering arm for arm, with ingest last on both.
+
+### What this does not yet mean
+
+GLM and DeepSeek carried no reasoning tokens in round 2 and came out at
+0.888 and 0.955 — structured *slower*. Either the effect genuinely
+differs by model, or their thinking state was never verified the way
+Qwen's now is. DeepSeek in particular was only ever inferred to be
+thinking-off from a nil field, and Qwen shows that field populated when
+thinking is on. Their round-3 rows settle it; until then no cross-model
+statement is available.
+
+**Absolute decode drifted again**: prose reads 34.39 here against 35.7 in
+round 2 and 47.7 in an ad-hoc measurement an hour earlier, on one model
+and one arm. The ratios are the output; the absolutes are this session's
+snapshot.
+
+
+## DeepSeek V4 Flash Vision Exp — `dsv4-flash-vision-exp`
+
+Started 2026-09-09T23:09:30Z, finished 2026-09-09T23:16:23Z. `thinking_leaked: 0` on all 15.
+
+Its round-2 row was also genuinely thinking-off — verified afterwards:
+`reasoning_effort: "none"` alone does suppress thinking on this template
+(856 chars bare, 0 with the flag), unlike Qwen's. So round 2 and round 3
+are two clean measurements of the same condition, which is more useful
+than one.
+
+| arm | decode tok/s | acceptance |
+|---|---:|---:|
+| synthetic | 31.58 | 0.2949 |
+| ingest | 30.78 | 0.2980 |
+| prose | 30.54 | 0.2534 |
+| json_free | 29.83 | 0.2664 |
+| json (schema enforced) | 26.86 | 0.2497 |
+
+### Direction reproduces; magnitude does not
+
+| ratio | round 2 | round 3 |
+|---|---:|---:|
+| structured / prose | 0.955 | 0.880 |
+| guided / free | 0.976 | 0.900 |
+
+Both rounds thinking-off, same host, same harness. The ratio moved 8
+points, so **do not quote these to three figures.** What does hold is the
+ordering, and it holds strictly: in both rounds DeepSeek's whole json
+range sits below its whole prose range, with no overlap.
+
+| round | json range | prose range |
+|---|---|---|
+| 2 | 25.39 – 27.73 | 28.08 – 29.46 |
+| 3 | 26.36 – 28.50 | 30.14 – 30.71 |
+
+Six json cases, six prose cases, two sessions, and every json case is
+slower than every prose case. Structured output is slower than prose on
+DeepSeek. How much slower is not resolved at n=3.
+
+### The two models genuinely disagree
+
+| | Qwen 3.8 | DeepSeek V4 |
+|---|---:|---:|
+| structured / prose | **1.062** | **0.880** |
+| acceptance, json | 0.6639 | 0.2497 |
+| acceptance, prose | 0.6162 | 0.2534 |
+| json more predictable than prose? | **yes** (+0.048) | **no** (−0.004) |
+
+This is not a difference in magnitude, it is a difference in sign, and
+acceptance backs each side independently. Structured tokens are more
+predictable for Qwen and are not for DeepSeek, and decode follows in both
+cases. jody's original hypothesis — braces and commas are
+near-deterministic, so structured should decode faster — is **true for
+Qwen and false for DeepSeek**.
+
+GLM decides whether that is a two-camp split or a spectrum.
+
+
+## GLM 5.3 Flash — `glm53-flash-exl3`
+
+Started 2026-09-09T23:29:27Z, finished 2026-09-09T23:37:58Z. `thinking_leaked: 0` on all 15.
+
+| arm | decode tok/s | acceptance |
+|---|---:|---:|
+| synthetic | 39.88 | 0.6761 |
+| ingest | 27.13 | 0.3685 |
+| prose | 22.92 | 0.2939 |
+| json_free | 22.06 | 0.2681 |
+| json (schema enforced) | 17.15 | 0.2404 |
+
+---
+
+# Round 3 — three clean rows, and the claim resolves
+
+All three measured thinking-off, verified per case, arms shuffled, on one
+host. `thinking_leaked: 0` everywhere.
+
+| | Qwen 3.8 | DeepSeek V4 | GLM 5.3 |
+|---|---:|---:|---:|
+| draft positions | 3 | 6 | 7 |
+| **structured / prose** | **1.062** | **0.880** | **0.748** |
+| guided / free | 1.004 | 0.900 | 0.777 |
+| acceptance gap (json − prose) | **+0.048** | **−0.004** | **−0.054** |
+| decode vs acceptance, r | 0.941 | 0.920 | 0.941 |
+
+## It is a spectrum, and it orders with draft depth
+
+Both the effect and its mechanism move monotonically with how deep a
+model drafts:
+
+- **structured / prose**: 3 positions → 1.062, 6 → 0.880, 7 → 0.748.
+- **acceptance gap**: +0.048, −0.004, −0.054.
+
+The deeper a model drafts, the more a schema costs its draft acceptance,
+and decode follows. Qwen, drafting three, gains from structure. DeepSeek,
+at six, is neutral. GLM, at seven, loses a quarter of its decode.
+
+**jody's claim is confirmed on clean data**: GLM does have the largest
+disparity between structured output and prose, by a wide margin, and now
+with a mechanism rather than an observation.
+
+**The original hypothesis is true for exactly one of the three.**
+Structured output decodes faster than prose only on Qwen. The prediction
+was that near-deterministic braces and commas would help every model; it
+helps the shallow drafter and hurts the deep ones, because a grammar that
+prunes continuations takes more from a model that is guessing seven
+tokens ahead than from one guessing three.
+
+The decode/acceptance correlation replicates a third time, r = 0.92–0.94
+on every model, so acceptance is the variable throughout.
+
+## GLM's synthetic arm is the spark_bench artifact, isolated
+
+| model | synthetic / prose | synthetic acceptance | prose acceptance |
+|---|---:|---:|---:|
+| GLM 5.3 | **1.74** | 0.6761 | 0.2939 |
+| Qwen 3.8 | 1.149 | 0.6964 | 0.6162 |
+| DeepSeek V4 | 1.034 | 0.2949 | 0.2534 |
+
+GLM's acceptance more than doubles on the degenerate workload — 0.29 to
+0.68 — and its decode goes with it, 22.9 to 39.9. That is the whole
+reason round 1 of the programme reported GLM at 44.9–58.2 tok/s: it
+measured the one model whose speculation benefits most from repetitive
+forced output, on exactly that workload. The synthetic arm is kept as a
+labelled upper bound for this reason.
+
+## What is still not resolved
+
+- **Magnitude at n = 3.** DeepSeek's structured/prose read 0.955 in round
+  2 and 0.880 here, both clean, both thinking-off. The direction
+  reproduces strictly — every json case slower than every prose case in
+  both rounds — but the ratio is not stable to three figures. Read the
+  ordering, not the decimal.
+- **Absolute decode drifts up to 2x within an hour**, so the tok/s
+  columns are this session's snapshot.
+- **The DSpark recipe gap.** Its c=1 row at a 2,048-token prompt is 64.6
+  tok/s for DeepSeek; this round reads 30.5 on prose and 31.6 on
+  synthetic, thinking-off. The recipe benches
+  `DeepSeek-V4-Flash-0731` on Anemll 0.1.1 with MTP-5 and `nvfp4_ds_mla`
+  KV; ours is the Vision-Exp fp8 build reporting 6 draft positions.
+  Different checkpoint, KV format and draft depth — untested as the
+  explanation, and the most likely one left.
