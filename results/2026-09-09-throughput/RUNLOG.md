@@ -1,3 +1,8 @@
+> **SUPERSEDED 2026-09-09 — do not quote these numbers.** Every model was
+> re-run on a fixed harness (thinking off by template kwarg, arms shuffled)
+> in `results/2026-09-09-throughput-r3/`. Kept because the correction below
+> is the record of what went wrong and how it was found.
+
 # Run log — 2026-09-09 throughput, round 1
 
 **Status: COMPLETE** (2026-09-09T15:53:32Z). The first run of `Helm.Evals.Throughput` (T35 task
