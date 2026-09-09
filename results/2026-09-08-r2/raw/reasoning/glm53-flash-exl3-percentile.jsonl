@@ -1,0 +1,4 @@
+{"round":1,"seq":1,"tools":["read"],"content":null,"reasoning":null}
+{"round":2,"seq":3,"tools":["edit"],"content":null,"reasoning":"Bug: no interpolation, and trunc vs floor. Fix with linear interpolation; keep minimal."}
+{"round":3,"seq":5,"tools":["bash"],"content":null,"reasoning":null}
+{"round":4,"seq":7,"tools":[],"content":"Fixed `percentile/2` to use linear interpolation between floor/ceil ranks of `p/100*(n-1)` instead of a single truncated index — all @moduledoc examples verified.","reasoning":null}

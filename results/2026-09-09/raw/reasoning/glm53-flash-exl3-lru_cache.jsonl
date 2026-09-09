@@ -1,0 +1,5 @@
+{"round":1,"seq":1,"tools":["read"],"content":null,"reasoning":null}
+{"round":2,"seq":3,"tools":["edit"],"content":null,"reasoning":"Bugs: put with existing key doesn't change map size, fine. Eviction: when putting a new key beyond capacity, pops last of order — order is MRU-first, correct. But if updating existing key, map size stays same, fine. Bug: when updating existing key, if the key being updated is... fine. Real bug: get doesn't refresh recency. Also eviction pops order's last — but if map had key evicted, map.delete ok. Another subtle bug: when putting an existing key that is the LRU and size == capacity — map size stays, no eviction, fine.\n\nFix get."}
+{"round":3,"seq":5,"tools":["bash"],"content":null,"reasoning":null}
+{"round":4,"seq":7,"tools":["bash"],"content":null,"reasoning":null}
+{"round":5,"seq":9,"tools":[],"content":"Fixed: `get` on a hit now refreshes the key's recency (moves it to the front of `order`), as the `@moduledoc` requires — verified with a quick test showing the hit key survives eviction.","reasoning":null}
