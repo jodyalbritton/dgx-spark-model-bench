@@ -364,3 +364,61 @@ medians move between rounds.
 
 That is a different problem from being slow. It is slow *and* erratic,
 and the erratic part is what made the reload look like it had worked.
+
+
+---
+
+# Qwen re-run: the bench reproduces, the models still fall short
+
+Qwen's deployment was not touched. Re-running its full row hours later is
+a stability check on the harness itself. Prior row kept as
+`raw/throughput-qwen38-flash-next-nvfp4.prior.json`.
+
+## Raw decode, tok/s
+
+| arm | earlier row | re-run |
+|---|---:|---:|
+| synthetic | 39.5 | 40.3 |
+| json_free | 36.4 | 37.3 |
+| json | 36.5 | 36.8 |
+| prose | 34.4 | 36.6 |
+| ingest | 33.3 | 33.4 |
+
+**Every arm within ~2 tok/s.** The harness reproduces on an unchanged
+deployment, which is what GLM also showed (22.92 against 22.92). The
+instability is in the models and the cluster, not the measurement.
+
+Per-case synthetic spread, 35.8 – 41.8 (acceptance 0.561 – 0.748),
+against DeepSeek's 29.7 – 40.7 (acceptance 0.272 – 0.458). Qwen is the
+steadier of the two by a wide margin.
+
+## Against the published targets — raw tok/s
+
+| model | measured (prose / synthetic) | target | share |
+|---|---|---|---|
+| Qwen 3.8 | 36.6 / 40.3 | 52.1 at MTP=3 | ~70–77 % |
+| DeepSeek V4 | 28.2 / 34.7 | 62–83 at c=1 | ~40–50 % |
+| GLM 5.3 | 22.9 / 39.9 | none published | — |
+
+Qwen is the cleanest comparison in the set: its kit publishes 52.1 at
+MTP=3 batch-1 greedy, our deployment reports exactly 3 draft positions,
+and the bench runs greedy at temperature 0. No checkpoint or KV-format
+caveat, unlike DeepSeek. It still lands ~25 % low.
+
+Both models fall short; DeepSeek falls much further and is erratic with
+it. That both are short by different amounts, on a harness that
+reproduces itself, points at the deployments rather than at one bad
+config.
+
+## Standalone probes keep reading higher than rounds
+
+Qwen's best standalone case was 54.1 (thinking off, acceptance off) and
+59.0 with thinking on; the round reproduces 36–40. DeepSeek's standalone
+was 50.0 against 34.7 in-round. But the isolation test settled that the
+round is not at fault — synthetic alone gave DeepSeek 37.7 against 34.7
+in-round, overlapping.
+
+The remaining explanation is cluster drift between windows: Qwen measured
+~50 around 23:00Z and ~36–42 at 06:00Z, in-round and standalone alike.
+Absolute decode on this cluster is a property of *when you asked*, which
+is why the record carries ranges and why the ratios are the headline.
