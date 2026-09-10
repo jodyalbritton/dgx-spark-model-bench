@@ -303,3 +303,64 @@ jody is reloading DeepSeek. The diagnostic to watch is **acceptance and
 tokens/step**, not decode: decode drifts up to 2x on this cluster, while
 acceptance is a property of the speculation and moves only when the
 deployment does.
+
+
+---
+
+# DeepSeek reloaded, and re-run in full — the gap does not close
+
+jody reloaded the DeepSeek deployment. Its pre-reload row is kept as
+`raw/throughput-dsv4-flash-vision-exp.prereload.json`; the current row is
+the re-run. **Note this makes round 3 span a deployment change**: GLM's
+and Qwen's rows were taken before the reload and were not repeated.
+
+## Raw decode, tok/s
+
+| arm | before reload | after, full row |
+|---|---:|---:|
+| synthetic | 31.6 | 34.7 |
+| ingest | 30.8 | 31.6 |
+| json_free | 29.8 | 29.5 |
+| prose | 30.5 | 28.2 |
+| json | 26.9 | 27.9 |
+
+**The reload bought almost nothing in a full round**, and every arm is
+still less than half the recipe's 62–83 band. The draft curve did change
+— first-position acceptance is now 0.641 where the whole-request rate had
+been 0.266 — but the throughput did not follow.
+
+## A spot check I should not have reported as a result
+
+Immediately after the reload, two standalone cases gave synthetic 50.0
+and prose 36.2, and I presented those as the reload working. The full row
+twenty minutes later gave 34.7 and 28.2. Two cases were not a
+measurement, and the 50.0 was a favourable outlier.
+
+## The round is not contaminating itself
+
+The obvious suspect was the round interleaving `ingest`, a 13k-token
+prompt, among the other cases, leaving the block pool in a state that
+slows later decode. Tested by running synthetic alone, three cases, no
+ingest anywhere in the session:
+
+| case | tok/s | acceptance |
+|---|---:|---:|
+| 1 | 29.7 | 0.272 |
+| 2 | 40.7 | 0.458 |
+| 3 | 37.7 | 0.414 |
+
+Median **37.7 alone against 34.7 in the full round**, with the isolated
+cases spanning 29.7–40.7. Those overlap; the round is measuring fine.
+GLM had already reproduced exactly under the same test (22.92 against
+22.92).
+
+## What the isolation actually found
+
+**Acceptance swings 68 % between identical cases** — 0.272, 0.458, 0.414
+on the same prompt shape, same settings, same minute — and decode tracks
+it case for case. DeepSeek's speculation is unstable run to run, which is
+why single-case measurements of this model are worthless and why its
+medians move between rounds.
+
+That is a different problem from being slow. It is slow *and* erratic,
+and the erratic part is what made the reload look like it had worked.
