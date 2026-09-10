@@ -1,0 +1,183 @@
+{
+  "label": "iso",
+  "root": "/tmp/iso",
+  "kind": "throughput",
+  "summary": {
+    "failed": 0,
+    "by_arm": {
+      "synthetic": {
+        "n": 3,
+        "completion_tokens": 900,
+        "decode_tok_s": 37.72,
+        "hit_cap": 3,
+        "prefill_tok_s": 1527.7,
+        "acceptance_n": 3,
+        "acceptance_rate": 0.4144
+      }
+    },
+    "structured_over_prose": null,
+    "synthetic_over_prose": null,
+    "acceptance_reported": true,
+    "thinking_leaked": 0,
+    "free_json_over_prose": null,
+    "guided_over_free": null,
+    "json_parse_failures": 0
+  },
+  "model": "deepseek-ai/DeepSeek-V4-Flash-Vision-Exp:fp8",
+  "harness": {
+    "arms": [
+      "prose",
+      "ingest",
+      "json",
+      "json_free",
+      "synthetic"
+    ],
+    "repeats": 3,
+    "max_tokens": 900,
+    "transport": "helm → airo (Helm.Airo)",
+    "acceptance_source": "GET /v1/serving?speculative=1 (delta per case)",
+    "arm_order": "interleaved repeats, shuffled within each pass",
+    "ingest_corpus": {
+      "chars": 61562,
+      "revid": 1373402144,
+      "revision_timestamp": "2026-09-05T19:42:44Z",
+      "sha256": "3d8f6ff7fda88424482cf63aca120c87bf24fa46abfe4eed0b3cb3aec55c2954",
+      "source": "https://en.wikipedia.org/wiki/Byzantine_Empire"
+    },
+    "ingest_paragraphs": 6,
+    "json_pairs": 25,
+    "json_schema_enforced": true,
+    "prefill_floor_tokens": 200,
+    "prose_prompt": "Write a one page report on the Dirac equation.",
+    "synthetic": {
+      "unit": "benchmark context datum ",
+      "ignore_eos": true,
+      "units": 400
+    },
+    "temperature": 0.0,
+    "thinking": "off — chat_template_kwargs{thinking,enable_thinking}=false + reasoning_effort none"
+  },
+  "cases": [
+    {
+      "ok": true,
+      "seq": 1,
+      "chars": 3728,
+      "acceptance": {
+        "reported": true,
+        "acceptance_rate": 0.2719,
+        "drafts": 342,
+        "accepted_tokens": 558,
+        "cumulative_rate": 0.2954,
+        "draft_tokens": 2052,
+        "host_id": "sparky",
+        "per_position": [
+          0.732,
+          0.482,
+          0.286,
+          0.148,
+          0.077,
+          0.042
+        ],
+        "tokens_per_step": 2.632
+      },
+      "ttft_ms": 794,
+      "finish_reason": "length",
+      "acceptance_reported": true,
+      "arm": "synthetic",
+      "cached_tokens": 0,
+      "completion_tokens": 900,
+      "decode_tok_s": 29.74,
+      "duration_ms": 31024,
+      "hit_cap": true,
+      "json_parsed": false,
+      "prefill_tok_s": 1527.7,
+      "prompt_tokens": 1213,
+      "reasoning_chars": 0,
+      "reasoning_tokens": null,
+      "thinking_leaked": false,
+      "uncached_prompt_tokens": 1213
+    },
+    {
+      "ok": true,
+      "seq": 2,
+      "chars": 2988,
+      "acceptance": {
+        "reported": true,
+        "acceptance_rate": 0.4578,
+        "drafts": 241,
+        "accepted_tokens": 662,
+        "cumulative_rate": 0.302,
+        "draft_tokens": 1446,
+        "host_id": "sparky",
+        "per_position": [
+          0.734,
+          0.488,
+          0.294,
+          0.157,
+          0.084,
+          0.048
+        ],
+        "tokens_per_step": 3.747
+      },
+      "ttft_ms": 791,
+      "finish_reason": "length",
+      "acceptance_reported": true,
+      "arm": "synthetic",
+      "cached_tokens": 0,
+      "completion_tokens": 900,
+      "decode_tok_s": 40.65,
+      "duration_ms": 22906,
+      "hit_cap": true,
+      "json_parsed": false,
+      "prefill_tok_s": 1533.5,
+      "prompt_tokens": 1213,
+      "reasoning_chars": 0,
+      "reasoning_tokens": null,
+      "thinking_leaked": false,
+      "uncached_prompt_tokens": 1213
+    },
+    {
+      "ok": true,
+      "seq": 3,
+      "chars": 3412,
+      "acceptance": {
+        "reported": true,
+        "acceptance_rate": 0.4144,
+        "drafts": 259,
+        "accepted_tokens": 644,
+        "cumulative_rate": 0.3067,
+        "draft_tokens": 1554,
+        "host_id": "sparky",
+        "per_position": [
+          0.736,
+          0.492,
+          0.3,
+          0.164,
+          0.09,
+          0.052
+        ],
+        "tokens_per_step": 3.486
+      },
+      "ttft_ms": 797,
+      "finish_reason": "length",
+      "acceptance_reported": true,
+      "arm": "synthetic",
+      "cached_tokens": 0,
+      "completion_tokens": 900,
+      "decode_tok_s": 37.72,
+      "duration_ms": 24629,
+      "hit_cap": true,
+      "json_parsed": false,
+      "prefill_tok_s": 1522.0,
+      "prompt_tokens": 1213,
+      "reasoning_chars": 0,
+      "reasoning_tokens": null,
+      "thinking_leaked": false,
+      "uncached_prompt_tokens": 1213
+    }
+  ],
+  "finished_utc": "2026-09-10T05:13:38Z",
+  "helm_dirty": false,
+  "helm_sha": "9ed7c56",
+  "started_utc": "2026-09-10T05:12:19Z"
+}

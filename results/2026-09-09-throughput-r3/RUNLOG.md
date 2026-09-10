@@ -422,3 +422,80 @@ The remaining explanation is cluster drift between windows: Qwen measured
 ~50 around 23:00Z and ~36–42 at 06:00Z, in-round and standalone alike.
 Absolute decode on this cluster is a property of *when you asked*, which
 is why the record carries ranges and why the ratios are the headline.
+
+
+---
+
+# Side measurements — raw, direct, outside the bench
+
+These were cited in the sections above but their records lived only in
+`/tmp`. Preserved under `raw/side/`. None is a round row; all are Qwen
+unless stated.
+
+## The Dirac essay — real sustained prose
+
+Not a bench arm. A 5,000-word essay asked for and generated to a natural
+stop, thinking off, no forced continuation. `raw/side/dirac-essay-qwen.txt`.
+
+| | |
+|---|---|
+| decode | **39.14 tok/s** |
+| completion tokens | 5,128 |
+| words delivered | 3,990 (against 5,000 asked) |
+| TTFT | 486 ms |
+| wall | 131.5 s |
+
+Beside the bench's arms on the same model:
+
+| workload | tok/s |
+|---|---:|
+| synthetic, 900 forced repetitive tokens | 40.3 |
+| **Dirac essay, 5,128 real tokens** | **39.1** |
+| prose arm, ~850 tokens | 36.6 |
+
+**The synthetic arm is not flattering Qwen.** Two minutes of genuine
+prose reads 39.1 against the degenerate arm's 40.3, and the prose arm
+brackets it from below. Decode held flat across 5,128 tokens with no
+decay against KV growth — unlike GLM in the coding rounds, where decode
+fell ~1.9–2.8 tok/s per 10k of context.
+
+The model delivered 20 % fewer words than asked, which is why word count
+is recorded next to token count.
+
+## Direct raw ladder — the recipe's own method
+
+Raw `Req` stream, nothing of helm's in the path, unique cold prefixes,
+`max_tokens = min_tokens`, `ignore_eos`, thinking off, temperature 0,
+decode after first token. Same window, minutes apart.
+
+| method | prompt | out | tok/s |
+|---|---:|---:|---|
+| raw stream (recipe cell) | 256 | 128 | 46.6 (42.9–46.7) |
+| raw stream (recipe cell) | 2,048 | 128 | 43.8 (37.4–44.4) |
+| raw stream | 2,048 | 900 | 45.9, 55.8 |
+| bench function, acceptance off | 1,225 | 900 | 44.8 |
+| bench round, acceptance on | 1,225 | 900 | 40.3 (35.8–41.8) |
+| **Qwen published target** | | | **52.1** |
+
+Three conclusions, and they close the "is the bench measuring wrong"
+question:
+
+1. **The bench path costs nothing.** Its own function with acceptance off
+   reads 44.8 against a raw stream's 45.9 on the same shape.
+2. **Longer output is faster, not slower.** 900 tokens beats 128 in the
+   same window. The recipe measuring at 128 does not explain its higher
+   number; it should read lower.
+3. **The spread inside one window exceeds the gap to target.** Everything
+   lands 40–56 and 52.1 sits inside that. One direct case hit 55.8, above
+   target.
+
+## The two runs cited earlier
+
+- `raw/side/glm-remeasure.json` — GLM synthetic and prose re-measured
+  through the task immediately after round 3: prose **22.92 against
+  22.92**, synthetic 37.4 against 39.9. This is the evidence that the
+  round does not depress its own numbers.
+- `raw/side/deepseek-synthetic-isolated.json` — DeepSeek synthetic alone,
+  no ingest in the session: 29.7 / 40.7 / 37.7, median 37.7 against 34.7
+  in-round. Overlapping, and the source of the 68 % acceptance swing
+  finding (0.272 / 0.458 / 0.414 on identical input).

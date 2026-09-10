@@ -1,0 +1,12 @@
+[90m↳ Helm.Procs.sweep_orphans/0, at: lib/helm/procs.ex:35[0m
+[90m↳ Helm.MCP.reload/0, at: lib/helm/mcp.ex:69[0m
+[90m↳ Helm.Shell.sweep_orphans/0, at: lib/helm/shell.ex:143[0m
+[90m↳ Helm.Procs.start_auto/0, at: lib/helm/procs.ex:186[0m
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+model            RadixArk/Qwen3.8-Flash-Next-NVFP4:modelopt
+completion_tokens 5128
+words            3990
+ttft_ms          486
+total_s          131.5
+decode_tok_s     39.14
