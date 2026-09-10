@@ -250,3 +250,56 @@ labelled upper bound for this reason.
   KV; ours is the Vision-Exp fp8 build reporting 6 draft positions.
   Different checkpoint, KV format and draft depth — untested as the
   explanation, and the most likely one left.
+
+
+---
+
+# What is actually slow: DeepSeek's draft acceptance
+
+jody, against the published recipes: DeepSeek should give ~62–83 decode
+tok/s at c=1; Qwen's kit reports 52.1 at MTP=3 (24.5 with MTP off, 2.13x).
+This round measured DeepSeek at 30.5 prose. The acceptance data says why,
+and it is not the measurement.
+
+| model | draft positions | acceptance | tokens/step | ceiling | prose decode |
+|---|---:|---:|---:|---:|---:|
+| Qwen 3.8 | 3 | 0.636 | **2.91** | 4 | 34.4 |
+| DeepSeek V4 | 6 | **0.266** | **2.60** | 7 | 30.5 |
+| GLM 5.3 | 7 | 0.287 | 3.01 | 8 | 22.9 |
+
+Tokens per step is the speculative multiplier directly — one base token
+plus whatever the drafts buy. **Qwen extracts 2.91 of a possible 4 (73 %
+of its ceiling). DeepSeek extracts 2.60 of a possible 7 (37 %).** It
+drafts twice as deep as Qwen and gets less out of it.
+
+For contrast, the Qwen3.6-35B deployment on `forge` reports acceptance
+0.894 across 2 positions. DeepSeek here is at 0.266 across 6.
+
+**Qwen reconciles against its own recipe.** Target 52.1 at MTP=3, our
+deployment reports exactly 3 draft positions, and the best measurement
+taken on it was 54.1. Round 3's 39.5 caught it in a slower window; the
+configuration is behaving as documented.
+
+## Ruled out, each measured rather than argued
+
+| candidate | evidence |
+|---|---|
+| helm/airo transport overhead | a thin client that counts chunks and does nothing else: 42.93 tok/s against the bench's 42.56, same arm and length |
+| thinking left on | `thinking_leaked: 0` on all 45 cases, verified by both the usage counter and the reasoning text |
+| the round context depressing decode | GLM re-measured through the task straight after round 3: prose **22.92 against 22.92**, synthetic 37.4 against 39.9 |
+| output length | 128 forced tokens is *slower* than 900 on Qwen (46.1 vs 59.2), the wrong direction to close the gap |
+| uncounted reasoning tokens | the usage counter is populated when thinking is on (199 of 200 in a probe) |
+
+## What is left
+
+Our DeepSeek is `Vision-Exp:fp8` reporting 6 draft positions. The recipe
+benches `DeepSeek-V4-Flash-0731` on Anemll 0.1.1 with **MTP-5** and
+`nvfp4_ds_mla` KV. Different checkpoint, KV format and draft depth, and
+an acceptance rate that cannot support the published decode. If the draft
+model or its config is mismatched for this checkpoint, that is where the
+missing 2x sits.
+
+jody is reloading DeepSeek. The diagnostic to watch is **acceptance and
+tokens/step**, not decode: decode drifts up to 2x on this cluster, while
+acceptance is a property of the speculation and moves only when the
+deployment does.
