@@ -1,0 +1,21 @@
+Generated helm app
+fixtures bench: deepseek-ai/DeepSeek-V4-Flash-Vision-Exp:fp8 as dsv4-flash-vision-exp, effort low, root /Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline
+on helm_dev@jobybook — watch it in that helm's conn
+run fixtures-31746 started
+run fixtures-31746 finished: %{
+  label: "dsv4-flash-vision-exp",
+  kind: "fixtures",
+  summary: %{
+    fixtures_passed: 16,
+    fixtures_total: 17,
+    fixtures_wall_ms: 486286,
+    fixtures_capped: 0,
+    fixtures_timed_out: 0,
+    by_band: %{
+      "easy" => %{total: 3, passed: 3},
+      "hard" => %{total: 7, passed: 6},
+      "medium" => %{total: 7, passed: 7}
+    },
+    fixtures_abandoned: 0
+  }
+}

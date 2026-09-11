@@ -1,0 +1,146 @@
+{
+  "label": "qwen38-flash-next-nvfp4",
+  "root": "/Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline",
+  "base": {
+    "app_name": "benchapp",
+    "base_sha": "f3965116ada9",
+    "generated_utc": "2026-09-11T08:23:26Z",
+    "node": "v24.20.0",
+    "npm": "11.19.0",
+    "react": "19.3.0",
+    "vite": "8.3.0",
+    "vitest": "5.0.0"
+  },
+  "kind": "js_app",
+  "app": {
+    "tool_time_ms": 3374,
+    "tool_time_by_tool": {
+      "bash": 3048,
+      "edit": 5,
+      "preview": 208,
+      "read": 1,
+      "todo": 10,
+      "tree": 70,
+      "write": 32
+    },
+    "ending": "summary",
+    "checks_total": 6,
+    "wall_ms": 371635,
+    "reasoning_reported": true,
+    "assistant_messages": 30,
+    "completion_tok_s": 42.3,
+    "uncached_prompt_tokens": 116462,
+    "decode_tok_s": 49.21,
+    "completion_tokens": 15692,
+    "checks_passed": 6,
+    "duration_ms": 371193,
+    "final": "\n\nEverything is verified: dark theme + expanded mobile nav menu render correctly, and the countdown is live (already at 97 from the real interval). All green — `npx vitest run` (9 tests pass), `npx tsc -b --noEmit` clean, `npm run build` clean, and the dev server serves `/` and `/about` on port 4099.\n\nBuilt **Pulse**, a launch-countdown waitlist landing site: `#main-nav` (aria-current active link, `#nav-toggle` mobile menu, `#theme-toggle` light/dark on both widths), hero + `#countdown` ticking from 100 on a real 5s interval, `#signup-form` with validation/dedup feeding `#signups`, a `#stats` strip (`#stat-signups`/`#stat-ticks` from live state), an `#activity` feed (newest-first, capped at 10), a reusable `FeatureGrid` component, and an `/about` page on the shared layout.",
+    "green_at": null,
+    "reasoning_tokens": 4510,
+    "rounds": 30,
+    "nudges": 0,
+    "ttft_ms": 1350,
+    "tool_calls": 39,
+    "checks": {
+      "build": {
+        "pass": true,
+        "detail": "dist/assets/index-CSO62WeA.js   229.24 kB │ gzip: 71.59 kB |  | ✓ built in 47ms"
+      },
+      "composite": {
+        "pass": true,
+        "detail": "components in their own files: 6"
+      },
+      "hidden_tests": {
+        "pass": true,
+        "failed": 0,
+        "detail": "      Tests  14 passed (14) |    Start at  01:29:39 |    Duration  369ms (environment 61%, tests 17%, transform 10%, setup 10%, import 1%, worker 1%)",
+        "passed": 14
+      },
+      "demo_gone": {
+        "pass": true,
+        "detail": "stock Vite demo content in src/App.tsx"
+      },
+      "own_tests": {
+        "pass": true,
+        "detail": "      Tests  23 passed (23) |    Start at  01:29:40 |    Duration  428ms (environment 59%, tests 19%, setup 10%, transform 10%, import 1%, worker 1%)"
+      },
+      "typecheck": {
+        "pass": true,
+        "detail": ""
+      }
+    },
+    "failures": [],
+    "tools": {
+      "bash": 4,
+      "edit": 6,
+      "preview": 6,
+      "read": 9,
+      "todo": 1,
+      "tree": 1,
+      "write": 12
+    },
+    "final_line": "Built **Pulse**, a launch-countdown waitlist landing site: `#main-nav` (aria-current active link, `#nav-toggle` mobile menu, `#theme-toggle` light/dark on both widths), hero + `#countdown` ticking from 100 on a real 5s interval, `#signup-form` with validation/dedup feeding `#signups`, a `#stats` strip (`#stat-signups`/`#stat-ticks` from live state), an `#activity` feed (newest-first, capped at 10), a reusable `FeatureGrid` component, and an `/about` page on the shared layout.",
+    "turns": 1,
+    "last_call": null,
+    "outcome": "done",
+    "failed": 0,
+    "prompt_tokens": 625262,
+    "scores": {
+      "tests_added": 1,
+      "typecheck_clean": true
+    },
+    "cached_tokens": 508800,
+    "rounds_after_green": null,
+    "refused": 0,
+    "screenshots": [],
+    "cached_reported": true,
+    "session_id": "6080860c-061d-4f12-860f-8ed961e76ae0",
+    "decode_rounds": 29
+  },
+  "model": "RadixArk/Qwen3.8-Flash-Next-NVFP4:modelopt",
+  "brief": "# JavaScript app benchmark\n\nA Vite + React + TypeScript app is already generated and its dependencies\nare already installed, in the current working directory under `benchapp`.\nWork inside it. The app you build is the artifact being benchmarked: a\nmodern demo landing site for a fictional product of your choice. It is\nnot a tool for running benchmarks; no benchmark-themed features or copy.\n\n## Setup\n\n1. Remove the stock Vite demo content — the logos, the counter button and\n   the \"click on the Vite and React logos\" copy in `src/App.tsx`, and the\n   template styling in `src/App.css` you do not want.\n2. The app's root component must stay the **default export of\n   `src/App.tsx`**. The hidden tests import it from there.\n\n## Requirements\n\nMobile and desktop views, and working light and dark themes, throughout.\n\n3. A top navigation bar with id `main-nav` that marks the current page's\n   link with `aria-current=\"page\"`, has a menu that works at phone widths\n   behind a toggle button with id `nav-toggle`, and a theme toggle with id\n   `theme-toggle` usable at both widths.\n4. A landing page with a hero.\n5. A countdown that starts at 100 and decreases by 1 every 5 seconds,\n   updating live, the number in an element with id `countdown`. The\n   five-second tick is a real interval in every environment, including\n   test — the hidden tests advance a fake clock and expect it to move; do\n   not gate the timer on an environment check.\n6. A newsletter signup form with id `signup-form` and one email input. An\n   invalid address shows an error in an element with id `signup-error` and\n   is not added. A valid address is added to a \"recent signups\" list with\n   id `signups` on the same page. The same address submitted twice shows\n   the error and is not added again. In-memory is fine; no backend.\n7. A stats strip with id `stats`: the number of signups in an element with\n   id `stat-signups` and the number of countdown ticks so far in an\n   element with id `stat-ticks`, both computed from live state.\n8. An activity feed with id `activity` whose entries are `<li>` elements,\n   newest first, at most 10, one entry per signup and one per tick.\n9. A reusable feature-grid component in its own file under `src/`, used by\n   the landing page.\n10. A second page at `/about`, linked from the nav, on the same layout.\n\n## Tests\n\n11. Created features must be tested: add your own tests under `test/` or\n    `src/`, run by `npx vitest run`.\n\n## Constraints\n\n- The dev server must run on port 4099: `npm run dev -- --port 4099 --strictPort`.\n  Do not use any other port.\n- Do not stop or kill processes you did not start.\n- The dev server is long-running: start it with `background: true` and poll\n  the job.\n- When your own tests and `npx tsc -b --noEmit` and `npm run build` pass, reply\n  with a one-line summary. Do not re-verify: a green suite and a clean build\n  are the finish line.\n",
+  "harness": {
+    "memory": "off",
+    "port": "4099",
+    "stack": "vite + react + typescript",
+    "tools": "native",
+    "system_prompt": "You are helm, an agent at the conn of the JobyCorp fleet. Be direct and concise.\n\nWorking method: survey before you read. `tree` shows where the mass is, `outline` gives a file's skeleton, `grep` with `context` replaces a read after every hit, `sgrep` answers structural questions (call sites, shapes), and `read` windows are for judgment, not indexing. Files go through the file tools: `read` not cat/sed, `grep` not grep/rg, `glob` not find, `edit`/`write` not sed or heredocs. Bash runs things: builds, tests, mix tasks. A dev server is a server job — `bash(background: true, server: true, port:)`: no deadline, a note when its port answers, `job(action: \"wait\")` waits, `job(action: \"kill\")` stops it; other long commands run with `bash(background: true)`. Never detach a process yourself, and never signal one you did not start. Several tool calls in one round are welcome when they are independent. Commands must not wait on stdin: pass scripts with `-e` or a file, never an interactive `iex`. Read enough to act, act, verify, and stop.",
+    "deadline_ms": 3600000,
+    "effort": "low",
+    "last_call": "Round cap reached — this is the last call. Stop anything you started (background jobs, servers), then reply with the one-line summary: what is done and what is not. No further work.",
+    "last_call_rounds": 4,
+    "nudge": "Continue until every requirement in the task is done, then reply with the one-line summary.",
+    "nudge_policy": "once, only after a narrated or blank ending; otherwise abandoned",
+    "brief": "# JavaScript app benchmark\n\nA Vite + React + TypeScript app is already generated and its dependencies\nare already installed, in the current working directory under `benchapp`.\nWork inside it. The app you build is the artifact being benchmarked: a\nmodern demo landing site for a fictional product of your choice. It is\nnot a tool for running benchmarks; no benchmark-themed features or copy.\n\n## Setup\n\n1. Remove the stock Vite demo content — the logos, the counter button and\n   the \"click on the Vite and React logos\" copy in `src/App.tsx`, and the\n   template styling in `src/App.css` you do not want.\n2. The app's root component must stay the **default export of\n   `src/App.tsx`**. The hidden tests import it from there.\n\n## Requirements\n\nMobile and desktop views, and working light and dark themes, throughout.\n\n3. A top navigation bar with id `main-nav` that marks the current page's\n   link with `aria-current=\"page\"`, has a menu that works at phone widths\n   behind a toggle button with id `nav-toggle`, and a theme toggle with id\n   `theme-toggle` usable at both widths.\n4. A landing page with a hero.\n5. A countdown that starts at 100 and decreases by 1 every 5 seconds,\n   updating live, the number in an element with id `countdown`. The\n   five-second tick is a real interval in every environment, including\n   test — the hidden tests advance a fake clock and expect it to move; do\n   not gate the timer on an environment check.\n6. A newsletter signup form with id `signup-form` and one email input. An\n   invalid address shows an error in an element with id `signup-error` and\n   is not added. A valid address is added to a \"recent signups\" list with\n   id `signups` on the same page. The same address submitted twice shows\n   the error and is not added again. In-memory is fine; no backend.\n7. A stats strip with id `stats`: the number of signups in an element with\n   id `stat-signups` and the number of countdown ticks so far in an\n   element with id `stat-ticks`, both computed from live state.\n8. An activity feed with id `activity` whose entries are `<li>` elements,\n   newest first, at most 10, one entry per signup and one per tick.\n9. A reusable feature-grid component in its own file under `src/`, used by\n   the landing page.\n10. A second page at `/about`, linked from the nav, on the same layout.\n\n## Tests\n\n11. Created features must be tested: add your own tests under `test/` or\n    `src/`, run by `npx vitest run`.\n\n## Constraints\n\n- The dev server must run on port 4099: `npm run dev -- --port 4099 --strictPort`.\n  Do not use any other port.\n- Do not stop or kill processes you did not start.\n- The dev server is long-running: start it with `background: true` and poll\n  the job.\n- When your own tests and `npx tsc -b --noEmit` and `npm run build` pass, reply\n  with a one-line summary. Do not re-verify: a green suite and a clean build\n  are the finish line.\n",
+    "hidden_tests_sha": "4ba790ba",
+    "last_call_grace_ms": 180000,
+    "mcp": false,
+    "prompt_sha": "628204d4",
+    "rounds_cap": 128,
+    "test_runner": "vitest + @testing-library/react (jsdom)",
+    "wire_tools": [
+      "read",
+      "edit",
+      "write",
+      "bash",
+      "grep",
+      "sgrep",
+      "glob",
+      "tree",
+      "outline",
+      "changes",
+      "read_artifact",
+      "job",
+      "preview",
+      "web_search",
+      "todo",
+      "session_search",
+      "consult",
+      "agent"
+    ]
+  },
+  "finished_utc": "2026-09-11T08:29:43Z",
+  "helm_dirty": true,
+  "helm_sha": "c535e08",
+  "started_utc": "2026-09-11T08:29:43Z"
+}

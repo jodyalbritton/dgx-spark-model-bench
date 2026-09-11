@@ -185,3 +185,145 @@ the three run medians, per arm:
 leaks, 2 JSON parse failures (DeepSeek `json_free`), every acceptance
 gap within ±6, every bracket under 141 ms, every uncached ingest case a
 full prefill, every warm-up a prefill at size.
+
+---
+
+# The agent benches on Qwen 3.8 — fixtures, Phoenix app, JS app, design
+
+One chain, detached (`run-qwen-benches.sh`), 07:34–09:01 UTC on
+2026-09-11. helm `c535e08`; `helm_dirty: true` on all four records
+because an uncommitted, report-only edit to `priv/bench/make_report.py`
+sat in the tree at launch (the same benchmarks-repo session that had
+edited it earlier wrote it again at 07:31 UTC); nothing under `lib/`
+differed, and the runs went ahead with `--allow-dirty`. Effort **low**
+on all four — the post-rebaseline coding rows' setting; the one prior
+design round (2026-09-06) ran at `max`, so the design row is not
+comparable to it on effort.
+
+Pre-flight, measured: tree at `c535e08` with only report files
+differing; port 4099 free; Qwen answering through airo in 342 ms; the
+deployment's image cap 10 per prompt (`--limit-mm-per-prompt`) against
+helm's 8.
+
+| bench | result | rounds | wall | decode tok/s (rounds) | end-to-end tok/s | reasoning / completion tokens | tool calls (failed) |
+|---|---|---:|---:|---:|---:|---:|---:|
+| fixtures | **17/17** (3 easy, 7 medium, 7 hard); 0 capped, 0 timed out | 4–16 per fixture | 792 s | 39.7–53.5 per fixture | 29.4–41.6 | — | — |
+| Phoenix app | **19/19**, done, green at 101 | 103 | 1,977 s | 43.2 (99) | 34.0 | 44,008 / 67,171 | 140 (1) |
+| JS app | **6/6** mechanical, done (rendered half off) | 30 | 372 s | 49.2 (29) | 42.3 | 4,510 / 15,692 | 39 (0) |
+| design | **18/19** gates, done, green at 82 | 85 | 1,741 s | 46.8 (81) | 38.0 | 38,204 / 66,226 | 100 (0) |
+
+The design gate that failed is `contrast`: table headers at 4.24 against
+the 4.5 floor on the about and home pages in the light theme ("artifact",
+"what we publish"). Every other gate passed, including WCAG contrast
+elsewhere, both themes, mobile nav, and composite reuse across pages.
+12 screenshots and the sealed review pack are in the record.
+
+## What the records show about the harness
+
+- **Per-round decode is now beside end-to-end on every agent row**, and
+  it sits where the throughput bench put Qwen: 43–49 tok/s median per
+  round against 47–50 on the prose and JSON arms.
+- **`reasoning_effort: "low"` does not turn Qwen's thinking off.** Two
+  thirds of the Phoenix app's completion tokens and 58 % of the design
+  row's were reasoning; the JS app's share was 29 %. The rows carry
+  `reasoning_tokens` and `reasoning_reported: true`, so this is in the
+  record, not hidden — but a "low" row on Qwen is a thinking row and a
+  "low" row on a model whose template obeys the flag may not be.
+- **The session page in the dev server cannot see a round run by a
+  mix task.** The task boots its own BEAM; the dev server, sharing only
+  the database, started an idle shadow process for the app session when
+  the page was opened (07:52), served that process's 52-message snapshot
+  to every refresh, and fired two 43,302-token prewarm requests (14.4 s
+  cold, 1.8 s cached) into the deployment during the scored row. The
+  shadow process was stopped after the app bench exited; the record is
+  unaffected. Harness items: bench sessions opened read-only from the
+  database by the UI, no prewarm, no job sweep; and a line in
+  RUNNING.md that live streaming is only visible in the BEAM that runs
+  the round.
+- Cleanup checked: 4099 free after each bench; the chain's own log is
+  `run-qwen-benches.out`.
+
+---
+
+# The agent benches on DeepSeek V4 — fixtures, Phoenix app, JS app, design
+
+One chain (`run-dsv4-benches.sh`), 11:52–13:05 UTC on 2026-09-11, the
+first round run **inside the helm node** (T38, merged as `3ce9c26`): each
+`mix bench.*` client connected to `helm_dev@jobybook` and the bench ran
+there, so every session was on the dev helm's home page and streamed in
+its conn as it worked. helm `bcf1e7d`, **clean tree** — `helm_dirty:
+false` on all four records. Effort low.
+
+Pre-flight, measured: tree clean; port 4099 free; `helm_dev` and `helm`
+registered with epmd; DeepSeek answering through airo in 2.1 s; the
+deployment's image cap 8 per prompt, equal to what helm sends.
+
+| bench | result | rounds | wall | decode tok/s (rounds) | end-to-end tok/s | reasoning / completion tokens | tool calls (failed) |
+|---|---|---:|---:|---:|---:|---:|---:|
+| fixtures | **16/17** — `safe_echo_exact` (hard) declared done at 4 rounds with the hidden tests failing; 0 capped, 0 timed out | — | 486 s | 43.3–70.0 per fixture | 28.3–48.0 | — | — |
+| Phoenix app | **19/19**, done, green at 103 | 104 | 1,705 s | 49.8 (67) | 37.9 | 38,560 / 64,667 | 117 (2) |
+| JS app | **4/6**, done — `hidden_tests` 13/14, `own_tests` 23/24 (one failing test each; the record keeps vitest's summary line, not the test's name) | 33 | 400 s | 59.3 (19) | 41.0 | 4,942 / 16,393 | 39 (0) |
+| design | **17/19** gates, done, green at 91 — `composite_registered` (0 app components registered beyond the generator's) and `composite_reused` | 95 | 1,575 s | 50.8 (67) | 39.3 | 34,727 / 61,946 | 124 (3) |
+
+Beside Qwen's rows from the morning (17/17 · 19/19 · 6/6 · 18/19).
+
+## What the records show
+
+- **Reasoning at "low" is not Qwen's alone.** DeepSeek's Phoenix and
+  design rows spent 56 % of their completion tokens thinking; the JS row
+  30 %. Both models' "low" rows are thinking rows on this cluster.
+- **Per-round decode on real agent work sits above the throughput
+  bench's prose arm for DeepSeek** — 49.8 / 59.3 / 50.8 against 36 on
+  prose — because agent rounds are mostly code and tool JSON, the
+  higher-acceptance kinds; the fixtures' 43–70 spread says the same.
+- **Two harness gaps, small:** the JS checks should capture the failing
+  test names (the Phoenix arm names its failed checks); and
+  `safe_echo_exact` is the fixture DeepSeek keeps declaring done on —
+  round 6 needed a T32 re-run for it too.
+- Cleanup checked: 4099 free after each bench. No shadow session, no
+  prewarm, no sweep from the client: the sessions were the node's own.
+
+---
+
+# The agent benches on GLM 5.3 — fixtures, Phoenix app, JS app, design
+
+One chain (`run-glm53-benches.sh`), 13:21–14:16 UTC on 2026-09-11, run
+inside `helm_dev@jobybook` (T38). helm `bcf1e7d`, clean tree,
+`helm_dirty: false` on all four records. Effort low. Pre-flight,
+measured: tree clean; port 4099 free; both nodes in epmd; GLM answering
+through airo in 1.0 s; this GLM deployment's image cap 10 per prompt
+(the round-9 cap of 4 is gone) against helm's 8.
+
+| bench | result | rounds | wall | decode tok/s (rounds) | end-to-end tok/s | reasoning / completion tokens | tool calls (failed) |
+|---|---|---:|---:|---:|---:|---:|---:|
+| fixtures | **17/17**; 0 capped, 0 timed out | — | 503 s | 30.9–45.5 per fixture | — | — | — |
+| Phoenix app | **19/19**, done, green at 71 | 90 | 1,019 s | 28.2 (36) | 18.5 | 6,599 / 18,814 | 111 (3) |
+| JS app | **4/6**, done — `hidden_tests` 13/14 (`signup form › shows an error for an invalid address`: the error element never rendered), `own_tests` 25/26 | 42 | 456 s | 26.4 (11) | 23.5 | 1,553 / 10,735 | 49 (0) |
+| design | **18/19** gates, done, green at 105 — `theme_toggle_mobile` (at 390 px the theme toggle is absent) | 106 | 1,122 s | 28.9 (40) | 22.9 | 4,918 / 25,681 | 118 (5) |
+
+The failing hidden JS tests were named by re-running vitest in each
+model's `work/js-<label>/benchapp` tree (the rows keep only the summary
+line): DeepSeek's is `activity feed › adds an entry per signup` (expected
+2, found 1), GLM's is the signup error above, Qwen passes all 14 in the
+same tree. Two models, two different tests: the oracle holds.
+
+## The round's agent benches, three models
+
+| | GLM 5.3 | DeepSeek V4 | Qwen 3.8 |
+|---|---|---|---|
+| fixtures | 17/17 · 503 s | 16/17 · 486 s | 17/17 · 792 s |
+| Phoenix app | 19/19 · 90 rounds · 17 min | 19/19 · 104 rounds · 28 min | 19/19 · 103 rounds · 33 min |
+| JS app | 4/6 · 42 rounds · 8 min | 4/6 · 33 rounds · 7 min | 6/6 · 30 rounds · 6 min |
+| design | 18/19 · 106 rounds · 19 min | 17/19 · 95 rounds · 26 min | 18/19 · 85 rounds · 29 min |
+| app decode tok/s, median round | 28.2 | 49.8 | 43.2 |
+| app reasoning share of completion | 35 % | 60 % | 66 % |
+| helm_dirty | false | false | true (report-only edit) |
+
+Qwen's four rows were run before T38 in a separate BEAM; DeepSeek's and
+GLM's inside the helm node. The benches themselves are unchanged
+between the two, and the records carry the same fields; the difference
+is only where the sessions lived and whether the conn could see them.
+
+Cleanup checked after every bench: 4099 free. GLM's design row ran to
+green at 105 of a 128 cap, the closest any row came to the cap this
+round.

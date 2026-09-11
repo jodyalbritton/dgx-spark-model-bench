@@ -1,0 +1,10 @@
+{
+  "app_name": "benchapp",
+  "base_sha": "f3965116ada9",
+  "generated_utc": "2026-09-11T08:23:26Z",
+  "node": "v24.20.0",
+  "npm": "11.19.0",
+  "react": "19.3.0",
+  "vite": "8.3.0",
+  "vitest": "5.0.0"
+}

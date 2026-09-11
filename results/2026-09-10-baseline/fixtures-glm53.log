@@ -1,0 +1,20 @@
+fixtures bench: Mia-AiLab/GLM-5.3-Flash-EXL3-TR3-4bpw:exl3 as glm53-flash-exl3, effort low, root /Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline
+on helm_dev@jobybook — watch it in that helm's conn
+run fixtures-40578 started
+run fixtures-40578 finished: %{
+  label: "glm53-flash-exl3",
+  kind: "fixtures",
+  summary: %{
+    fixtures_passed: 17,
+    fixtures_total: 17,
+    fixtures_wall_ms: 502798,
+    fixtures_capped: 0,
+    fixtures_timed_out: 0,
+    by_band: %{
+      "easy" => %{total: 3, passed: 3},
+      "hard" => %{total: 7, passed: 7},
+      "medium" => %{total: 7, passed: 7}
+    },
+    fixtures_abandoned: 0
+  }
+}

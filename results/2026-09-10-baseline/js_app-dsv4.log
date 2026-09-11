@@ -1,0 +1,4 @@
+js app bench: deepseek-ai/DeepSeek-V4-Flash-Vision-Exp:fp8 as dsv4-flash-vision-exp, effort low, root /Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline
+on helm_dev@jobybook — watch it in that helm's conn
+run js_app-37890 started
+run js_app-37890 finished: %{label: "dsv4-flash-vision-exp", kind: "js_app"}

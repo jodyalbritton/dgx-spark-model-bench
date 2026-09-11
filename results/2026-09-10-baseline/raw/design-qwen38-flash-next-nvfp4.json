@@ -1,0 +1,579 @@
+{
+  "label": "qwen38-flash-next-nvfp4",
+  "root": "/Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline",
+  "kind": "design",
+  "summary": {
+    "rounds": 85,
+    "outcome": "done",
+    "wall_ms": 1741281,
+    "gates_passed": 18,
+    "gates_total": 19
+  },
+  "model": "RadixArk/Qwen3.8-Flash-Next-NVFP4:modelopt",
+  "harness": {
+    "memory": "off",
+    "port": "4099",
+    "tools": "native",
+    "system_prompt": "You are helm, an agent at the conn of the JobyCorp fleet. Be direct and concise.\n\nWorking method: survey before you read. `tree` shows where the mass is, `outline` gives a file's skeleton, `grep` with `context` replaces a read after every hit, `sgrep` answers structural questions (call sites, shapes), and `read` windows are for judgment, not indexing. Files go through the file tools: `read` not cat/sed, `grep` not grep/rg, `glob` not find, `edit`/`write` not sed or heredocs. Bash runs things: builds, tests, mix tasks. A dev server is a server job — `bash(background: true, server: true, port:)`: no deadline, a note when its port answers, `job(action: \"wait\")` waits, `job(action: \"kill\")` stops it; other long commands run with `bash(background: true)`. Never detach a process yourself, and never signal one you did not start. Several tool calls in one round are welcome when they are independent. Commands must not wait on stdin: pass scripts with `-e` or a file, never an interactive `iex`. Read enough to act, act, verify, and stop.",
+    "vision": "native",
+    "effort": "low",
+    "digest_mode": "ceiling",
+    "last_call": "Round cap reached — this is the last call. Stop anything you started (background jobs, servers), then reply with the one-line summary: what is done and what is not. No further work.",
+    "last_call_rounds": 4,
+    "nudge": "Continue until every requirement in the task is done, then reply with the one-line summary.",
+    "nudge_policy": "once, only after a narrated or blank ending; otherwise abandoned",
+    "brief": "# JobyCorp website — design brief\n\nJobyKit is already installed and `benchapp` is a generated JobyKit app that\ncompiles, boots, and passes its tests. Work inside `benchapp`. Follow the\nguidelines in `benchapp/AGENTS.md` and the design direction in\n`benchapp/DESIGN.md`; where `DESIGN.md` and this brief differ, this brief\nwins.\n\n## The client\n\nJobyCorp is a local AI research company. It runs analysis and benchmarks of\nlocal LLMs on its own hardware and shares the research openly with the\ncommunity. The site is JobyCorp's public home: it should tell a visitor\nwhat JobyCorp does, show that the work is real and rigorous, and invite\nthem to read and follow it.\n\nUse only the facts above. Do not invent statistics, customer names, team\nmembers, awards, dates, or product names. Where a section wants a number\nor a name you have not been given, write copy that does not need one.\n\n## Scope\n\nThis is a design task. Build the visual identity, the layout, the copy, and\nthe components. Do not add application features: no forms that submit, no\nlive data, no countdowns. Static content and navigation only. The app's\ndatabases already exist so the dev server boots; do not add tables,\nmigrations, schemas, or any use of the Repo — the site has no data.\n\n1. Remove every trace of the generator's demo: the stock `simple_nav`\n   header, the \"built with\" footer, the welcome content of HomeLive, and\n   every link to `/design`, `/custom-designs`, and `/design.json`. Those\n   pages exist for inspecting the kit and are not part of the product;\n   leave their routes in place but nothing on the site may link to or\n   mention them.\n2. Three pages, all on the same layout: `/` (the landing page),\n   `/research` (what JobyCorp publishes and how it tests), and `/about`\n   (who JobyCorp is and why the work is shared).\n3. A top navigation bar in `Layouts.app` with id `main-nav` that marks the\n   current page's link with `aria-current=\"page\"`, collapses behind a\n   toggle button with id `nav-toggle` at phone widths, and carries the\n   kit's theme toggle with id `theme-toggle`, usable at both widths.\n4. A footer that belongs to JobyCorp.\n5. The landing page: a hero that says what JobyCorp does in one sentence, a\n   section on the research (what is measured and how), a section on the\n   hardware and method (local models, local hardware, results published in\n   full), and a closing call to action to read the research. Sections are\n   yours to add or merge; every section must earn its place.\n6. At least one composite component of your own, registered in the\n   DesignManifest with a preview (host composites show on\n   `/custom-designs`), used on more than one page.\n\n## Design requirements\n\n- Light and dark themes, both finished, with the palette `DESIGN.md`\n  defines applied to the `light` and `dark` themes in `app.css` (keep\n  those two names; the theme toggle switches by them). Phone and desktop,\n  both finished. No horizontal overflow at 390 px. Body text contrast at\n  least 4.5:1 and large text at least 3:1 in both themes.\n- The installed heroicon set is `deps/heroicons/optimized/24/outline`\n  (and `solid`); the name is `hero-` plus the file name without `.svg`.\n- `Layouts.app` and a LiveView's `render/1` are exempt from the lint's\n  unmarked-component rule. `mix format` (part of precommit) re-indents\n  HEEx — re-read a block before editing it after a format.\n- Every icon name you use must exist in the installed heroicon set; check\n  before you use it. A blank icon is a defect.\n- Copy is concise: headings of a few words, sentences a visitor can read\n  at a glance. Copy is about JobyCorp and its research, never about the\n  component kit, the framework, or this task.\n- Compose the kit's registered wrappers; raw HTML primitives are a lint\n  failure. Lint must be clean.\n\n## Tests\n\n7. Existing tests must pass; update any test that referred to removed\n   demo content. No new features. Add a render test for each new page.\n\n## Constraints\n\n- The dev server must run on port 4099; `PORT` is already set. Do not use\n  any other port. Do not stop or kill processes you did not start.\n- Look at every page at 1440 and 390, in both themes, as you build —\n  the preview tool has viewport, scheme, click, wait_for and evaluate.\n  A scratch directory for probes, notes and screenshots is `../scratch`\n  (outside `benchapp`); nothing there is graded.\n- When `mix precommit` and `mix joby_kit.lint` both pass, reply with a\n  one-line summary. Green is the end: do not re-verify, do not take\n  more screenshots.\n",
+    "approvals": {
+      "bash": "default",
+      "consult": "deny",
+      "edit": "allow",
+      "write": "allow"
+    },
+    "base_sha": "28a73603c1a3",
+    "browser": {
+      "scheme": "light",
+      "viewport": "desktop"
+    },
+    "design_sha": "deed3a8c",
+    "forbidden_words": [
+      "JobyKit",
+      "daisyUI",
+      "Phoenix",
+      "LiveView",
+      "Tailwind",
+      "component",
+      "wrapper",
+      "composite",
+      "manifest",
+      "this task",
+      "benchmark app",
+      "benchapp"
+    ],
+    "joby_kit_version": "0.3.3",
+    "last_call_grace_ms": 180000,
+    "mcp": false,
+    "prompt_sha": "de5bec89",
+    "scratch": "scratch/ beside benchapp/",
+    "site_deadline_ms": 5400000,
+    "site_rounds_cap": 150,
+    "vision_model": "Mia-AiLab/GLM-5.3-Flash-EXL3-TR3-4bpw:exl3",
+    "wire_tools": [
+      "read",
+      "edit",
+      "write",
+      "bash",
+      "grep",
+      "sgrep",
+      "glob",
+      "tree",
+      "outline",
+      "changes",
+      "read_artifact",
+      "job",
+      "preview",
+      "web_search",
+      "todo",
+      "session_search",
+      "consult",
+      "agent"
+    ]
+  },
+  "helm_dirty": true,
+  "helm_sha": "c535e08",
+  "site": {
+    "tool_time_ms": 7150,
+    "reasoning_tokens": 38204,
+    "duration_ms": 1741263,
+    "ending": "summary",
+    "cached_reported": true,
+    "completion_tok_s": 38.0,
+    "checks_total": 19,
+    "checks_passed": 18,
+    "prompt_tokens": 9506429,
+    "pass": false,
+    "completion_tokens": 66226,
+    "rounds_after_green": 3,
+    "decode_tok_s": 46.76,
+    "final": "\n\nBuilt the JobyCorp site — three pages (`/`, `/research`, `/about`) on a JobyCorp nav (`main-nav`/`nav-toggle`/`theme-toggle`, `aria-current`) and JobyCorp footer, with the DESIGN.md palette in `app.css` (light + dark), a plotting-paper record-card composite and spec-row/table composites reused across pages, generator demo and `/design` links removed, render tests per page, and no horizontal overflow at 390px — `mix precommit` and `mix joby_kit.lint` both green.",
+    "name": "site",
+    "reasoning_reported": true,
+    "screenshots": {
+      "qwen38-flash-next-nvfp4-about-dark-desktop.png": "/Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline/screenshots/qwen38-flash-next-nvfp4-about-dark-desktop.png",
+      "qwen38-flash-next-nvfp4-about-dark-phone.png": "/Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline/screenshots/qwen38-flash-next-nvfp4-about-dark-phone.png",
+      "qwen38-flash-next-nvfp4-about-light-desktop.png": "/Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline/screenshots/qwen38-flash-next-nvfp4-about-light-desktop.png",
+      "qwen38-flash-next-nvfp4-about-light-phone.png": "/Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline/screenshots/qwen38-flash-next-nvfp4-about-light-phone.png",
+      "qwen38-flash-next-nvfp4-home-dark-desktop.png": "/Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline/screenshots/qwen38-flash-next-nvfp4-home-dark-desktop.png",
+      "qwen38-flash-next-nvfp4-home-dark-phone.png": "/Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline/screenshots/qwen38-flash-next-nvfp4-home-dark-phone.png",
+      "qwen38-flash-next-nvfp4-home-light-desktop.png": "/Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline/screenshots/qwen38-flash-next-nvfp4-home-light-desktop.png",
+      "qwen38-flash-next-nvfp4-home-light-phone.png": "/Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline/screenshots/qwen38-flash-next-nvfp4-home-light-phone.png",
+      "qwen38-flash-next-nvfp4-research-dark-desktop.png": "/Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline/screenshots/qwen38-flash-next-nvfp4-research-dark-desktop.png",
+      "qwen38-flash-next-nvfp4-research-dark-phone.png": "/Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline/screenshots/qwen38-flash-next-nvfp4-research-dark-phone.png",
+      "qwen38-flash-next-nvfp4-research-light-desktop.png": "/Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline/screenshots/qwen38-flash-next-nvfp4-research-light-desktop.png",
+      "qwen38-flash-next-nvfp4-research-light-phone.png": "/Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline/screenshots/qwen38-flash-next-nvfp4-research-light-phone.png"
+    },
+    "cached_tokens": 9032000,
+    "last_call": null,
+    "tool_time_by_tool": {
+      "bash": 5257,
+      "edit": 23,
+      "glob": 0,
+      "job": 529,
+      "preview": 1170,
+      "read": 13,
+      "todo": 10,
+      "tree": 122,
+      "write": 26
+    },
+    "rounds": 85,
+    "scores": {
+      "composites_reused": 7,
+      "components_added": 6,
+      "lint_warnings": 0,
+      "page_height": 2417,
+      "tests_added": 7,
+      "tests_total": 11
+    },
+    "assistant_messages": 85,
+    "turns": 1,
+    "nudges": 0,
+    "final_line": "Built the JobyCorp site — three pages (`/`, `/research`, `/about`) on a JobyCorp nav (`main-nav`/`nav-toggle`/`theme-toggle`, `aria-current`) and JobyCorp footer, with the DESIGN.md palette in `app.css` (light + dark), a plotting-paper record-card composite and spec-row/table composites reused across pages, generator demo and `/design` links removed, render tests per page, and no horizontal overflow at 390px — `mix precommit` and `mix joby_kit.lint` both green.",
+    "tools": {
+      "bash": 13,
+      "edit": 20,
+      "glob": 1,
+      "job": 2,
+      "preview": 27,
+      "read": 20,
+      "todo": 2,
+      "tree": 4,
+      "write": 11
+    },
+    "work_dir": "/Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline/work/qwen38-flash-next-nvfp4",
+    "uncached_prompt_tokens": 474429,
+    "render": {
+      "about": {
+        "dark": {
+          "desktop": {
+            "bg": "rgb(17, 22, 30)",
+            "contrast_checked": 34,
+            "contrast_fail_count": 0,
+            "contrast_fails": [],
+            "current": [
+              "/about"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 2016,
+            "icons": 3,
+            "icons_unresolved": [],
+            "inner_width": 1440,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 1440,
+            "text": "JobyCorp\nHome\nResearch\nAbout\nA small lab that measures things\n\nJobyCorp is a local AI research company. We run language models on hardware we own, measure what they do, and share the work openly with the community that builds and uses these models.\n\nWe are not a product or a provider. The point of the work is the measurement: what a model actually does on a machine, described exactly enough for someone else to check it.\n\nshared\nWhat we share\n\nEverything a result depends on goes out with the result. Not a headline number — the whole record.\n\nartifact\twhat we publish\nrecords\tthe full record of every run, fields and units intact\nprompts\tthe exact prompt set each result came from\nmethod\tthe protocol, versioned and kept fixed\nhardware\tthe device each run was measured on\nWhy we share it\n\nA result is worth more shared than kept. Publishing the record lets the work be checked, reproduced, and argued with on the evidence.\n\ntrust\nA number no one can check is worth little. The record lets a reader verify it or disagree on the evidence.\nreproduce\nWith the prompts, seeds, and hardware named, a result is a starting point rather than a claim to take on faith.\ncommon ground\nLocal models belong to a community. The measurements are meant to be a shared reference, not a competitive edge.\nRead the research\nJobyCorp\n\nWe run language models on our own hardware, measure them, and publish the results in full.\n\nHome\nResearch\nAbout",
+            "theme": "dark",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "About · JobyKit",
+            "toggle_visible": false
+          },
+          "phone": {
+            "bg": "rgb(17, 22, 30)",
+            "contrast_checked": 31,
+            "contrast_fail_count": 0,
+            "contrast_fails": [],
+            "current": [
+              "/about"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 2158,
+            "icons": 4,
+            "icons_unresolved": [],
+            "inner_width": 390,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 390,
+            "text": "JobyCorp\nA small lab that measures things\n\nJobyCorp is a local AI research company. We run language models on hardware we own, measure what they do, and share the work openly with the community that builds and uses these models.\n\nWe are not a product or a provider. The point of the work is the measurement: what a model actually does on a machine, described exactly enough for someone else to check it.\n\nshared\nWhat we share\n\nEverything a result depends on goes out with the result. Not a headline number — the whole record.\n\nartifact\twhat we publish\nrecords\tthe full record of every run, fields and units intact\nprompts\tthe exact prompt set each result came from\nmethod\tthe protocol, versioned and kept fixed\nhardware\tthe device each run was measured on\nWhy we share it\n\nA result is worth more shared than kept. Publishing the record lets the work be checked, reproduced, and argued with on the evidence.\n\ntrust\nA number no one can check is worth little. The record lets a reader verify it or disagree on the evidence.\nreproduce\nWith the prompts, seeds, and hardware named, a result is a starting point rather than a claim to take on faith.\ncommon ground\nLocal models belong to a community. The measurements are meant to be a shared reference, not a competitive edge.\nRead the research\nJobyCorp\n\nWe run language models on our own hardware, measure them, and publish the results in full.\n\nHome\nResearch\nAbout",
+            "theme": "dark",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "About · JobyKit",
+            "toggle_visible": true
+          }
+        },
+        "light": {
+          "desktop": {
+            "bg": "rgb(246, 249, 251)",
+            "contrast_checked": 34,
+            "contrast_fail_count": 2,
+            "contrast_fails": [
+              "th 4.24<4.5 \"artifact\"",
+              "th 4.24<4.5 \"what we publish\""
+            ],
+            "current": [
+              "/about"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 2016,
+            "icons": 3,
+            "icons_unresolved": [],
+            "inner_width": 1440,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 1440,
+            "text": "JobyCorp\nHome\nResearch\nAbout\nA small lab that measures things\n\nJobyCorp is a local AI research company. We run language models on hardware we own, measure what they do, and share the work openly with the community that builds and uses these models.\n\nWe are not a product or a provider. The point of the work is the measurement: what a model actually does on a machine, described exactly enough for someone else to check it.\n\nshared\nWhat we share\n\nEverything a result depends on goes out with the result. Not a headline number — the whole record.\n\nartifact\twhat we publish\nrecords\tthe full record of every run, fields and units intact\nprompts\tthe exact prompt set each result came from\nmethod\tthe protocol, versioned and kept fixed\nhardware\tthe device each run was measured on\nWhy we share it\n\nA result is worth more shared than kept. Publishing the record lets the work be checked, reproduced, and argued with on the evidence.\n\ntrust\nA number no one can check is worth little. The record lets a reader verify it or disagree on the evidence.\nreproduce\nWith the prompts, seeds, and hardware named, a result is a starting point rather than a claim to take on faith.\ncommon ground\nLocal models belong to a community. The measurements are meant to be a shared reference, not a competitive edge.\nRead the research\nJobyCorp\n\nWe run language models on our own hardware, measure them, and publish the results in full.\n\nHome\nResearch\nAbout",
+            "theme": "light",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "About · JobyKit",
+            "toggle_visible": false
+          },
+          "phone": {
+            "bg": "rgb(246, 249, 251)",
+            "contrast_checked": 31,
+            "contrast_fail_count": 2,
+            "contrast_fails": [
+              "th 4.24<4.5 \"artifact\"",
+              "th 4.24<4.5 \"what we publish\""
+            ],
+            "current": [
+              "/about"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 2158,
+            "icons": 4,
+            "icons_unresolved": [],
+            "inner_width": 390,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 390,
+            "text": "JobyCorp\nA small lab that measures things\n\nJobyCorp is a local AI research company. We run language models on hardware we own, measure what they do, and share the work openly with the community that builds and uses these models.\n\nWe are not a product or a provider. The point of the work is the measurement: what a model actually does on a machine, described exactly enough for someone else to check it.\n\nshared\nWhat we share\n\nEverything a result depends on goes out with the result. Not a headline number — the whole record.\n\nartifact\twhat we publish\nrecords\tthe full record of every run, fields and units intact\nprompts\tthe exact prompt set each result came from\nmethod\tthe protocol, versioned and kept fixed\nhardware\tthe device each run was measured on\nWhy we share it\n\nA result is worth more shared than kept. Publishing the record lets the work be checked, reproduced, and argued with on the evidence.\n\ntrust\nA number no one can check is worth little. The record lets a reader verify it or disagree on the evidence.\nreproduce\nWith the prompts, seeds, and hardware named, a result is a starting point rather than a claim to take on faith.\ncommon ground\nLocal models belong to a community. The measurements are meant to be a shared reference, not a competitive edge.\nRead the research\nJobyCorp\n\nWe run language models on our own hardware, measure them, and publish the results in full.\n\nHome\nResearch\nAbout",
+            "theme": "light",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "About · JobyKit",
+            "toggle_visible": true
+          }
+        }
+      },
+      "home": {
+        "dark": {
+          "desktop": {
+            "bg": "rgb(17, 22, 30)",
+            "contrast_checked": 63,
+            "contrast_fail_count": 0,
+            "contrast_fails": [],
+            "current": [
+              "/"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 2417,
+            "icons": 3,
+            "icons_unresolved": [],
+            "inner_width": 1440,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 1440,
+            "text": "JobyCorp\nHome\nResearch\nAbout\nLocal models, measured on local hardware.\n\nJobyCorp runs language models on machines we own, measures what they do, and publishes every result in full — fields, units, and method included.\n\nRead the research\nrun record\nRECORD\nmodel\nid\nquantization\npreset\nprompt tokens\ncount\ngenerated tokens\ncount\nttft\nms\nthroughput\ntok/s\nhardware\ndevice\nseed\nint\n\nWhat every published run carries.\n\nmeasure\nWhat we measure\n\nFour quantities, measured the same way on every run so results compare across models and machines. The table names each field and the unit it is reported in.\n\nfield\tunit\twhat it captures\nttft\tms\tTime to the first token, cold.\ndecode\ttok/s\tTokens generated per second once decoding starts.\nprompt\ttok/s\tTokens read per second while the prompt is processed.\npeak\tMiB\tResident memory held by the running model.\nhardware\nLocal by construction\n\nNothing in this pipeline depends on a provider we do not control. The whole run — load, generate, record — happens on hardware we own and can describe exactly.\n\nmodels\nOpen-weight models that run locally, each pinned to a specific revision.\nhardware\nOur own machines. Every record names the device it ran on.\nmethod\nOne protocol, fixed before the first run: same prompts, same seeds, same metrics.\nresults\nPublished in full — the raw record, not a summary of it.\nRead the research\n\nThe method page sets out what we publish and how each run is tested.\n\nRead the research\nJobyCorp\n\nWe run language models on our own hardware, measure them, and publish the results in full.\n\nHome\nResearch\nAbout",
+            "theme": "dark",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "JobyCorp · JobyKit",
+            "toggle_visible": false
+          },
+          "phone": {
+            "bg": "rgb(17, 22, 30)",
+            "contrast_checked": 60,
+            "contrast_fail_count": 0,
+            "contrast_fails": [],
+            "current": [
+              "/"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 2941,
+            "icons": 4,
+            "icons_unresolved": [],
+            "inner_width": 390,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 390,
+            "text": "JobyCorp\nLocal models, measured on local hardware.\n\nJobyCorp runs language models on machines we own, measures what they do, and publishes every result in full — fields, units, and method included.\n\nRead the research\nrun record\nRECORD\nmodel\nid\nquantization\npreset\nprompt tokens\ncount\ngenerated tokens\ncount\nttft\nms\nthroughput\ntok/s\nhardware\ndevice\nseed\nint\n\nWhat every published run carries.\n\nmeasure\nWhat we measure\n\nFour quantities, measured the same way on every run so results compare across models and machines. The table names each field and the unit it is reported in.\n\nfield\tunit\twhat it captures\nttft\tms\tTime to the first token, cold.\ndecode\ttok/s\tTokens generated per second once decoding starts.\nprompt\ttok/s\tTokens read per second while the prompt is processed.\npeak\tMiB\tResident memory held by the running model.\nhardware\nLocal by construction\n\nNothing in this pipeline depends on a provider we do not control. The whole run — load, generate, record — happens on hardware we own and can describe exactly.\n\nmodels\nOpen-weight models that run locally, each pinned to a specific revision.\nhardware\nOur own machines. Every record names the device it ran on.\nmethod\nOne protocol, fixed before the first run: same prompts, same seeds, same metrics.\nresults\nPublished in full — the raw record, not a summary of it.\nRead the research\n\nThe method page sets out what we publish and how each run is tested.\n\nRead the research\nJobyCorp\n\nWe run language models on our own hardware, measure them, and publish the results in full.\n\nHome\nResearch\nAbout",
+            "theme": "dark",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "JobyCorp · JobyKit",
+            "toggle_visible": true
+          }
+        },
+        "light": {
+          "desktop": {
+            "bg": "rgb(246, 249, 251)",
+            "contrast_checked": 63,
+            "contrast_fail_count": 3,
+            "contrast_fails": [
+              "th 4.24<4.5 \"field\"",
+              "th 4.24<4.5 \"unit\"",
+              "th 4.24<4.5 \"what it captures\""
+            ],
+            "current": [
+              "/"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 2417,
+            "icons": 3,
+            "icons_unresolved": [],
+            "inner_width": 1440,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 1440,
+            "text": "JobyCorp\nHome\nResearch\nAbout\nLocal models, measured on local hardware.\n\nJobyCorp runs language models on machines we own, measures what they do, and publishes every result in full — fields, units, and method included.\n\nRead the research\nrun record\nRECORD\nmodel\nid\nquantization\npreset\nprompt tokens\ncount\ngenerated tokens\ncount\nttft\nms\nthroughput\ntok/s\nhardware\ndevice\nseed\nint\n\nWhat every published run carries.\n\nmeasure\nWhat we measure\n\nFour quantities, measured the same way on every run so results compare across models and machines. The table names each field and the unit it is reported in.\n\nfield\tunit\twhat it captures\nttft\tms\tTime to the first token, cold.\ndecode\ttok/s\tTokens generated per second once decoding starts.\nprompt\ttok/s\tTokens read per second while the prompt is processed.\npeak\tMiB\tResident memory held by the running model.\nhardware\nLocal by construction\n\nNothing in this pipeline depends on a provider we do not control. The whole run — load, generate, record — happens on hardware we own and can describe exactly.\n\nmodels\nOpen-weight models that run locally, each pinned to a specific revision.\nhardware\nOur own machines. Every record names the device it ran on.\nmethod\nOne protocol, fixed before the first run: same prompts, same seeds, same metrics.\nresults\nPublished in full — the raw record, not a summary of it.\nRead the research\n\nThe method page sets out what we publish and how each run is tested.\n\nRead the research\nJobyCorp\n\nWe run language models on our own hardware, measure them, and publish the results in full.\n\nHome\nResearch\nAbout",
+            "theme": "light",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "JobyCorp · JobyKit",
+            "toggle_visible": false
+          },
+          "phone": {
+            "bg": "rgb(246, 249, 251)",
+            "contrast_checked": 60,
+            "contrast_fail_count": 3,
+            "contrast_fails": [
+              "th 4.24<4.5 \"field\"",
+              "th 4.24<4.5 \"unit\"",
+              "th 4.24<4.5 \"what it captures\""
+            ],
+            "current": [
+              "/"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 2941,
+            "icons": 4,
+            "icons_unresolved": [],
+            "inner_width": 390,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 390,
+            "text": "JobyCorp\nLocal models, measured on local hardware.\n\nJobyCorp runs language models on machines we own, measures what they do, and publishes every result in full — fields, units, and method included.\n\nRead the research\nrun record\nRECORD\nmodel\nid\nquantization\npreset\nprompt tokens\ncount\ngenerated tokens\ncount\nttft\nms\nthroughput\ntok/s\nhardware\ndevice\nseed\nint\n\nWhat every published run carries.\n\nmeasure\nWhat we measure\n\nFour quantities, measured the same way on every run so results compare across models and machines. The table names each field and the unit it is reported in.\n\nfield\tunit\twhat it captures\nttft\tms\tTime to the first token, cold.\ndecode\ttok/s\tTokens generated per second once decoding starts.\nprompt\ttok/s\tTokens read per second while the prompt is processed.\npeak\tMiB\tResident memory held by the running model.\nhardware\nLocal by construction\n\nNothing in this pipeline depends on a provider we do not control. The whole run — load, generate, record — happens on hardware we own and can describe exactly.\n\nmodels\nOpen-weight models that run locally, each pinned to a specific revision.\nhardware\nOur own machines. Every record names the device it ran on.\nmethod\nOne protocol, fixed before the first run: same prompts, same seeds, same metrics.\nresults\nPublished in full — the raw record, not a summary of it.\nRead the research\n\nThe method page sets out what we publish and how each run is tested.\n\nRead the research\nJobyCorp\n\nWe run language models on our own hardware, measure them, and publish the results in full.\n\nHome\nResearch\nAbout",
+            "theme": "light",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "JobyCorp · JobyKit",
+            "toggle_visible": true
+          }
+        }
+      },
+      "research": {
+        "dark": {
+          "desktop": {
+            "bg": "rgb(17, 22, 30)",
+            "contrast_checked": 56,
+            "contrast_fail_count": 0,
+            "contrast_fails": [],
+            "current": [
+              "/research"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 2103,
+            "icons": 3,
+            "icons_unresolved": [],
+            "inner_width": 1440,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 1440,
+            "text": "JobyCorp\nHome\nResearch\nAbout\nHow a run is published\n\nWe publish the record, not a summary of it. Each release bundles the fields a run was measured on, so a reader can check the method or run it again themselves.\n\nrelease record\nRECORD\nmodel\nid\nprompts\nset id\nseeds\ncount\nttft\nms\ndecode\ntok/s\npeak\nMiB\nmethod\nversion\n\nWhat a published release bundles.\n\nmethod\nHow a run is tested\n\nOne protocol, applied the same way every time. The steps run in order; each one is fixed before the next begins.\n\n01\nPin the model to a fixed revision and the runtime to a fixed build.\n02\nFix the prompts, seeds, and metrics before the first run — never chosen after.\n03\nLoad and run locally, on hardware named in the record.\n04\nRecord every field from the run itself; nothing is filled in later.\n05\nPublish the full record, so the result can be checked or reproduced.\nheld fixed\nWhat stays the same\n\nComparisons only mean something when everything except the model is held fixed. Each input is named and shared alongside the results.\n\ninput\tfixed by\nprompts\ta named set, shared with the results\nseeds\tchosen before the run and listed per result\nrevision\ta pinned model and runtime build\ndevice\tnamed in every record\nmetrics\tthe same four, measured the same way\nJobyCorp\n\nWe run language models on our own hardware, measure them, and publish the results in full.\n\nHome\nResearch\nAbout",
+            "theme": "dark",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "Research · JobyKit",
+            "toggle_visible": false
+          },
+          "phone": {
+            "bg": "rgb(17, 22, 30)",
+            "contrast_checked": 53,
+            "contrast_fail_count": 0,
+            "contrast_fails": [],
+            "current": [
+              "/research"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 2422,
+            "icons": 4,
+            "icons_unresolved": [],
+            "inner_width": 390,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 390,
+            "text": "JobyCorp\nHow a run is published\n\nWe publish the record, not a summary of it. Each release bundles the fields a run was measured on, so a reader can check the method or run it again themselves.\n\nrelease record\nRECORD\nmodel\nid\nprompts\nset id\nseeds\ncount\nttft\nms\ndecode\ntok/s\npeak\nMiB\nmethod\nversion\n\nWhat a published release bundles.\n\nmethod\nHow a run is tested\n\nOne protocol, applied the same way every time. The steps run in order; each one is fixed before the next begins.\n\n01\nPin the model to a fixed revision and the runtime to a fixed build.\n02\nFix the prompts, seeds, and metrics before the first run — never chosen after.\n03\nLoad and run locally, on hardware named in the record.\n04\nRecord every field from the run itself; nothing is filled in later.\n05\nPublish the full record, so the result can be checked or reproduced.\nheld fixed\nWhat stays the same\n\nComparisons only mean something when everything except the model is held fixed. Each input is named and shared alongside the results.\n\ninput\tfixed by\nprompts\ta named set, shared with the results\nseeds\tchosen before the run and listed per result\nrevision\ta pinned model and runtime build\ndevice\tnamed in every record\nmetrics\tthe same four, measured the same way\nJobyCorp\n\nWe run language models on our own hardware, measure them, and publish the results in full.\n\nHome\nResearch\nAbout",
+            "theme": "dark",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "Research · JobyKit",
+            "toggle_visible": true
+          }
+        },
+        "light": {
+          "desktop": {
+            "bg": "rgb(246, 249, 251)",
+            "contrast_checked": 56,
+            "contrast_fail_count": 2,
+            "contrast_fails": [
+              "th 4.24<4.5 \"input\"",
+              "th 4.24<4.5 \"fixed by\""
+            ],
+            "current": [
+              "/research"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 2103,
+            "icons": 3,
+            "icons_unresolved": [],
+            "inner_width": 1440,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 1440,
+            "text": "JobyCorp\nHome\nResearch\nAbout\nHow a run is published\n\nWe publish the record, not a summary of it. Each release bundles the fields a run was measured on, so a reader can check the method or run it again themselves.\n\nrelease record\nRECORD\nmodel\nid\nprompts\nset id\nseeds\ncount\nttft\nms\ndecode\ntok/s\npeak\nMiB\nmethod\nversion\n\nWhat a published release bundles.\n\nmethod\nHow a run is tested\n\nOne protocol, applied the same way every time. The steps run in order; each one is fixed before the next begins.\n\n01\nPin the model to a fixed revision and the runtime to a fixed build.\n02\nFix the prompts, seeds, and metrics before the first run — never chosen after.\n03\nLoad and run locally, on hardware named in the record.\n04\nRecord every field from the run itself; nothing is filled in later.\n05\nPublish the full record, so the result can be checked or reproduced.\nheld fixed\nWhat stays the same\n\nComparisons only mean something when everything except the model is held fixed. Each input is named and shared alongside the results.\n\ninput\tfixed by\nprompts\ta named set, shared with the results\nseeds\tchosen before the run and listed per result\nrevision\ta pinned model and runtime build\ndevice\tnamed in every record\nmetrics\tthe same four, measured the same way\nJobyCorp\n\nWe run language models on our own hardware, measure them, and publish the results in full.\n\nHome\nResearch\nAbout",
+            "theme": "light",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "Research · JobyKit",
+            "toggle_visible": false
+          },
+          "phone": {
+            "bg": "rgb(246, 249, 251)",
+            "contrast_checked": 53,
+            "contrast_fail_count": 2,
+            "contrast_fails": [
+              "th 4.24<4.5 \"input\"",
+              "th 4.24<4.5 \"fixed by\""
+            ],
+            "current": [
+              "/research"
+            ],
+            "demo_links": [],
+            "demo_text": [],
+            "height": 2422,
+            "icons": 4,
+            "icons_unresolved": [],
+            "inner_width": 390,
+            "nav": true,
+            "nav_links_visible": true,
+            "scroll_width": 390,
+            "text": "JobyCorp\nHow a run is published\n\nWe publish the record, not a summary of it. Each release bundles the fields a run was measured on, so a reader can check the method or run it again themselves.\n\nrelease record\nRECORD\nmodel\nid\nprompts\nset id\nseeds\ncount\nttft\nms\ndecode\ntok/s\npeak\nMiB\nmethod\nversion\n\nWhat a published release bundles.\n\nmethod\nHow a run is tested\n\nOne protocol, applied the same way every time. The steps run in order; each one is fixed before the next begins.\n\n01\nPin the model to a fixed revision and the runtime to a fixed build.\n02\nFix the prompts, seeds, and metrics before the first run — never chosen after.\n03\nLoad and run locally, on hardware named in the record.\n04\nRecord every field from the run itself; nothing is filled in later.\n05\nPublish the full record, so the result can be checked or reproduced.\nheld fixed\nWhat stays the same\n\nComparisons only mean something when everything except the model is held fixed. Each input is named and shared alongside the results.\n\ninput\tfixed by\nprompts\ta named set, shared with the results\nseeds\tchosen before the run and listed per result\nrevision\ta pinned model and runtime build\ndevice\tnamed in every record\nmetrics\tthe same four, measured the same way\nJobyCorp\n\nWe run language models on our own hardware, measure them, and publish the results in full.\n\nHome\nResearch\nAbout",
+            "theme": "light",
+            "theme_toggle": true,
+            "theme_toggle_visible": true,
+            "title": "Research · JobyKit",
+            "toggle_visible": true
+          }
+        }
+      }
+    },
+    "tool_calls": 100,
+    "diff": {
+      "files": 15,
+      "stat": " test/benchapp_web/live/home_live_test.exs          |  28 +++ |  test/benchapp_web/live/research_live_test.exs      |  20 ++ |  15 files changed, 816 insertions(+), 283 deletions(-)",
+      "patch": "raw/diff-qwen38-flash-next-nvfp4.patch",
+      "insertions": 816,
+      "deletions": 283
+    },
+    "wall_ms": 1741281,
+    "failed": 0,
+    "outcome": "done",
+    "failures": [],
+    "refused": 0,
+    "ttft_ms": 1411,
+    "decode_rounds": 81,
+    "session_id": "bb749fdd-2e8e-4c43-900e-4984c7338aa3",
+    "checks": {
+      "compile": {
+        "pass": true,
+        "detail": ""
+      },
+      "lint": {
+        "pass": true,
+        "detail": "JobyKit lint — BenchappWeb.DesignManifest |  |   ✓ Clean. Wrapper contract holds across the manifest."
+      },
+      "test": {
+        "pass": true,
+        "detail": "........... | Finished in 0.09 seconds (0.09s async, 0.00s sync) | 11 tests, 0 failures"
+      },
+      "boots": {
+        "pass": true,
+        "detail": "GET / 200 with a nav"
+      },
+      "contrast": {
+        "pass": false,
+        "detail": "about/light/desktop: 2 — th 4.24<4.5 \"artifact\"; th 4.24<4.5 \"what we publish\" | about/light/phone: 2 — th 4.24<4.5 \"artifact\"; th 4.24<4.5 \"what we publish\" | home/light/desktop: 3 — th 4.24<4.5 \"field\"; th 4.24<4.5 \"unit\"; th 4.24<4.5 \"what it captures\" | home/light/phone: 3 — th 4.24<4.5 \"field\"; th 4.24<4.5 \"unit\"; th 4.24<4.5 \"what it captures\" | research/light/desktop: 2 — th 4.24<4.5 \"input\"; th 4.24<4.5 \"fixed by\" | research/light/phone: 2 — th 4.24<4.5 \"input\"; th 4.24<4.5 \"fixed by\""
+      },
+      "copy_clean": {
+        "pass": true,
+        "detail": "no kit, framework, or task words in the rendered copy"
+      },
+      "dark_theme": {
+        "pass": true,
+        "detail": "data-theme \"light\" → \"dark\", body bg rgb(246, 249, 251) → rgb(17, 22, 30)"
+      },
+      "demo_gone": {
+        "pass": true,
+        "detail": "no link to or mention of the kit's demo pages"
+      },
+      "icons_resolve": {
+        "pass": true,
+        "detail": "42 heroicon(s), all resolved"
+      },
+      "mobile_nav": {
+        "pass": true,
+        "detail": "at 390 px: nav-toggle visible true, nav links visible true"
+      },
+      "nav_current": {
+        "pass": true,
+        "detail": "aria-current=page on exactly the current link, all three pages"
+      },
+      "no_overflow": {
+        "pass": true,
+        "detail": "no horizontal overflow at 390 px on any page or theme"
+      },
+      "routes": {
+        "pass": true,
+        "detail": "12 page loads, each with #main-nav"
+      },
+      "theme_toggle_mobile": {
+        "pass": true,
+        "detail": "at 390 px: theme-toggle present true, visible true"
+      },
+      "composite_registered": {
+        "pass": true,
+        "detail": "6 app component(s) registered beyond the generator's"
+      },
+      "composite_reused": {
+        "pass": true,
+        "detail": "used on two or more pages: record_card, spec_row, page_body, lede, section, figure_table, prose_cell"
+      },
+      "layout_replaced": {
+        "pass": true,
+        "detail": "the generator's stock nav+footer markers are gone from Layouts.app"
+      },
+      "page_tests": {
+        "pass": true,
+        "detail": "11 tests ran, 4 are the generator's (a render test per new page asked)"
+      },
+      "theme_pair": {
+        "pass": true,
+        "detail": "light primary oklch(48% 0.11 195) (want L≈48.0 h≈195.0); dark base-100 oklch(20% 0.018 255) (want L ≤ 20.0)"
+      }
+    },
+    "green_at": 82
+  },
+  "finished_utc": "2026-09-11T09:01:46Z",
+  "started_utc": "2026-09-11T08:30:29Z"
+}

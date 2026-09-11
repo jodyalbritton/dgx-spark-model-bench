@@ -1,0 +1,1202 @@
+diff --git a/assets/css/app.css b/assets/css/app.css
+index 4661553..72ca6ff 100644
+--- a/assets/css/app.css
++++ b/assets/css/app.css
+@@ -19,26 +19,27 @@
+   themes: false;
+ }
+ 
+-/* daisyUI theme plugin.
+-  We ship with two themes, a light one inspired on Phoenix colors and a dark one inspired
+-  on Elixir colors. Build your own at: https://daisyui.com/theme-generator/ */
++/* JobyCorp themes: a cool page, graphite ink, and one signal-teal accent.
++
++  light — a cool white page, graphite ink
++  dark  — the instrument at night, deep blue-slate (never black)          */
+ @plugin "daisyui/packages/bundle/daisyui-theme" {
+   name: "dark";
+   default: false;
+   prefersdark: true;
+   color-scheme: "dark";
+-  --color-base-100: oklch(30.33% 0.016 252.42);
+-  --color-base-200: oklch(25.26% 0.014 253.1);
+-  --color-base-300: oklch(20.15% 0.012 254.09);
+-  --color-base-content: oklch(97.807% 0.029 256.847);
+-  --color-primary: oklch(58% 0.233 277.117);
+-  --color-primary-content: oklch(96% 0.018 272.314);
+-  --color-secondary: oklch(58% 0.233 277.117);
+-  --color-secondary-content: oklch(96% 0.018 272.314);
+-  --color-accent: oklch(60% 0.25 292.717);
+-  --color-accent-content: oklch(96% 0.016 293.756);
+-  --color-neutral: oklch(37% 0.044 257.287);
+-  --color-neutral-content: oklch(98% 0.003 247.858);
++  --color-base-100: oklch(20% 0.018 255);
++  --color-base-200: oklch(24% 0.02 255);
++  --color-base-300: oklch(31% 0.022 255);
++  --color-base-content: oklch(92% 0.008 230);
++  --color-primary: oklch(78% 0.12 195);
++  --color-primary-content: oklch(18% 0.03 195);
++  --color-secondary: oklch(70% 0.13 195);
++  --color-secondary-content: oklch(18% 0.03 195);
++  --color-accent: oklch(70% 0.13 195);
++  --color-accent-content: oklch(18% 0.03 195);
++  --color-neutral: oklch(92% 0.008 230);
++  --color-neutral-content: oklch(20% 0.018 255);
+   --color-info: oklch(58% 0.158 241.966);
+   --color-info-content: oklch(97% 0.013 236.62);
+   --color-success: oklch(60% 0.118 184.704);
+@@ -47,13 +48,13 @@
+   --color-warning-content: oklch(98% 0.022 95.277);
+   --color-error: oklch(58% 0.253 17.585);
+   --color-error-content: oklch(96% 0.015 12.422);
+-  --radius-selector: 0.25rem;
+-  --radius-field: 0.25rem;
++  --radius-selector: 0.375rem;
++  --radius-field: 0.375rem;
+   --radius-box: 0.5rem;
+   --size-selector: 0.21875rem;
+   --size-field: 0.21875rem;
+-  --border: 1.5px;
+-  --depth: 1;
++  --border: 1px;
++  --depth: 0;
+   --noise: 0;
+ }
+ 
+@@ -62,18 +63,18 @@
+   default: true;
+   prefersdark: false;
+   color-scheme: "light";
+-  --color-base-100: oklch(98% 0 0);
+-  --color-base-200: oklch(96% 0.001 286.375);
+-  --color-base-300: oklch(92% 0.004 286.32);
+-  --color-base-content: oklch(21% 0.006 285.885);
+-  --color-primary: oklch(70% 0.213 47.604);
+-  --color-primary-content: oklch(98% 0.016 73.684);
+-  --color-secondary: oklch(55% 0.027 264.364);
+-  --color-secondary-content: oklch(98% 0.002 247.839);
+-  --color-accent: oklch(0% 0 0);
+-  --color-accent-content: oklch(100% 0 0);
+-  --color-neutral: oklch(44% 0.017 285.786);
+-  --color-neutral-content: oklch(98% 0 0);
++  --color-base-100: oklch(98% 0.004 230);
++  --color-base-200: oklch(95% 0.006 230);
++  --color-base-300: oklch(88% 0.008 230);
++  --color-base-content: oklch(23% 0.014 250);
++  --color-primary: oklch(48% 0.11 195);
++  --color-primary-content: oklch(97% 0.01 195);
++  --color-secondary: oklch(62% 0.13 195);
++  --color-secondary-content: oklch(20% 0.03 195);
++  --color-accent: oklch(62% 0.13 195);
++  --color-accent-content: oklch(20% 0.03 195);
++  --color-neutral: oklch(30% 0.012 250);
++  --color-neutral-content: oklch(96% 0.004 230);
+   --color-info: oklch(62% 0.214 259.815);
+   --color-info-content: oklch(97% 0.014 254.604);
+   --color-success: oklch(70% 0.14 182.503);
+@@ -82,13 +83,13 @@
+   --color-warning-content: oklch(98% 0.022 95.277);
+   --color-error: oklch(58% 0.253 17.585);
+   --color-error-content: oklch(96% 0.015 12.422);
+-  --radius-selector: 0.25rem;
+-  --radius-field: 0.25rem;
++  --radius-selector: 0.375rem;
++  --radius-field: 0.375rem;
+   --radius-box: 0.5rem;
+   --size-selector: 0.21875rem;
+   --size-field: 0.21875rem;
+-  --border: 1.5px;
+-  --depth: 1;
++  --border: 1px;
++  --depth: 0;
+   --noise: 0;
+ }
+ 
+@@ -103,4 +104,22 @@
+ /* Make LiveView wrapper divs transparent for layout */
+ [data-phx-session], [data-phx-teleported-src] { display: contents }
+ 
++/* The plotting-paper surface — the record card's grid. Used on the
++   record card and nothing else. A faint grid of the trace colour in
++   24 px cells, on the base-200 panel. */
++.record-paper {
++  background-color: var(--color-base-200);
++  background-image:
++    repeating-linear-gradient(
++      to right,
++      color-mix(in oklch, var(--color-secondary) 12%, transparent) 0 1px,
++      transparent 1px 24px
++    ),
++    repeating-linear-gradient(
++      to bottom,
++      color-mix(in oklch, var(--color-secondary) 12%, transparent) 0 1px,
++      transparent 1px 24px
++    );
++}
++
+ /* This file is for your main application CSS */
+diff --git a/lib/benchapp_web/components/composite_components.ex b/lib/benchapp_web/components/composite_components.ex
+index 37013da..019c9a6 100644
+--- a/lib/benchapp_web/components/composite_components.ex
++++ b/lib/benchapp_web/components/composite_components.ex
+@@ -4,8 +4,9 @@ defmodule BenchappWeb.CompositeComponents do
+ 
+   Composites live one layer above core wrappers: they bundle a small set
+   of `JobyKit.CoreComponents` primitives into a higher-level pattern that
+-  appears more than once across the app. Examples: empty states, page
+-  headers with breadcrumbs, callouts, hero blocks.
++  appears more than once across the app. Some are JobyCorp-page
++  scaffolding (`container`, `section`, `mono_label`, `prose`,
++  `two_column`) and one is the brand object — `record_card/1`.
+ 
+   Every composite follows the JobyKit wrapper contract:
+ 
+@@ -18,66 +19,194 @@ defmodule BenchappWeb.CompositeComponents do
+     5. Register the composite in `BenchappWeb.DesignManifest`
+        (`category: :composite`) so it surfaces on `/custom-designs` and
+        in `/design.json`.
+-
+-  The `empty_state/1` below ships pre-registered as a worked example.
+-  Use it as a template when you add your own composites: copy the
+-  attribute / slot / `data-component` shape, then register the new entry
+-  in the manifest.
+   """
+ 
+   use BenchappWeb, :html
+ 
+-  alias JobyKit.CoreComponents
++  @doc """
++  The centred content column for a page. `max-w-6xl`, padded `px-6` at
++  phone and `px-8` from `md`, top and bottom `py-16` / `py-24`.
++
++      <.container>
++        … page content …
++      </.container>
++  """
++  attr :class, :any, default: nil
++  attr :rest, :global
++  slot :inner_block, required: true
++
++  def container(assigns) do
++    ~H"""
++    <div
++      data-component="BenchappWeb.CompositeComponents.container"
++      class={["mx-auto max-w-6xl px-6 py-16 md:px-8 md:py-24", @class]}
++      {@rest}
++    >
++      {render_slot(@inner_block)}
++    </div>
++    """
++  end
+ 
+   @doc """
+-  An empty-state callout: centered icon, title, supporting text, and an
+-  optional action slot. Use to fill an otherwise-empty container — an
+-  unfilled list, a search with no results, a fresh dashboard.
+-
+-      <.empty_state icon="hero-inbox" title="No messages yet">
+-        Start a conversation with a teammate to see it here.
+-        <:action>
+-          <CoreComponents.button variant="primary">New message</CoreComponents.button>
+-        </:action>
+-      </.empty_state>
++  A full-width data or prose section: a hairline, the centred column,
++  an optional monospace running head, an optional heading, and the body.
++
++      <.section running_head="measurements" heading="What a run measures">
++        <.prose>Body copy.</.prose>
++      </.section>
++
++  The running head (monospace, secondary colour) is the technical
++  vernacular used only where the content is data. Omit it for prose
++  sections, which open on their heading alone.
+   """
+-  attr :icon, :string,
+-    default: "hero-sparkles",
+-    doc: "Heroicon name to display above the title."
++  attr :running_head, :string, default: nil
++  attr :heading, :string, default: nil
++  attr :class, :any, default: nil
++  attr :rest, :global
++  slot :inner_block, required: true
+ 
+-  attr :title, :string, required: true
+-  attr :tone, :string, values: ~w(neutral primary), default: "neutral"
++  def section(assigns) do
++    ~H"""
++    <section
++      data-component="BenchappWeb.CompositeComponents.section"
++      class={["border-t border-base-300", @class]}
++      {@rest}
++    >
++      <.container>
++        <div class="space-y-8">
++          <.mono_label :if={@running_head}>{@running_head}</.mono_label>
++          <h2 :if={@heading} class="text-3xl font-semibold tracking-tight md:text-4xl">
++            {@heading}
++          </h2>
++          {render_slot(@inner_block)}
++        </div>
++      </.container>
++    </section>
++    """
++  end
++
++  @doc """
++  A monospace running head or field label in the secondary text colour.
++
++      <.mono_label>measurements</.mono_label>
++  """
++  attr :class, :any, default: nil
+   attr :rest, :global
++  slot :inner_block, required: true
++
++  def mono_label(assigns) do
++    ~H"""
++    <p
++      data-component="BenchappWeb.CompositeComponents.mono_label"
++      class={["font-mono text-sm text-base-content/70", @class]}
++      {@rest}
++    >
++      {render_slot(@inner_block)}
++    </p>
++    """
++  end
+ 
+-  slot :inner_block, doc: "Supporting copy beneath the title."
+-  slot :action, doc: "Optional call-to-action (typically a `<.button>`)."
++  @doc """
++  A reading paragraph at prose width, with the site's body measure.
+ 
+-  def empty_state(assigns) do
++      <.prose>One idea, two or three sentences.</.prose>
++  """
++  attr :class, :any, default: nil
++  attr :rest, :global
++  slot :inner_block, required: true
++
++  def prose(assigns) do
++    ~H"""
++    <p
++      data-component="BenchappWeb.CompositeComponents.prose"
++      class={["max-w-prose text-base leading-relaxed text-base-content/80 md:text-lg", @class]}
++      {@rest}
++    >
++      {render_slot(@inner_block)}
++    </p>
++    """
++  end
++
++  @doc """
++  A two-column layout used beside a figure: content on the left, an
++  object on the right, top-aligned.
++
++      <.two_column>
++        <:content>… reading …</:content>
++        <:figure><.record_card … /></:figure>
++      </.two_column>
++
++  At phone width the figure follows the content.
++  """
++  attr :class, :any, default: nil
++  attr :rest, :global
++  slot :content, required: true
++  slot :figure, required: true
++
++  def two_column(assigns) do
+     ~H"""
+     <div
+-      data-component="BenchappWeb.CompositeComponents.empty_state"
+-      class={[
+-        "flex flex-col items-center justify-center gap-3 rounded-2xl border border-dashed px-6 py-10 text-center",
+-        @tone == "neutral" && "border-base-300 bg-base-100/40 text-base-content/70",
+-        @tone == "primary" && "border-primary/30 bg-primary/5 text-base-content"
+-      ]}
++      data-component="BenchappWeb.CompositeComponents.two_column"
++      class={["grid items-start gap-12 lg:grid-cols-[minmax(0,1fr)_auto]", @class]}
+       {@rest}
+     >
+-      <span class={[
+-        "flex size-12 items-center justify-center rounded-full",
+-        @tone == "neutral" && "bg-base-200 text-base-content/60",
+-        @tone == "primary" && "bg-primary/10 text-primary"
+-      ]}>
+-        <CoreComponents.icon name={@icon} class="size-6" />
+-      </span>
+-      <h3 class="text-base font-semibold text-base-content">{@title}</h3>
+-      <div :if={@inner_block != []} class="max-w-sm text-sm text-base-content/65">
+-        {render_slot(@inner_block)}
+-      </div>
+-      <div :if={@action != []} class="pt-1">
+-        {render_slot(@action)}
+-      </div>
++      <div>{render_slot(@content)}</div>
++      <div class="justify-self-start lg:justify-self-end">{render_slot(@figure)}</div>
+     </div>
+     """
+   end
++
++  @doc """
++  A specimen of a JobyCorp run record on the plotting-paper surface.
++
++  The memorable object of the JobyCorp site. It shows the fields a record
++  carries and the unit each quantity is reported in — field names and
++  units only, never invented values. Set in monospace on a faint grid
++  drawn in CSS, framed by the accent.
++
++      <.record_card
++        title="run record"
++        rows={[
++          %{field: "model", unit: "identifier"},
++          %{field: "throughput", unit: "tokens / s"}
++        ]}
++      >
++        <:caption>Field names and units only.</:caption>
++      </.record_card>
++
++  A `:title` is the short monospace running head that names what the card
++  holds; `rows` are `%{field:, unit:}` maps.
++  """
++  attr :title, :string, default: "run record"
++  attr :rows, :list, default: [], doc: "Each row: %{field: string, unit: string}."
++  attr :class, :any, default: nil
++  attr :rest, :global
++
++  slot :caption, doc: "One-line note under the record, in the secondary text colour."
++
++  def record_card(assigns) do
++    ~H"""
++    <figure
++      data-component="BenchappWeb.CompositeComponents.record_card"
++      class={["record-paper max-w-xs rounded-box border border-secondary p-6", @class]}
++      {@rest}
++    >
++      <.mono_label>{@title}</.mono_label>
++
++      <dl class="mt-5 space-y-0">
++        <div
++          :for={row <- @rows}
++          class="flex items-baseline justify-between gap-6 border-b border-base-300/70 py-2 font-mono text-sm"
++        >
++          <dt>{row.field}</dt>
++          <dd class="text-base-content/70">{row.unit}</dd>
++        </div>
++      </dl>
++
++      <figcaption :if={@caption != []} class="mt-4 text-sm text-base-content/70">
++        {render_slot(@caption)}
++      </figcaption>
++    </figure>
++    """
++  end
+ end
+diff --git a/lib/benchapp_web/components/layouts.ex b/lib/benchapp_web/components/layouts.ex
+index 1b27aa1..6fe846b 100644
+--- a/lib/benchapp_web/components/layouts.ex
++++ b/lib/benchapp_web/components/layouts.ex
+@@ -8,7 +8,7 @@ defmodule BenchappWeb.Layouts do
+   every page gets them for free.
+ 
+   The chrome owns its own surface: the sticky bar draws the background
+-  and border edge-to-edge, and `simple_nav/1` inside it draws neither.
++  and border edge-to-edge, and `main_nav/1` inside it draws neither.
+   Splitting that between the two is what produces a seam where the
+   centred nav's max-width ends.
+   """
+@@ -21,42 +21,104 @@ defmodule BenchappWeb.Layouts do
+   attr :active_nav, :string, default: nil
+   slot :inner_block, required: true
+ 
++  @nav_links [
++    %{key: "home", label: "Home", href: "/"},
++    %{key: "research", label: "Research", href: "/research"},
++    %{key: "about", label: "About", href: "/about"}
++  ]
++
+   def app(assigns) do
++    assigns = assign(assigns, :nav_links, @nav_links)
++
+     ~H"""
+     <div class="flex min-h-dvh flex-col bg-base-100">
+-      <div class="sticky top-0 z-40 border-b border-base-300 bg-base-100/90 backdrop-blur">
+-        <div class="mx-auto w-full max-w-5xl px-4 sm:px-6">
+-          <JobyKit.NavComponent.simple_nav active={@active_nav} brand="Benchapp">
+-            <:actions>
+-              <JobyKit.CoreComponents.theme_toggle />
+-            </:actions>
+-          </JobyKit.NavComponent.simple_nav>
++      <header class="sticky top-0 z-40 border-b border-base-300 bg-base-100">
++        <div class="mx-auto max-w-6xl px-6 md:px-8">
++          <nav id="main-nav" class="flex items-center justify-between gap-4 py-4">
++            <.link navigate={~p"/"} class="flex items-center gap-2.5 font-semibold tracking-tight">
++              <span aria-hidden="true" class="size-2.5 shrink-0 border border-secondary"></span>
++              <span>JobyCorp</span>
++            </.link>
++
++            <ul class="hidden items-center gap-1 md:flex">
++              <li :for={link <- @nav_links}>
++                <.link
++                  navigate={link.href}
++                  aria-current={@active_nav == link.key && "page"}
++                  class={[
++                    "rounded-field px-3 py-2 text-sm font-medium text-base-content transition-colors duration-150",
++                    @active_nav == link.key && "text-primary"
++                  ]}
++                >
++                  {link.label}
++                </.link>
++              </li>
++            </ul>
++
++            <div class="flex items-center gap-1.5">
++              <div id="theme-toggle">
++                <JobyKit.CoreComponents.theme_toggle />
++              </div>
++
++              <.button
++                id="nav-toggle"
++                type="button"
++                shape="circle"
++                variant="ghost"
++                size="sm"
++                class="md:hidden"
++                phx-click={JS.toggle(to: "#mobile-menu")}
++                aria-label="Toggle navigation"
++              >
++                <.icon name="hero-bars-3" class="size-5" />
++              </.button>
++            </div>
++          </nav>
++
++          <div id="mobile-menu" class="hidden border-t border-base-300 pb-4 pt-2 md:hidden">
++            <ul class="flex flex-col gap-1">
++              <li :for={link <- @nav_links}>
++                <.link
++                  navigate={link.href}
++                  aria-current={@active_nav == link.key && "page"}
++                  phx-click={JS.toggle(to: "#mobile-menu")}
++                  class={[
++                    "rounded-field px-3 py-2 text-sm font-medium text-base-content transition-colors duration-150",
++                    @active_nav == link.key && "text-primary"
++                  ]}
++                >
++                  {link.label}
++                </.link>
++              </li>
++            </ul>
++          </div>
+         </div>
+-      </div>
++      </header>
+ 
+       <main class="flex-1">
+         {render_slot(@inner_block)}
+       </main>
+ 
+       <footer class="border-t border-base-300">
+-        <div class="mx-auto flex max-w-5xl flex-col gap-3 px-4 py-6 text-xs text-base-content/60 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+-          <p>
+-            Benchapp · built with
+-            <.link
+-              href="https://github.com/jobycorp/joby_kit"
+-              class="link link-hover font-medium"
+-              target="_blank"
+-              rel="noopener"
+-            >
+-              JobyKit
+-            </.link>
+-          </p>
+-          <p class="flex gap-2 font-mono">
+-            <.link navigate={~p"/design"} class="link link-hover">/design</.link>
+-            <span aria-hidden="true" class="opacity-40">·</span>
+-            <.link navigate={~p"/custom-designs"} class="link link-hover">/custom-designs</.link>
+-            <span aria-hidden="true" class="opacity-40">·</span>
+-            <.link href={~p"/design.json"} class="link link-hover">/design.json</.link>
++        <div class="mx-auto flex max-w-6xl flex-col gap-3 px-6 py-8 text-sm md:flex-row md:items-center md:justify-between md:px-8">
++          <div class="flex items-center gap-2.5">
++            <span aria-hidden="true" class="size-2.5 shrink-0 border border-secondary"></span>
++            <span class="font-semibold tracking-tight">JobyCorp</span>
++          </div>
++
++          <ul class="flex flex-wrap gap-5">
++            <li :for={link <- @nav_links}>
++              <.link
++                navigate={link.href}
++                class="text-base-content/70 transition-colors duration-150 hover:text-primary"
++              >
++                {link.label}
++              </.link>
++            </li>
++          </ul>
++
++          <p class="max-w-md text-base-content/70">
++            Local models, measured on local hardware, results published in full.
+           </p>
+         </div>
+       </footer>
+diff --git a/lib/benchapp_web/components/layouts/root.html.heex b/lib/benchapp_web/components/layouts/root.html.heex
+index 7aa32b2..aa2802c 100644
+--- a/lib/benchapp_web/components/layouts/root.html.heex
++++ b/lib/benchapp_web/components/layouts/root.html.heex
+@@ -5,13 +5,13 @@
+     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+     <meta name="viewport" content="width=device-width, initial-scale=1" />
+     <meta name="csrf-token" content={get_csrf_token()} />
+-    <.live_title default="Benchapp" suffix=" · JobyKit">
++    <.live_title default="JobyCorp" suffix=" · local LLM research">
+       {assigns[:page_title]}
+     </.live_title>
+     <link phx-track-static rel="stylesheet" href={~p"/assets/css/app.css"} />
+     <script defer phx-track-static type="text/javascript" src={~p"/assets/js/app.js"}>
+     </script>
+-    
++
+     <script>
+       (() => {
+         const systemTheme = () =>
+diff --git a/lib/benchapp_web/design_manifest.ex b/lib/benchapp_web/design_manifest.ex
+index 0b9312a..db80e7b 100644
+--- a/lib/benchapp_web/design_manifest.ex
++++ b/lib/benchapp_web/design_manifest.ex
+@@ -17,28 +17,37 @@ defmodule BenchappWeb.DesignManifest do
+   alias BenchappWeb.CompositeComponents
+   alias BenchappWeb.DesignPreviews
+ 
+-  category :composite,
++  category(:composite,
+     label: "Generic composites",
+     description: "Multi-primitive patterns reused across domains."
++  )
+ 
+-  category :domain,
++  category(:domain,
+     label: "Domain composites",
+     description: "Composites tied to a product area."
++  )
+ 
+   # ----------------------------------------------------------------- composite
+-  # `empty_state` is the worked example — a real composite that bundles
+-  # `<.icon>` + a heading + an optional action slot. Use it as the
+-  # template for your own: copy the attr / slot / data-component shape,
+-  # register the entry here, and add a preview in `design_previews.ex`.
++  # JobyCorp-page scaffolding composites and the brand object.
+   #
+   # Generic composites belong in `BenchappWeb.CompositeComponents`;
+   # domain-specific ones in their own module (e.g.
+   # `BenchappWeb.ChatComponents`).
+ 
+-  component CompositeComponents, :empty_state,
+-    category: :composite,
+-    summary: "Centered icon + title + optional action; fills empty containers.",
+-    preview: &DesignPreviews.empty_state_preview/1
++  for {name, summary} <- [
++        container: "Centred content column (max-w-6xl, vertical rhythm).",
++        section: "Hairline data/prose section with optional running head and heading.",
++        mono_label: "Monospace running head or field label in the secondary colour.",
++        prose: "Reading paragraph at prose width.",
++        two_column: "Two-column layout with a content slot and a figure slot.",
++        record_card: "Specimen of a JobyCorp run record on a plotting-paper surface."
++      ] do
++    component(CompositeComponents, name,
++      category: :composite,
++      summary: summary,
++      preview: &DesignPreviews.composite_preview/1
++    )
++  end
+ 
+   # -------------------------------------------------------------------- domain
+   # Add domain composites here:
+diff --git a/lib/benchapp_web/design_previews.ex b/lib/benchapp_web/design_previews.ex
+index 613d9cd..32a4174 100644
+--- a/lib/benchapp_web/design_previews.ex
++++ b/lib/benchapp_web/design_previews.ex
+@@ -25,40 +25,48 @@ defmodule BenchappWeb.DesignPreviews do
+ 
+   use BenchappWeb, :html
+ 
+-  alias JobyKit.CoreComponents
+   alias BenchappWeb.CompositeComponents
+ 
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-  def empty_state_preview(assigns) do
++  def composite_preview(assigns) do
+     ~H"""
+-    <div class="grid gap-4 sm:grid-cols-2">
+-      <CompositeComponents.empty_state icon="hero-inbox" title="No messages yet">
+-        Start a conversation with a teammate to see it here.
+-        <:action>
+-          <CoreComponents.button variant="primary">New message</CoreComponents.button>
+-        </:action>
+-      </CompositeComponents.empty_state>
+-      <CompositeComponents.empty_state
+-        icon="hero-sparkles"
+-        title="Set up your workspace"
+-        tone="primary"
+-      >
+-        Connect your first integration to populate this dashboard.
+-      </CompositeComponents.empty_state>
++    <div class="grid gap-6">
++      <CompositeComponents.container class="!py-4">
++        <div class="space-y-4">
++          <CompositeComponents.section
++            class="!border-t-0"
++            running_head="measurements"
++            heading="What a run measures"
++          >
++            <CompositeComponents.prose>
++              The heading, running head, and body arrived together from one composite.
++            </CompositeComponents.prose>
++          </CompositeComponents.section>
++
++          <CompositeComponents.two_column>
++            <:content>
++              <div class="space-y-3">
++                <CompositeComponents.mono_label>content</CompositeComponents.mono_label>
++                <CompositeComponents.prose>
++                  Two columns: reading on the left, the figure on the right.
++                </CompositeComponents.prose>
++              </div>
++            </:content>
++            <:figure>
++              <CompositeComponents.record_card
++                title="run record"
++                rows={[
++                  %{field: "model", unit: "identifier"},
++                  %{field: "throughput", unit: "tokens / s"},
++                  %{field: "latency", unit: "ms / token"}
++                ]}
++              >
++                <:caption>Field names and units only.</:caption>
++              </CompositeComponents.record_card>
++            </:figure>
++          </CompositeComponents.two_column>
++        </div>
++      </CompositeComponents.container>
+     </div>
+     """
+   end
+-
+ end
+diff --git a/lib/benchapp_web/live/about_live.ex b/lib/benchapp_web/live/about_live.ex
+new file mode 100644
+index 0000000..88a6ccf
+--- /dev/null
++++ b/lib/benchapp_web/live/about_live.ex
+@@ -0,0 +1,70 @@
++defmodule BenchappWeb.AboutLive do
++  @moduledoc """
++  The JobyCorp about page.
++
++  Who JobyCorp is and why the work is shared openly.
++  """
++
++  use BenchappWeb, :live_view
++
++  alias BenchappWeb.CompositeComponents
++
++  @specimen [
++    %{label: "focus", value: "analysis and benchmarks of local LLMs"},
++    %{label: "hardware", value: "owned and operated, at the job"},
++    %{label: "method", value: "one sequence, recorded every run"},
++    %{label: "publication", value: "full results, shared with the community"}
++  ]
++
++  @impl true
++  def mount(_params, _session, socket) do
++    {:ok, assign(socket, page_title: "About", specimen: @specimen)}
++  end
++
++  @impl true
++  def handle_event(_event, _params, socket), do: {:noreply, socket}
++
++  @impl true
++  def render(assigns) do
++    ~H"""
++    <Layouts.app flash={@flash} active_nav="about">
++      <CompositeComponents.container>
++        <div class="space-y-8">
++          <h1 class="max-w-3xl text-5xl font-semibold leading-[1.02] tracking-[-0.03em] md:text-6xl">
++            Why the work is shared
++          </h1>
++          <CompositeComponents.prose>
++            JobyCorp is a small AI research company. It runs analysis and benchmarks of
++            local language models on its own hardware, and shares the research openly
++            with the community that builds and runs them.
++          </CompositeComponents.prose>
++        </div>
++      </CompositeComponents.container>
++
++      <CompositeComponents.section running_head="who we are" heading="Open, because it can be checked">
++        <CompositeComponents.two_column>
++          <:content>
++            <CompositeComponents.prose>
++              Benchmarks matter only if they can be re-run. That is why we publish the
++              whole record — the hardware, the configuration, the method — and why the
++              tooling and results are shared with the community rather than kept
++              behind a sign-up.
++            </CompositeComponents.prose>
++          </:content>
++          <:figure>
++            <div class="rounded-box border border-base-300 bg-base-200 p-6 md:w-96">
++              <CompositeComponents.mono_label>premise</CompositeComponents.mono_label>
++              <dl class="mt-5 space-y-4 font-mono text-sm">
++                <div :for={item <- @specimen}>
++                  <dt class="text-base-content/70">{item.label}</dt>
++                  <dd class="mt-1">{item.value}</dd>
++                </div>
++              </dl>
++            </div>
++          </:figure>
++        </CompositeComponents.two_column>
++      </CompositeComponents.section>
++    </Layouts.app>
++    """
++  end
++end
+diff --git a/lib/benchapp_web/live/custom_designs_live.ex b/lib/benchapp_web/live/custom_designs_live.ex
+index 33bac68..131245a 100644
+--- a/lib/benchapp_web/live/custom_designs_live.ex
++++ b/lib/benchapp_web/live/custom_designs_live.ex
+@@ -31,8 +31,7 @@ defmodule BenchappWeb.CustomDesignsLive do
+           <h1 class="text-3xl font-semibold leading-tight">Custom Designs</h1>
+           <p class="mt-2 max-w-3xl text-sm text-base-content/70">
+             This app's generic composites and domain components. Kit-curated
+-            wrappers and the contract live on
+-            <.link navigate={~p"/design"} class="link link-primary">/design</.link>.
++            wrappers and the contract live on <.link navigate={~p"/design"} class="link link-primary">/design</.link>.
+           </p>
+         </header>
+ 
+diff --git a/lib/benchapp_web/live/design_system_live.ex b/lib/benchapp_web/live/design_system_live.ex
+index efa439c..aac992c 100644
+--- a/lib/benchapp_web/live/design_system_live.ex
++++ b/lib/benchapp_web/live/design_system_live.ex
+@@ -26,8 +26,7 @@ defmodule BenchappWeb.DesignSystemLive do
+           <h1 class="text-3xl font-semibold leading-tight">Design System</h1>
+           <p class="mt-2 max-w-3xl text-sm text-base-content/70">
+             JobyKit's curated wrapper inventory and contract. Composites and domain
+-            components live on
+-            <.link navigate={~p"/custom-designs"} class="link link-primary">/custom-designs</.link>.
++            components live on <.link navigate={~p"/custom-designs"} class="link link-primary">/custom-designs</.link>.
+           </p>
+         </header>
+ 
+diff --git a/lib/benchapp_web/live/home_live.ex b/lib/benchapp_web/live/home_live.ex
+index eac5262..dcac6ad 100644
+--- a/lib/benchapp_web/live/home_live.ex
++++ b/lib/benchapp_web/live/home_live.ex
+@@ -1,49 +1,52 @@
+ defmodule BenchappWeb.HomeLive do
+   @moduledoc """
+-  Welcome page generated by `mix joby_kit.new`.
++  The JobyCorp landing page.
+ 
+-  It doubles as the worked example: every block on it is built from a
+-  registered kit wrapper, and each section's eyebrow names the component
+-  that renders it. If you're an agent picking up this app, this page is
+-  the shortest correct answer to "how do I build UI here".
+-
+-  Edit freely — this file lives in your app, not in the kit. When you
+-  replace it, keep reaching for the wrappers it demonstrates.
++  Says what JobyCorp does in one sentence, shows a specimen of a run
++  record, and closes with a call to read the research.
+   """
+ 
+   use BenchappWeb, :live_view
+ 
+-  @build_order [
+-    %{step: "1", rule: "Domain composite exists?", detail: "Use it."},
+-    %{step: "2", rule: "Generic composite exists?", detail: "Use it — see /custom-designs."},
+-    %{step: "3", rule: "Core wrapper exists?", detail: "Use it — see /design."},
++  alias BenchappWeb.CompositeComponents
++
++  @record_rows [
++    %{field: "model", unit: "identifier"},
++    %{field: "hardware", unit: "identifier"},
++    %{field: "context length", unit: "tokens"},
++    %{field: "throughput", unit: "tokens / s"},
++    %{field: "latency", unit: "ms / token"},
++    %{field: "quality", unit: "score"}
++  ]
++
++  @measurements [
++    %{quantity: "throughput", unit: "tokens / s"},
++    %{quantity: "latency", unit: "ms / token"},
++    %{quantity: "quality", unit: "score"},
++    %{quantity: "context length", unit: "tokens"}
++  ]
++
++  @spec_sheet [
++    %{label: "hardware", detail: "Models run on hardware we own and maintain, behind the work."},
++    %{label: "models", detail: "Local models only — no remote inference, no leased compute."},
+     %{
+-      step: "4",
+-      rule: "daisyUI primitive exists?",
+-      detail: "Wrap it, register it in DesignManifest, then use it."
++      label: "method",
++      detail: "Each run is measured the same way, and the configuration ships with the result."
+     },
+     %{
+-      step: "5",
+-      rule: "None of the above?",
+-      detail: "Tailwind plus theme tokens — then expose the result as a wrapper and register it."
++      label: "publication",
++      detail: "Results are published in full, configuration and method included."
+     }
+   ]
+ 
+-  @lint_snippet """
+-  # See what's already registered before building anything
+-  curl http://localhost:4000/design.json | jq '.components[].data_component'
+-
+-  # Then, after writing UI
+-  mix joby_kit.lint\
+-  """
+-
+   @impl true
+   def mount(_params, _session, socket) do
+     {:ok,
+      assign(socket,
+        page_title: "Home",
+-       build_order: @build_order,
+-       lint_snippet: @lint_snippet
++       record_rows: @record_rows,
++       measurements: @measurements,
++       spec_sheet: @spec_sheet
+      )}
+   end
+ 
+@@ -54,96 +57,76 @@ defmodule BenchappWeb.HomeLive do
+   def render(assigns) do
+     ~H"""
+     <Layouts.app flash={@flash} active_nav="home">
+-      <div class="mx-auto max-w-5xl space-y-14 px-4 py-12 sm:px-6">
+-        <.header size="page">
+-          Benchapp
+-          <:eyebrow>benchapp</:eyebrow>
+-          <:subtitle>
+-            A Phoenix app wired to JobyKit. Every UI primitive flows through a
+-            registered wrapper, so the component inventory, the rendered page, and
+-            the JSON manifest never drift apart.
+-          </:subtitle>
+-          <:actions>
+-            <.button navigate={~p"/design"} variant="primary">Open the inventory</.button>
+-          </:actions>
+-        </.header>
+-
+-        <section class="space-y-4">
+-          <.header level="h2">
+-            Three surfaces
+-            <:eyebrow>Start here</:eyebrow>
+-            <:subtitle>
+-              Where the component inventory lives, for people and for agents.
+-              Each panel below is a <code class="font-mono text-xs">&lt;.card&gt;</code>.
+-            </:subtitle>
+-          </.header>
+-
+-          <div class="grid gap-4 md:grid-cols-3">
+-            <.card prose>
+-              <:eyebrow>Kit wrappers</:eyebrow>
+-              <:title><span class="font-mono text-base">/design</span></:title>
+-              The curated inventory every JobyKit app shares, with the wrapper
+-              contract and the daisyUI catalogue.
+-              <:actions>
+-                <.button navigate={~p"/design"} size="sm">Open</.button>
+-              </:actions>
+-            </.card>
+-
+-            <.card prose>
+-              <:eyebrow>This app's components</:eyebrow>
+-              <:title><span class="font-mono text-base">/custom-designs</span></:title>
+-              Composites and domain components you add, starting from the worked
+-              empty-state example.
+-              <:actions>
+-                <.button navigate={~p"/custom-designs"} size="sm">Open</.button>
+-              </:actions>
+-            </.card>
+-
+-            <.card prose>
+-              <:eyebrow>Machine-readable</:eyebrow>
+-              <:title><span class="font-mono text-base">/design.json</span></:title>
+-              The same inventory as JSON — attrs, slots, and source lines. Fetch
+-              it instead of parsing rendered HEEx.
+-              <:actions>
+-                <.button href={~p"/design.json"} size="sm">Open</.button>
+-              </:actions>
+-            </.card>
++      <CompositeComponents.container>
++        <CompositeComponents.two_column>
++          <:content>
++            <h1 class="max-w-3xl text-5xl font-semibold leading-[1.02] tracking-[-0.03em] md:text-7xl">
++              JobyCorp runs local models on its own hardware, measures them, and publishes the results in full.
++            </h1>
++            <p class="mt-6 max-w-prose text-base leading-relaxed md:text-lg">
++              We run language models where the work happens — on hardware we own and
++              operate. Every run is measured the same way, and the results are published
++              openly, so anyone can check the work and build on it.
++            </p>
++            <div class="mt-8">
++              <.button navigate={~p"/research"} variant="primary">Read the research</.button>
++            </div>
++          </:content>
++          <:figure>
++            <CompositeComponents.record_card title="run record" rows={@record_rows}>
++              <:caption>
++                What a JobyCorp run record carries — the field and the unit, nothing invented.
++              </:caption>
++            </CompositeComponents.record_card>
++          </:figure>
++        </CompositeComponents.two_column>
++      </CompositeComponents.container>
++
++      <CompositeComponents.section running_head="measurements" heading="What a run measures">
++        <CompositeComponents.prose>
++          Every run reports the same set of quantities, so results stay comparable
++          run to run and machine to machine. The measurement, not the claim, is the
++          finding.
++        </CompositeComponents.prose>
++
++        <div class="overflow-x-auto rounded-box border border-base-300">
++          <table class="w-full text-left text-sm">
++            <thead class="bg-base-200 font-mono text-base-content/70">
++              <tr>
++                <th class="px-5 py-3 font-medium">quantity</th>
++                <th class="px-5 py-3 font-medium">reported in</th>
++              </tr>
++            </thead>
++            <tbody class="font-mono">
++              <tr :for={{m, _} <- Enum.with_index(@measurements)} class="border-t border-base-300">
++                <td class="px-5 py-3">{m.quantity}</td>
++                <td class="px-5 py-3 text-base-content/70">{m.unit}</td>
++              </tr>
++            </tbody>
++          </table>
++        </div>
++      </CompositeComponents.section>
++
++      <CompositeComponents.section
++        running_head="hardware & method"
++        heading="Local models, local hardware"
++      >
++        <div class="grid gap-x-12 gap-y-6 md:grid-cols-[11rem_minmax(0,1fr)]">
++          <div :for={item <- @spec_sheet} class="contents md:contents">
++            <CompositeComponents.mono_label>{item.label}</CompositeComponents.mono_label>
++            <CompositeComponents.prose>{item.detail}</CompositeComponents.prose>
+           </div>
+-        </section>
+-
+-        <section class="space-y-4">
+-          <.header level="h2">
+-            Build order
+-            <:eyebrow>The rule</:eyebrow>
+-            <:subtitle>
+-              Work down the steps and stop at the first match — the order decides
+-              the answer. Rendered with <code class="font-mono text-xs">&lt;.list&gt;</code>.
+-            </:subtitle>
+-          </.header>
+-
+-          <.list>
+-            <:item :for={entry <- @build_order} title={"#{entry.step}. #{entry.rule}"}>
+-              {entry.detail}
+-            </:item>
+-          </.list>
+-        </section>
+-
+-        <section class="space-y-4">
+-          <.header level="h2">
+-            Before you call it done
+-            <:eyebrow>Verify</:eyebrow>
+-            <:subtitle>
+-              The linter checks the contract end to end: registration, the
+-              <code class="font-mono text-xs">data-component</code> marker, global
+-              pass-through, and raw primitives that skipped a wrapper.
+-            </:subtitle>
+-          </.header>
+-
+-          <.card>
+-            <pre class="overflow-x-auto rounded-box bg-base-200 p-4 text-xs leading-relaxed"><code>{@lint_snippet}</code></pre>
+-          </.card>
+-        </section>
+-      </div>
++        </div>
++      </CompositeComponents.section>
++
++      <CompositeComponents.section heading="Read the research">
++        <CompositeComponents.prose>
++          The results, the method, and how the tests are run are published in full.
++        </CompositeComponents.prose>
++        <div>
++          <.button navigate={~p"/research"} variant="primary">Read the research</.button>
++        </div>
++      </CompositeComponents.section>
+     </Layouts.app>
+     """
+   end
+diff --git a/lib/benchapp_web/live/research_live.ex b/lib/benchapp_web/live/research_live.ex
+new file mode 100644
+index 0000000..b0ec747
+--- /dev/null
++++ b/lib/benchapp_web/live/research_live.ex
+@@ -0,0 +1,94 @@
++defmodule BenchappWeb.ResearchLive do
++  @moduledoc """
++  The JobyCorp research page.
++
++  What JobyCorp publishes and how it tests: the method (a sequence), the
++  quantities a run reports, and the fact that everything ships in full.
++  """
++
++  use BenchappWeb, :live_view
++
++  alias BenchappWeb.CompositeComponents
++
++  @record_rows [
++    %{field: "model", unit: "identifier"},
++    %{field: "hardware", unit: "identifier"},
++    %{field: "context length", unit: "tokens"},
++    %{field: "throughput", unit: "tokens / s"},
++    %{field: "latency", unit: "ms / token"},
++    %{field: "quality", unit: "score"}
++  ]
++
++  @steps [
++    "Name the model and the exact build that runs.",
++    "Record the hardware, the software, and every setting before a run.",
++    "Answer a fixed prompt set on the local machine.",
++    "Capture the quantities above into one run record.",
++    "Publish the record, the method, and the configuration in full."
++  ]
++
++  @impl true
++  def mount(_params, _session, socket) do
++    {:ok, assign(socket, page_title: "Research", record_rows: @record_rows, steps: @steps)}
++  end
++
++  @impl true
++  def handle_event(_event, _params, socket), do: {:noreply, socket}
++
++  @impl true
++  def render(assigns) do
++    ~H"""
++    <Layouts.app flash={@flash} active_nav="research">
++      <CompositeComponents.container>
++        <div class="space-y-8">
++          <h1 class="max-w-3xl text-5xl font-semibold leading-[1.02] tracking-[-0.03em] md:text-6xl">
++            How a run is measured
++          </h1>
++          <CompositeComponents.prose>
++            JobyCorp publishes analysis and benchmarks of local LLMs. Each result is a
++            run record — the configuration, the method, and the measured quantities —
++            published in full rather than as a summary.
++          </CompositeComponents.prose>
++        </div>
++      </CompositeComponents.container>
++
++      <CompositeComponents.section running_head="method" heading="The test, in order">
++        <CompositeComponents.two_column>
++          <:content>
++            <div class="space-y-6">
++              <CompositeComponents.prose>
++                The method is a sequence, run the same way every time, so a result
++                means the same thing wherever it appears.
++              </CompositeComponents.prose>
++              <ol class="max-w-prose space-y-4">
++                <li :for={{step, i} <- Enum.with_index(@steps, 1)} class="flex gap-4">
++                  <span aria-hidden="true" class="font-mono text-sm text-base-content/70">{i}</span>
++                  <span class="text-base leading-relaxed text-base-content/80">{step}</span>
++                </li>
++              </ol>
++            </div>
++          </:content>
++          <:figure>
++            <CompositeComponents.record_card title="run record" rows={@record_rows}>
++              <:caption>
++                The record a run produces — field and unit, no invented values.
++              </:caption>
++            </CompositeComponents.record_card>
++          </:figure>
++        </CompositeComponents.two_column>
++      </CompositeComponents.section>
++
++      <CompositeComponents.section
++        running_head="publication"
++        heading="Every result, published in full"
++      >
++        <CompositeComponents.prose>
++          A result is worth little if the reader cannot check it. Each published run
++          carries the configuration, the method, and the run record, so anyone can
++          reproduce the measurement instead of taking it on faith.
++        </CompositeComponents.prose>
++      </CompositeComponents.section>
++    </Layouts.app>
++    """
++  end
++end
+diff --git a/lib/benchapp_web/router.ex b/lib/benchapp_web/router.ex
+index f563062..66cf344 100644
+--- a/lib/benchapp_web/router.ex
++++ b/lib/benchapp_web/router.ex
+@@ -18,6 +18,8 @@ defmodule BenchappWeb.Router do
+     pipe_through :browser
+ 
+     live "/", HomeLive, :index
++    live "/research", ResearchLive, :index
++    live "/about", AboutLive, :index
+     live "/design", DesignSystemLive, :index
+     live "/custom-designs", CustomDesignsLive, :index
+   end
+diff --git a/test/benchapp_web/live/page_render_test.exs b/test/benchapp_web/live/page_render_test.exs
+new file mode 100644
+index 0000000..5b2988b
+--- /dev/null
++++ b/test/benchapp_web/live/page_render_test.exs
+@@ -0,0 +1,37 @@
++defmodule BenchappWeb.PageRenderTest do
++  use BenchappWeb.ConnCase, async: true
++
++  import Phoenix.LiveViewTest
++
++  test "renders the landing page with the record card and primary action", %{conn: conn} do
++    {:ok, view, html} = live(conn, "/")
++
++    assert html =~ "JobyCorp runs local models on its own hardware"
++    assert has_element?(view, "#main-nav")
++    assert has_element?(view, "#nav-toggle")
++    assert has_element?(view, "#theme-toggle")
++    assert has_element?(view, "[data-component=\"BenchappWeb.CompositeComponents.record_card\"]")
++    assert has_element?(view, "a[href=\"/research\"]")
++  end
++
++  test "renders the research page with the method and a record card", %{conn: conn} do
++    {:ok, view, html} = live(conn, "/research")
++
++    assert html =~ "How a run is measured"
++    assert has_element?(view, "[data-component=\"BenchappWeb.CompositeComponents.record_card\"]")
++    assert has_element?(view, "a[href=\"/research\"][aria-current=\"page\"]")
++  end
++
++  test "renders the about page with the specimen block", %{conn: conn} do
++    {:ok, view, html} = live(conn, "/about")
++
++    assert html =~ "Why the work is shared"
++    assert has_element?(view, "a[href=\"/about\"][aria-current=\"page\"]")
++  end
++
++  test "nav marks the home page as current", %{conn: conn} do
++    {:ok, _view, html} = live(conn, "/")
++
++    assert html =~ ~s(a[href="/"][aria-current="page"]) || html =~ "aria-current=\"page\""
++  end
++end

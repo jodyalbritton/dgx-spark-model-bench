@@ -1,0 +1,4 @@
+js app bench: Mia-AiLab/GLM-5.3-Flash-EXL3-TR3-4bpw:exl3 as glm53-flash-exl3, effort low, root /Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline
+on helm_dev@jobybook — watch it in that helm's conn
+run js_app-45314 started
+run js_app-45314 finished: %{label: "glm53-flash-exl3", kind: "js_app"}

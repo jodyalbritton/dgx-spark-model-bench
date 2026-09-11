@@ -1,0 +1,265 @@
+{
+  "label": "qwen38-flash-next-nvfp4",
+  "root": "/Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline",
+  "kind": "phoenix_app",
+  "app": {
+    "turns": 1,
+    "pass": true,
+    "checks_passed": 19,
+    "rounds_after_green": 2,
+    "cached_reported": true,
+    "nudges": 0,
+    "decode_rounds": 99,
+    "decode_tok_s": 43.22,
+    "checks_total": 19,
+    "completion_tokens": 67171,
+    "assistant_messages": 103,
+    "tool_time_by_tool": {
+      "bash": 65850,
+      "edit": 18,
+      "job": 27,
+      "outline": 5,
+      "preview": 1008,
+      "read": 15,
+      "todo": 22,
+      "write": 21
+    },
+    "final_line": "Built **Lumen** — a JobyKit Phoenix landing app with `#main-nav` (aria-current + `#nav-toggle` phone menu + `#theme-toggle` light/dark), HomeLive hero, live 100→0 5s `#countdown` with stats (`#stat-signups`/`#stat-ticks`) and capped-10 activity feed, validated/dup-checked `#signup-form` with `#signups` list, a manifest-registered `feature_grid` composite with `/design` preview, an `/about` page, and full LiveView tests — `mix test` 14/14 green, `mix joby_kit.lint` clean, `mix precommit` passing.",
+    "final": "\n\nBuilt **Lumen** — a JobyKit Phoenix landing app with `#main-nav` (aria-current + `#nav-toggle` phone menu + `#theme-toggle` light/dark), HomeLive hero, live 100→0 5s `#countdown` with stats (`#stat-signups`/`#stat-ticks`) and capped-10 activity feed, validated/dup-checked `#signup-form` with `#signups` list, a manifest-registered `feature_grid` composite with `/design` preview, an `/about` page, and full LiveView tests — `mix test` 14/14 green, `mix joby_kit.lint` clean, `mix precommit` passing.",
+    "name": "app",
+    "refused": 0,
+    "duration_ms": 1976714,
+    "ending": "summary",
+    "ttft_ms": 1308,
+    "rounds": 103,
+    "prompt_tokens": 9014666,
+    "wall_ms": 1977263,
+    "completion_tok_s": 34.0,
+    "checks": {
+      "compile": {
+        "pass": true,
+        "detail": ""
+      },
+      "generated": {
+        "pass": true
+      },
+      "lint": {
+        "pass": true,
+        "detail": "JobyKit lint — BenchappWeb.DesignManifest |  |   ✓ Clean. Wrapper contract holds across the manifest."
+      },
+      "stats": {
+        "pass": true,
+        "detail": "hidden LiveView test passed"
+      },
+      "tick": {
+        "pass": true,
+        "detail": "hidden LiveView test passed"
+      },
+      "test": {
+        "pass": true,
+        "detail": ".............. | Finished in 5.1 seconds (5.1s async, 0.00s sync) | 14 tests, 0 failures"
+      },
+      "boots": {
+        "pass": true,
+        "detail": "GET / 200 with a nav"
+      },
+      "composite_registered": {
+        "pass": true,
+        "detail": "2 app component(s) registered beyond the generator's"
+      },
+      "countdown": {
+        "pass": true,
+        "detail": "HomeLive: start 100, 5 s tick, timer message"
+      },
+      "layout_replaced": {
+        "pass": true,
+        "detail": "the generator's stock nav+footer markers are gone from Layouts.app"
+      },
+      "nav": {
+        "pass": true,
+        "detail": "a nav element or JobyKit nav in a source under lib/benchapp_web"
+      },
+      "tests_added": {
+        "pass": true,
+        "detail": "14 tests ran, 4 are the generator's"
+      },
+      "dark_theme": {
+        "pass": true,
+        "detail": "data-theme \"light\" → \"dark\", body bg rgba(0, 0, 0, 0) → rgba(0, 0, 0, 0)"
+      },
+      "mobile_nav": {
+        "pass": true,
+        "detail": "at 390 px: nav-toggle visible true, nav links visible true"
+      },
+      "theme_toggle_mobile": {
+        "pass": true,
+        "detail": "at 390 px: theme-toggle present true, visible true"
+      },
+      "tick_rendered": {
+        "pass": true,
+        "detail": "countdown \"100\" at load, \"98\" after 12 s (connected true)"
+      },
+      "signup": {
+        "pass": true,
+        "detail": "hidden LiveView test passed"
+      },
+      "about": {
+        "pass": true,
+        "detail": "hidden LiveView test passed"
+      },
+      "activity": {
+        "pass": true,
+        "detail": "hidden LiveView test passed"
+      }
+    },
+    "cached_tokens": 8536000,
+    "last_call": null,
+    "reasoning_reported": true,
+    "tools": {
+      "bash": 46,
+      "edit": 22,
+      "job": 4,
+      "outline": 1,
+      "preview": 29,
+      "read": 21,
+      "todo": 10,
+      "write": 7
+    },
+    "work_dir": "/Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline/work/qwen38-flash-next-nvfp4",
+    "render": {
+      "mobile": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "connected": true,
+        "countdown": "100",
+        "height": 2978,
+        "nav": true,
+        "nav_links_visible": true,
+        "theme": "light",
+        "theme_toggle": true,
+        "theme_toggle_visible": true,
+        "title": "Lumen — briefed before you wake · JobyKit",
+        "toggle_visible": true
+      },
+      "after": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "connected": true,
+        "countdown": "98",
+        "height": 1658,
+        "nav": true,
+        "nav_links_visible": true,
+        "theme": "light",
+        "theme_toggle": true,
+        "theme_toggle_visible": true,
+        "title": "Lumen — briefed before you wake · JobyKit",
+        "toggle_visible": false
+      },
+      "light": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "connected": true,
+        "countdown": "100",
+        "height": 1658,
+        "nav": true,
+        "nav_links_visible": true,
+        "theme": "light",
+        "theme_toggle": true,
+        "theme_toggle_visible": true,
+        "title": "Lumen — briefed before you wake · JobyKit",
+        "toggle_visible": false
+      },
+      "dark": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "connected": true,
+        "countdown": "100",
+        "height": 1658,
+        "nav": true,
+        "nav_links_visible": true,
+        "theme": "dark",
+        "theme_toggle": true,
+        "theme_toggle_visible": true,
+        "title": "Lumen — briefed before you wake · JobyKit",
+        "toggle_visible": false
+      }
+    },
+    "tool_time_ms": 66966,
+    "outcome": "done",
+    "diff": {
+      "files": 18,
+      "stat": " test/benchapp_web/live/about_live_test.exs         |  28 ++ |  test/benchapp_web/live/home_live_test.exs          | 140 ++++++++ |  18 files changed, 803 insertions(+), 164 deletions(-)",
+      "patch": "raw/diff-qwen38-flash-next-nvfp4.patch",
+      "insertions": 803,
+      "deletions": 164
+    },
+    "failed": 1,
+    "scores": {
+      "tests_added": 10,
+      "components_added": 2,
+      "lint_warnings": 0,
+      "page_height": 1658,
+      "tests_total": 14
+    },
+    "green_at": 101,
+    "tool_calls": 140,
+    "screenshots": {
+      "qwen38-flash-next-nvfp4-desktop-dark.png": "/Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline/screenshots/qwen38-flash-next-nvfp4-desktop-dark.png",
+      "qwen38-flash-next-nvfp4-desktop-light-after-12s.png": "/Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline/screenshots/qwen38-flash-next-nvfp4-desktop-light-after-12s.png",
+      "qwen38-flash-next-nvfp4-desktop-light.png": "/Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline/screenshots/qwen38-flash-next-nvfp4-desktop-light.png",
+      "qwen38-flash-next-nvfp4-full-light.png": "/Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline/screenshots/qwen38-flash-next-nvfp4-full-light.png",
+      "qwen38-flash-next-nvfp4-mobile-full-light.png": "/Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline/screenshots/qwen38-flash-next-nvfp4-mobile-full-light.png",
+      "qwen38-flash-next-nvfp4-mobile-light.png": "/Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline/screenshots/qwen38-flash-next-nvfp4-mobile-light.png"
+    },
+    "uncached_prompt_tokens": 478666,
+    "failures": [
+      {
+        "text": "exit 1\n",
+        "tool": "bash",
+        "class": "failed"
+      }
+    ],
+    "session_id": "4e0d427e-222d-494e-94c1-e4bae425157b",
+    "reasoning_tokens": 44008
+  },
+  "model": "RadixArk/Qwen3.8-Flash-Next-NVFP4:modelopt",
+  "app_prompt": "# Phoenix Elixir app benchmark\n\nJobyKit is already installed. The app you build is the artifact being\nbenchmarked: a modern demo landing site for a fictional product of your\nchoice. It is not a tool for running benchmarks; no benchmark-themed\nfeatures or copy.\n\n## Setup\n\n1. In the current working directory run `mix joby_kit.new benchapp`, then work inside the `benchapp` directory it creates. The generator takes a few minutes, longer than a foreground `bash` call may run: start it with `background: true` and poll the job.\n2. Remove the stock JobyKit demo content: the generator's `simple_nav` header and \"built with\" footer in `lib/benchapp_web/components/layouts.ex`, and the welcome content of HomeLive in `lib/benchapp_web/live/home_live.ex`. Keep the `/design` and `/custom-designs` pages.\n\n## Requirements\n\nMobile and desktop views, and working light and dark themes, throughout.\n\n3. A top navigation bar in `Layouts.app` with id `main-nav` that marks the current page's link with `aria-current=\"page\"`, has a menu that works at phone widths behind a toggle button with id `nav-toggle`, and a theme toggle with id `theme-toggle` usable at both widths.\n4. HomeLive as a landing page with a hero.\n5. A countdown that starts at 100 and decreases by 1 every 5 seconds, updating live, the number in an element with id `countdown`. The five-second tick holds in every environment, including test — the hidden tests wait for it; do not park or stub the timer in configuration.\n6. A newsletter signup form with id `signup-form` and one email input. An invalid address shows an error in an element with id `signup-error` and is not added. A valid address is added to a \"recent signups\" list with id `signups` on the same page without a reload. The same address submitted twice shows the error and is not added again. In-memory is fine; no database.\n7. A stats strip with id `stats`: the number of signups in an element with id `stat-signups` and the number of countdown ticks so far in an element with id `stat-ticks`, both computed from live state.\n8. An activity feed with id `activity` whose entries are `<li>` elements, newest first, at most 10, one entry per signup and one per tick.\n9. A feature grid built from a composite component you register in the DesignManifest with a `/design` preview.\n10. A second page at `/about`, linked from the nav, on the same layout.\n\n## Tests\n\n11. Created features must be tested: add LiveView tests for the countdown, the signup form, the stats, the activity feed, and the `/about` page.\n\n## Constraints\n\n- The dev server must run on port 4099; the `PORT` environment variable is already set to 4099. Do not use any other port.\n- Do not stop or kill processes you did not start.\n- When your own tests and `mix precommit` pass, reply with a one-line summary. Do not re-verify: a green suite and a green precommit are the finish line.\n",
+  "harness": {
+    "memory": "off",
+    "port": "4099",
+    "tools": "native",
+    "system_prompt": "You are helm, an agent at the conn of the JobyCorp fleet. Be direct and concise.\n\nWorking method: survey before you read. `tree` shows where the mass is, `outline` gives a file's skeleton, `grep` with `context` replaces a read after every hit, `sgrep` answers structural questions (call sites, shapes), and `read` windows are for judgment, not indexing. Files go through the file tools: `read` not cat/sed, `grep` not grep/rg, `glob` not find, `edit`/`write` not sed or heredocs. Bash runs things: builds, tests, mix tasks. A dev server is a server job — `bash(background: true, server: true, port:)`: no deadline, a note when its port answers, `job(action: \"wait\")` waits, `job(action: \"kill\")` stops it; other long commands run with `bash(background: true)`. Never detach a process yourself, and never signal one you did not start. Several tool calls in one round are welcome when they are independent. Commands must not wait on stdin: pass scripts with `-e` or a file, never an interactive `iex`. Read enough to act, act, verify, and stop.",
+    "deadline_ms": 3600000,
+    "effort": "low",
+    "last_call": "Round cap reached — this is the last call. Stop anything you started (background jobs, servers), then reply with the one-line summary: what is done and what is not. No further work.",
+    "last_call_rounds": 4,
+    "nudge": "Continue until every requirement in the task is done, then reply with the one-line summary.",
+    "nudge_policy": "once, only after a narrated or blank ending; otherwise abandoned",
+    "app_prompt": "# Phoenix Elixir app benchmark\n\nJobyKit is already installed. The app you build is the artifact being\nbenchmarked: a modern demo landing site for a fictional product of your\nchoice. It is not a tool for running benchmarks; no benchmark-themed\nfeatures or copy.\n\n## Setup\n\n1. In the current working directory run `mix joby_kit.new benchapp`, then work inside the `benchapp` directory it creates. The generator takes a few minutes, longer than a foreground `bash` call may run: start it with `background: true` and poll the job.\n2. Remove the stock JobyKit demo content: the generator's `simple_nav` header and \"built with\" footer in `lib/benchapp_web/components/layouts.ex`, and the welcome content of HomeLive in `lib/benchapp_web/live/home_live.ex`. Keep the `/design` and `/custom-designs` pages.\n\n## Requirements\n\nMobile and desktop views, and working light and dark themes, throughout.\n\n3. A top navigation bar in `Layouts.app` with id `main-nav` that marks the current page's link with `aria-current=\"page\"`, has a menu that works at phone widths behind a toggle button with id `nav-toggle`, and a theme toggle with id `theme-toggle` usable at both widths.\n4. HomeLive as a landing page with a hero.\n5. A countdown that starts at 100 and decreases by 1 every 5 seconds, updating live, the number in an element with id `countdown`. The five-second tick holds in every environment, including test — the hidden tests wait for it; do not park or stub the timer in configuration.\n6. A newsletter signup form with id `signup-form` and one email input. An invalid address shows an error in an element with id `signup-error` and is not added. A valid address is added to a \"recent signups\" list with id `signups` on the same page without a reload. The same address submitted twice shows the error and is not added again. In-memory is fine; no database.\n7. A stats strip with id `stats`: the number of signups in an element with id `stat-signups` and the number of countdown ticks so far in an element with id `stat-ticks`, both computed from live state.\n8. An activity feed with id `activity` whose entries are `<li>` elements, newest first, at most 10, one entry per signup and one per tick.\n9. A feature grid built from a composite component you register in the DesignManifest with a `/design` preview.\n10. A second page at `/about`, linked from the nav, on the same layout.\n\n## Tests\n\n11. Created features must be tested: add LiveView tests for the countdown, the signup form, the stats, the activity feed, and the `/about` page.\n\n## Constraints\n\n- The dev server must run on port 4099; the `PORT` environment variable is already set to 4099. Do not use any other port.\n- Do not stop or kill processes you did not start.\n- When your own tests and `mix precommit` pass, reply with a one-line summary. Do not re-verify: a green suite and a green precommit are the finish line.\n",
+    "hidden_tests_sha": "6ed2e858",
+    "last_call_grace_ms": 180000,
+    "mcp": false,
+    "prompt_sha": "39413706",
+    "rounds_cap": 128,
+    "wire_tools": [
+      "read",
+      "edit",
+      "write",
+      "bash",
+      "grep",
+      "sgrep",
+      "glob",
+      "tree",
+      "outline",
+      "changes",
+      "read_artifact",
+      "job",
+      "preview",
+      "web_search",
+      "todo",
+      "session_search",
+      "consult",
+      "agent"
+    ]
+  },
+  "helm_dirty": true,
+  "helm_sha": "c535e08",
+  "finished_utc": "2026-09-11T08:23:16Z",
+  "started_utc": "2026-09-11T08:23:16Z"
+}

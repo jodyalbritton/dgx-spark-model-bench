@@ -149,6 +149,44 @@ def _spread(vals):
     return (max(v) - min(v)) / min(v)
 
 
+def across_models_tables(L, runs, arms):
+    """One table per metric: arms down, models across; a cell is the median of the
+    model's run medians, with the min–max of those run medians when it has more
+    than one record. Only when the round holds more than one model."""
+    groups = _run_groups(runs)
+    if len(groups) < 2: return
+    L.append("\n### Across models\n")
+    L.append("Columns are models; a cell is the median of the model's run medians for the arm (each run median as in "
+             "the per-run tables), with the min–max of those run medians in brackets where the model has more than one "
+             "record. Rows are in arm order.\n")
+    metrics = [("decode tok/s", "decode_tok_s", 1), ("TTFT ms", "ttft_ms", 0),
+               ("prefill tok/s", "prefill_tok_s", 0), ("acceptance", None, 3)]
+    for title, key, d in metrics:
+        rows = []
+        for arm in arms:
+            cells = []
+            for base, g in groups:
+                meds = []
+                for _, r in g:
+                    cases = r.get("cases") or []
+                    v = _tp_acc(cases, arm)[0] if key is None else _tp_stats(cases, arm, key)[0]
+                    if v is not None: meds.append(v)
+                if not meds:
+                    cells.append("—"); continue
+                meds.sort()
+                cell = fmt(meds[len(meds) // 2], d)
+                if len(meds) > 1: cell += f" ({fmt(meds[0], d)}–{fmt(meds[-1], d)})"
+                cells.append(cell)
+            if all(c == "—" for c in cells): continue
+            rows.append(f"| {arm} | " + " | ".join(cells) + " |")
+        if not rows: continue
+        L.append(f"#### {title}\n")
+        L.append("| arm | " + " | ".join(b for b, _ in groups) + " |")
+        L.append("|---|" + "---:|" * len(groups))
+        L.extend(rows)
+        L.append("")
+
+
 def per_run_tables(L, runs, arms):
     """One table per model and metric: arms down, runs across, the spread of the
     run medians at the right. Only when some model has more than one record."""
@@ -230,6 +268,7 @@ def throughput_section(L):
              f"gap tolerance {h.get('gap_tolerance', '—')}, ingest corpus rev {c.get('revid','?')} ({c.get('chars','?')} chars), "
              f"decode window: {h.get('decode_window', 'first delta to stream end')}.\n")
 
+    across_models_tables(L, runs, ARMS)
     per_run_tables(L, runs, ARMS)
 
     L.append("### Ratios of arm medians (from each record's `summary`)\n")
@@ -280,6 +319,61 @@ def throughput_section(L):
     L.append("\nRaw JSON per record, one row per case (decode, TTFT, window, prompt/cached/completion tokens, the "
              "acceptance delta with draft and accepted counts, `acceptance_gap`, `bracket_ms`, `cache_intent`), the "
              "warm-up, and any rejected attempts: `raw/throughput-<label>.json`.\n")
+
+
+def load_js():
+    runs = {}
+    for f in sorted(glob.glob(f"{RAW}/js_app-*.json")):
+        r = json.load(open(f)); runs[r["label"]] = r
+    return [runs[k] for k in ORDER if k in runs] + [r for k, r in runs.items() if k not in ORDER]
+
+
+_ANSI = re.compile(r"\x1b\[[0-9;]*m")
+
+
+def _vitest(detail):
+    """passed/total from a vitest summary line ("1 failed | 13 passed (14)"), ANSI stripped."""
+    text = _ANSI.sub("", detail or "")
+    failed = re.search(r"(\d+) failed", text); passed = re.search(r"(\d+) passed", text)
+    if not passed: return "—"
+    f = int(failed.group(1)) if failed else 0; n = int(passed.group(1))
+    return f"{n}/{n + f}"
+
+
+def js_section(L):
+    """The JavaScript app bench's records, as recorded."""
+    runs = load_js()
+    if not runs: return
+    L.append("\n## JavaScript app (helm agent)\n")
+    L.append("Harness: `Helm.Evals.JsApp` — a generated Vite + React + TypeScript app, the landing-site contract of the "
+             "Phoenix app (nav, hero, live countdown, signup form, stats strip, activity feed, a feature-grid component in "
+             "its own file, `/about`), graded by six mechanical checks: **build**, **typecheck**, **demo gone**, "
+             "**composite** (components in their own files), **hidden tests** (the harness's vitest suite, copied in at "
+             "grade time) and **own tests** (the model's). Test cells are passed/total from vitest's summary line. "
+             "Other columns as in the coding section.\n")
+    L.append("Every row ran on one harness:\n")
+    for r in runs:
+        h = r.get("harness") or {}; b = r.get("base") or {}
+        L.append(f"- **{r['label']}** — helm `{r.get('helm_sha')}`{' (dirty tree)' if r.get('helm_dirty') else ''}, "
+                 f"prompt `{h.get('prompt_sha')}`, hidden tests `{h.get('hidden_tests_sha')}`, base `{b.get('base_sha')}` "
+                 f"(vite {b.get('vite')}, react {b.get('react')}, vitest {b.get('vitest')}), cap {h.get('rounds_cap')} rounds / "
+                 f"{(h.get('deadline_ms') or 0) // 1000:,} s, effort {h.get('effort')}, {r.get('started_utc')} → {r.get('finished_utc')}")
+    L.append("\n| model | checks | build · typecheck · demo gone · composite | hidden tests | own tests | outcome (ending, nudges) | "
+             "rounds | wall (s) | tool calls (failed) | uncached prompt | completion | reasoning | end-to-end tok/s | "
+             "decode tok/s (median round) | tools |")
+    L.append("|---|---:|---|---:|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|---|")
+    for r in runs:
+        a = r.get("app") or {}; c = a.get("checks") or {}
+        tick = lambda k: "✅" if (c.get(k) or {}).get("pass") else ("❌" if k in c else "—")
+        tools = ", ".join(f"{k} {v}" for k, v in sorted((a.get("tools") or {}).items(), key=lambda kv: -kv[1]))
+        L.append(f"| {r['label']} | {a.get('checks_passed')}/{a.get('checks_total')} | {tick('build')} · {tick('typecheck')} · "
+                 f"{tick('demo_gone')} · {tick('composite')} | {_vitest((c.get('hidden_tests') or {}).get('detail'))} | "
+                 f"{_vitest((c.get('own_tests') or {}).get('detail'))} | {a.get('outcome')} ({a.get('ending')}, {a.get('nudges') or 0} nudges) | "
+                 f"{a.get('rounds')} | {(a.get('wall_ms') or 0) // 1000:,} | {a.get('tool_calls')} ({a.get('failed')}) | "
+                 f"{a.get('uncached_prompt_tokens') or 0:,} | {a.get('completion_tokens') or 0:,} | {a.get('reasoning_tokens') or 0:,} | "
+                 f"{fmt(a.get('completion_tok_s'))} | {fmt(a.get('decode_tok_s'))} | {tools} |")
+    L.append("\nThe app as each model left it: `work/js-<label>/`; raw JSON per run (checks with vitest's detail, the "
+             "final answer, tools and failures): `raw/js_app-<label>.json`.\n")
 
 
 def load_design():
@@ -585,6 +679,7 @@ def main():
     # finish before Phase A in a round (TESTPLAN §6: no round-specific
     # strings here; notes live in the per-run JSON `notes` field)
     coding_section(L)
+    js_section(L)
     throughput_section(L)
     design_section(L)
     notes = [(r["label"], r["notes"]) for r in runs if r.get("notes")]

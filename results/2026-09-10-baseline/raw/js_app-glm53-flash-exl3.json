@@ -1,0 +1,148 @@
+{
+  "label": "glm53-flash-exl3",
+  "root": "/Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline",
+  "base": {
+    "app_name": "benchapp",
+    "base_sha": "f3965116ada9",
+    "generated_utc": "2026-09-11T08:23:26Z",
+    "node": "v24.20.0",
+    "npm": "11.19.0",
+    "react": "19.3.0",
+    "vite": "8.3.0",
+    "vitest": "5.0.0"
+  },
+  "kind": "js_app",
+  "app": {
+    "uncached_prompt_tokens": 117990,
+    "checks_passed": 4,
+    "refused": 0,
+    "prompt_tokens": 892134,
+    "cached_tokens": 774144,
+    "session_id": "04dbdeb7-c45e-4367-a9dd-a73a2e1093ad",
+    "tool_time_by_tool": {
+      "bash": 11423,
+      "edit": 7,
+      "grep": 20,
+      "job": 20060,
+      "preview": 388,
+      "read": 2,
+      "tree": 29,
+      "write": 27
+    },
+    "final_line": "Built the \"Nimbus\" smart-home landing site (nav with aria-current/mobile toggle/theme toggle, hero, live 5s countdown, signup form with validation + duplicate detection, stats strip, capped activity feed, reusable FeatureGrid, /about page) — 12/12 vitest tests pass, `tsc -b --noEmit` and `npm run build` are clean, and the dev server is running on port 4099.",
+    "duration_ms": 455872,
+    "cached_reported": true,
+    "ttft_ms": 6661,
+    "last_call": null,
+    "assistant_messages": 42,
+    "ending": "summary",
+    "rounds": 42,
+    "failures": [],
+    "checks": {
+      "build": {
+        "pass": true,
+        "detail": "dist/assets/index-DV3iCqTX.js   227.20 kB │ gzip: 71.28 kB |  | ✓ built in 48ms"
+      },
+      "composite": {
+        "pass": true,
+        "detail": "components in their own files: 3"
+      },
+      "hidden_tests": {
+        "pass": false,
+        "failed": 1,
+        "detail": "exit 1: \u001B[2m      Tests \u001B[22m \u001B[1m\u001B[31m1 failed\u001B[39m\u001B[22m\u001B[2m | \u001B[22m\u001B[1m\u001B[32m13 passed\u001B[39m\u001B[22m\u001B[90m (14)\u001B[39m | \u001B[2m   Start at \u001B[22m 06:57:09 | \u001B[2m   Duration \u001B[22m 357ms\u001B[2m (environment 64%, tests 17%, import 11%, transform 8%, worker 1%)\u001B[22m",
+        "passed": 13
+      },
+      "demo_gone": {
+        "pass": true,
+        "detail": "stock Vite demo content in src/App.tsx"
+      },
+      "own_tests": {
+        "pass": false,
+        "detail": "exit 1: \u001B[2m      Tests \u001B[22m \u001B[1m\u001B[31m1 failed\u001B[39m\u001B[22m\u001B[2m | \u001B[22m\u001B[1m\u001B[32m25 passed\u001B[39m\u001B[22m\u001B[90m (26)\u001B[39m | \u001B[2m   Start at \u001B[22m 06:57:10 | \u001B[2m   Duration \u001B[22m 440ms\u001B[2m (environment 59%, tests 23%, import 10%, transform 7%, worker 1%)\u001B[22m"
+      },
+      "typecheck": {
+        "pass": true,
+        "detail": ""
+      }
+    },
+    "rounds_after_green": null,
+    "decode_tok_s": 26.41,
+    "final": "Built the \"Nimbus\" smart-home landing site (nav with aria-current/mobile toggle/theme toggle, hero, live 5s countdown, signup form with validation + duplicate detection, stats strip, capped activity feed, reusable FeatureGrid, /about page) — 12/12 vitest tests pass, `tsc -b --noEmit` and `npm run build` are clean, and the dev server is running on port 4099.",
+    "outcome": "done",
+    "tool_calls": 49,
+    "reasoning_reported": false,
+    "nudges": 0,
+    "turns": 1,
+    "wall_ms": 455885,
+    "decode_rounds": 11,
+    "failed": 0,
+    "screenshots": [],
+    "completion_tokens": 10735,
+    "green_at": null,
+    "reasoning_tokens": 1553,
+    "completion_tok_s": 23.5,
+    "tool_time_ms": 31956,
+    "scores": {
+      "tests_added": 1,
+      "typecheck_clean": true
+    },
+    "checks_total": 6,
+    "tools": {
+      "bash": 14,
+      "edit": 6,
+      "grep": 1,
+      "job": 1,
+      "preview": 11,
+      "read": 8,
+      "tree": 1,
+      "write": 7
+    }
+  },
+  "model": "Mia-AiLab/GLM-5.3-Flash-EXL3-TR3-4bpw:exl3",
+  "harness": {
+    "memory": "off",
+    "port": "4099",
+    "stack": "vite + react + typescript",
+    "tools": "native",
+    "system_prompt": "You are helm, an agent at the conn of the JobyCorp fleet. Be direct and concise.\n\nWorking method: survey before you read. `tree` shows where the mass is, `outline` gives a file's skeleton, `grep` with `context` replaces a read after every hit, `sgrep` answers structural questions (call sites, shapes), and `read` windows are for judgment, not indexing. Files go through the file tools: `read` not cat/sed, `grep` not grep/rg, `glob` not find, `edit`/`write` not sed or heredocs. Bash runs things: builds, tests, mix tasks. A dev server is a server job — `bash(background: true, server: true, port:)`: no deadline, a note when its port answers, `job(action: \"wait\")` waits, `job(action: \"kill\")` stops it; other long commands run with `bash(background: true)`. Never detach a process yourself, and never signal one you did not start. Several tool calls in one round are welcome when they are independent. Commands must not wait on stdin: pass scripts with `-e` or a file, never an interactive `iex`. Read enough to act, act, verify, and stop.",
+    "effort": "low",
+    "mcp": false,
+    "deadline_ms": 3600000,
+    "nudge": "Continue until every requirement in the task is done, then reply with the one-line summary.",
+    "last_call": "Round cap reached — this is the last call. Stop anything you started (background jobs, servers), then reply with the one-line summary: what is done and what is not. No further work.",
+    "last_call_rounds": 4,
+    "nudge_policy": "once, only after a narrated or blank ending; otherwise abandoned",
+    "last_call_grace_ms": 180000,
+    "prompt_sha": "628204d4",
+    "rounds_cap": 128,
+    "wire_tools": [
+      "read",
+      "edit",
+      "write",
+      "bash",
+      "grep",
+      "sgrep",
+      "glob",
+      "tree",
+      "outline",
+      "changes",
+      "read_artifact",
+      "job",
+      "preview",
+      "web_search",
+      "todo",
+      "session_search",
+      "consult",
+      "agent"
+    ],
+    "hidden_tests_sha": "4ba790ba",
+    "brief": "# JavaScript app benchmark\n\nA Vite + React + TypeScript app is already generated and its dependencies\nare already installed, in the current working directory under `benchapp`.\nWork inside it. The app you build is the artifact being benchmarked: a\nmodern demo landing site for a fictional product of your choice. It is\nnot a tool for running benchmarks; no benchmark-themed features or copy.\n\n## Setup\n\n1. Remove the stock Vite demo content — the logos, the counter button and\n   the \"click on the Vite and React logos\" copy in `src/App.tsx`, and the\n   template styling in `src/App.css` you do not want.\n2. The app's root component must stay the **default export of\n   `src/App.tsx`**. The hidden tests import it from there.\n\n## Requirements\n\nMobile and desktop views, and working light and dark themes, throughout.\n\n3. A top navigation bar with id `main-nav` that marks the current page's\n   link with `aria-current=\"page\"`, has a menu that works at phone widths\n   behind a toggle button with id `nav-toggle`, and a theme toggle with id\n   `theme-toggle` usable at both widths.\n4. A landing page with a hero.\n5. A countdown that starts at 100 and decreases by 1 every 5 seconds,\n   updating live, the number in an element with id `countdown`. The\n   five-second tick is a real interval in every environment, including\n   test — the hidden tests advance a fake clock and expect it to move; do\n   not gate the timer on an environment check.\n6. A newsletter signup form with id `signup-form` and one email input. An\n   invalid address shows an error in an element with id `signup-error` and\n   is not added. A valid address is added to a \"recent signups\" list with\n   id `signups` on the same page. The same address submitted twice shows\n   the error and is not added again. In-memory is fine; no backend.\n7. A stats strip with id `stats`: the number of signups in an element with\n   id `stat-signups` and the number of countdown ticks so far in an\n   element with id `stat-ticks`, both computed from live state.\n8. An activity feed with id `activity` whose entries are `<li>` elements,\n   newest first, at most 10, one entry per signup and one per tick.\n9. A reusable feature-grid component in its own file under `src/`, used by\n   the landing page.\n10. A second page at `/about`, linked from the nav, on the same layout.\n\n## Tests\n\n11. Created features must be tested: add your own tests under `test/` or\n    `src/`, run by `npx vitest run`.\n\n## Constraints\n\n- The dev server must run on port 4099: `npm run dev -- --port 4099 --strictPort`.\n  Do not use any other port.\n- Do not stop or kill processes you did not start.\n- The dev server is long-running: start it with `background: true` and poll\n  the job.\n- When your own tests and `npx tsc -b --noEmit` and `npm run build` pass, reply\n  with a one-line summary. Do not re-verify: a green suite and a clean build\n  are the finish line.\n",
+    "test_runner": "vitest + @testing-library/react (jsdom)"
+  },
+  "finished_utc": "2026-09-11T13:57:12Z",
+  "helm_dirty": false,
+  "helm_sha": "bcf1e7d",
+  "started_utc": "2026-09-11T13:57:12Z",
+  "brief": "# JavaScript app benchmark\n\nA Vite + React + TypeScript app is already generated and its dependencies\nare already installed, in the current working directory under `benchapp`.\nWork inside it. The app you build is the artifact being benchmarked: a\nmodern demo landing site for a fictional product of your choice. It is\nnot a tool for running benchmarks; no benchmark-themed features or copy.\n\n## Setup\n\n1. Remove the stock Vite demo content — the logos, the counter button and\n   the \"click on the Vite and React logos\" copy in `src/App.tsx`, and the\n   template styling in `src/App.css` you do not want.\n2. The app's root component must stay the **default export of\n   `src/App.tsx`**. The hidden tests import it from there.\n\n## Requirements\n\nMobile and desktop views, and working light and dark themes, throughout.\n\n3. A top navigation bar with id `main-nav` that marks the current page's\n   link with `aria-current=\"page\"`, has a menu that works at phone widths\n   behind a toggle button with id `nav-toggle`, and a theme toggle with id\n   `theme-toggle` usable at both widths.\n4. A landing page with a hero.\n5. A countdown that starts at 100 and decreases by 1 every 5 seconds,\n   updating live, the number in an element with id `countdown`. The\n   five-second tick is a real interval in every environment, including\n   test — the hidden tests advance a fake clock and expect it to move; do\n   not gate the timer on an environment check.\n6. A newsletter signup form with id `signup-form` and one email input. An\n   invalid address shows an error in an element with id `signup-error` and\n   is not added. A valid address is added to a \"recent signups\" list with\n   id `signups` on the same page. The same address submitted twice shows\n   the error and is not added again. In-memory is fine; no backend.\n7. A stats strip with id `stats`: the number of signups in an element with\n   id `stat-signups` and the number of countdown ticks so far in an\n   element with id `stat-ticks`, both computed from live state.\n8. An activity feed with id `activity` whose entries are `<li>` elements,\n   newest first, at most 10, one entry per signup and one per tick.\n9. A reusable feature-grid component in its own file under `src/`, used by\n   the landing page.\n10. A second page at `/about`, linked from the nav, on the same layout.\n\n## Tests\n\n11. Created features must be tested: add your own tests under `test/` or\n    `src/`, run by `npx vitest run`.\n\n## Constraints\n\n- The dev server must run on port 4099: `npm run dev -- --port 4099 --strictPort`.\n  Do not use any other port.\n- Do not stop or kill processes you did not start.\n- The dev server is long-running: start it with `background: true` and poll\n  the job.\n- When your own tests and `npx tsc -b --noEmit` and `npm run build` pass, reply\n  with a one-line summary. Do not re-verify: a green suite and a clean build\n  are the finish line.\n"
+}

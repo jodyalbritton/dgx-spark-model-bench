@@ -1,0 +1,14 @@
+design bench: deepseek-ai/DeepSeek-V4-Flash-Vision-Exp:fp8 as dsv4-flash-vision-exp, effort low, root /Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline
+on helm_dev@jobybook — watch it in that helm's conn
+run design-38274 started
+run design-38274 finished: %{
+  label: "dsv4-flash-vision-exp",
+  kind: "design",
+  summary: %{
+    rounds: 95,
+    outcome: "done",
+    wall_ms: 1575247,
+    gates_passed: 17,
+    gates_total: 19
+  }
+}

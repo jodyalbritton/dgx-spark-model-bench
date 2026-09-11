@@ -1,0 +1,271 @@
+{
+  "label": "glm53-flash-exl3",
+  "root": "/Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline",
+  "kind": "phoenix_app",
+  "app": {
+    "uncached_prompt_tokens": 245761,
+    "checks_passed": 19,
+    "refused": 0,
+    "prompt_tokens": 3797505,
+    "cached_tokens": 3551744,
+    "session_id": "9e1478c5-c25b-4e56-8936-883bf9dc8e1e",
+    "tool_time_by_tool": {
+      "bash": 59135,
+      "edit": 25,
+      "job": 27108,
+      "preview": 761,
+      "read": 6,
+      "write": 26
+    },
+    "final_line": "All tests (11) and `mix precommit` pass — the JobyKit-generated Phoenix app \"Lumina\" (landing page with live countdown, in-memory newsletter signup, stats strip, activity feed, registered `feature_grid`/`eyebrow` composites, and an `/about` page) runs on port 4099 with working mobile nav toggle and light/dark themes.",
+    "duration_ms": 1018548,
+    "cached_reported": true,
+    "ttft_ms": 3018,
+    "last_call": null,
+    "assistant_messages": 90,
+    "pass": true,
+    "ending": "summary",
+    "rounds": 90,
+    "failures": [
+      {
+        "text": "exit 1\nsed: 1: \"lib/benchapp_web/live/a ...\": extra characters at the end of l command\n",
+        "tool": "bash",
+        "class": "failed"
+      },
+      {
+        "text": "exit 1\nsed: 2: \"test/benchapp_web/live/ ...\": undefined label 'est/benchapp_web/live/home_live_test.exs'\n",
+        "tool": "bash",
+        "class": "failed"
+      },
+      {
+        "text": "no job 2 — job(action: \"list\") shows what exists",
+        "tool": "job",
+        "class": "failed"
+      }
+    ],
+    "checks": {
+      "compile": {
+        "pass": true,
+        "detail": ""
+      },
+      "generated": {
+        "pass": true
+      },
+      "lint": {
+        "pass": true,
+        "detail": "JobyKit lint — BenchappWeb.DesignManifest |  |   ✓ Clean. Wrapper contract holds across the manifest."
+      },
+      "stats": {
+        "pass": true,
+        "detail": "hidden LiveView test passed"
+      },
+      "tick": {
+        "pass": true,
+        "detail": "hidden LiveView test passed"
+      },
+      "test": {
+        "pass": true,
+        "detail": "........... | Finished in 0.1 seconds (0.1s async, 0.00s sync) | 11 tests, 0 failures"
+      },
+      "activity": {
+        "pass": true,
+        "detail": "hidden LiveView test passed"
+      },
+      "boots": {
+        "pass": true,
+        "detail": "GET / 200 with a nav"
+      },
+      "composite_registered": {
+        "pass": true,
+        "detail": "2 app component(s) registered beyond the generator's"
+      },
+      "countdown": {
+        "pass": true,
+        "detail": "HomeLive: start 100, 5 s tick, timer message"
+      },
+      "layout_replaced": {
+        "pass": true,
+        "detail": "the generator's stock nav+footer markers are gone from Layouts.app"
+      },
+      "nav": {
+        "pass": true,
+        "detail": "a nav element or JobyKit nav in a source under lib/benchapp_web"
+      },
+      "tests_added": {
+        "pass": true,
+        "detail": "11 tests ran, 4 are the generator's"
+      },
+      "dark_theme": {
+        "pass": true,
+        "detail": "data-theme \"light\" → \"dark\", body bg rgba(0, 0, 0, 0) → rgba(0, 0, 0, 0)"
+      },
+      "mobile_nav": {
+        "pass": true,
+        "detail": "at 390 px: nav-toggle visible true, nav links visible true"
+      },
+      "theme_toggle_mobile": {
+        "pass": true,
+        "detail": "at 390 px: theme-toggle present true, visible true"
+      },
+      "tick_rendered": {
+        "pass": true,
+        "detail": "countdown \"100\" at load, \"98\" after 12 s (connected true)"
+      },
+      "signup": {
+        "pass": true,
+        "detail": "hidden LiveView test passed"
+      },
+      "about": {
+        "pass": true,
+        "detail": "hidden LiveView test passed"
+      }
+    },
+    "rounds_after_green": 19,
+    "diff": {
+      "files": 18,
+      "stat": " test/benchapp_web/live/about_live_test.exs         |  13 + |  test/benchapp_web/live/home_live_test.exs          |  96 ++++++ |  18 files changed, 598 insertions(+), 177 deletions(-)",
+      "patch": "raw/diff-glm53-flash-exl3.patch",
+      "insertions": 598,
+      "deletions": 177
+    },
+    "decode_tok_s": 28.15,
+    "name": "app",
+    "final": "All tests (11) and `mix precommit` pass — the JobyKit-generated Phoenix app \"Lumina\" (landing page with live countdown, in-memory newsletter signup, stats strip, activity feed, registered `feature_grid`/`eyebrow` composites, and an `/about` page) runs on port 4099 with working mobile nav toggle and light/dark themes.",
+    "outcome": "done",
+    "tool_calls": 111,
+    "work_dir": "/Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline/work/glm53-flash-exl3",
+    "reasoning_reported": false,
+    "nudges": 0,
+    "turns": 1,
+    "wall_ms": 1018560,
+    "render": {
+      "mobile": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "connected": true,
+        "countdown": "100",
+        "height": 2709,
+        "nav": true,
+        "nav_links_visible": true,
+        "theme": "light",
+        "theme_toggle": true,
+        "theme_toggle_visible": true,
+        "title": "Home · JobyKit",
+        "toggle_visible": true
+      },
+      "after": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "connected": true,
+        "countdown": "98",
+        "height": 1564,
+        "nav": true,
+        "nav_links_visible": true,
+        "theme": "light",
+        "theme_toggle": true,
+        "theme_toggle_visible": true,
+        "title": "Home · JobyKit",
+        "toggle_visible": false
+      },
+      "light": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "connected": true,
+        "countdown": "100",
+        "height": 1554,
+        "nav": true,
+        "nav_links_visible": true,
+        "theme": "light",
+        "theme_toggle": true,
+        "theme_toggle_visible": true,
+        "title": "Home · JobyKit",
+        "toggle_visible": false
+      },
+      "dark": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "connected": true,
+        "countdown": "100",
+        "height": 1554,
+        "nav": true,
+        "nav_links_visible": true,
+        "theme": "dark",
+        "theme_toggle": true,
+        "theme_toggle_visible": true,
+        "title": "Home · JobyKit",
+        "toggle_visible": false
+      }
+    },
+    "decode_rounds": 36,
+    "failed": 3,
+    "screenshots": {
+      "glm53-flash-exl3-desktop-dark.png": "/Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline/screenshots/glm53-flash-exl3-desktop-dark.png",
+      "glm53-flash-exl3-desktop-light-after-12s.png": "/Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline/screenshots/glm53-flash-exl3-desktop-light-after-12s.png",
+      "glm53-flash-exl3-desktop-light.png": "/Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline/screenshots/glm53-flash-exl3-desktop-light.png",
+      "glm53-flash-exl3-full-light.png": "/Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline/screenshots/glm53-flash-exl3-full-light.png",
+      "glm53-flash-exl3-mobile-full-light.png": "/Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline/screenshots/glm53-flash-exl3-mobile-full-light.png",
+      "glm53-flash-exl3-mobile-light.png": "/Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline/screenshots/glm53-flash-exl3-mobile-light.png"
+    },
+    "completion_tokens": 18814,
+    "green_at": 71,
+    "reasoning_tokens": 6599,
+    "completion_tok_s": 18.5,
+    "tool_time_ms": 87061,
+    "scores": {
+      "tests_added": 7,
+      "components_added": 2,
+      "lint_warnings": 0,
+      "page_height": 1554,
+      "tests_total": 11
+    },
+    "checks_total": 19,
+    "tools": {
+      "bash": 49,
+      "edit": 31,
+      "job": 4,
+      "preview": 10,
+      "read": 10,
+      "write": 7
+    }
+  },
+  "model": "Mia-AiLab/GLM-5.3-Flash-EXL3-TR3-4bpw:exl3",
+  "harness": {
+    "memory": "off",
+    "port": "4099",
+    "tools": "native",
+    "system_prompt": "You are helm, an agent at the conn of the JobyCorp fleet. Be direct and concise.\n\nWorking method: survey before you read. `tree` shows where the mass is, `outline` gives a file's skeleton, `grep` with `context` replaces a read after every hit, `sgrep` answers structural questions (call sites, shapes), and `read` windows are for judgment, not indexing. Files go through the file tools: `read` not cat/sed, `grep` not grep/rg, `glob` not find, `edit`/`write` not sed or heredocs. Bash runs things: builds, tests, mix tasks. A dev server is a server job — `bash(background: true, server: true, port:)`: no deadline, a note when its port answers, `job(action: \"wait\")` waits, `job(action: \"kill\")` stops it; other long commands run with `bash(background: true)`. Never detach a process yourself, and never signal one you did not start. Several tool calls in one round are welcome when they are independent. Commands must not wait on stdin: pass scripts with `-e` or a file, never an interactive `iex`. Read enough to act, act, verify, and stop.",
+    "effort": "low",
+    "mcp": false,
+    "deadline_ms": 3600000,
+    "nudge": "Continue until every requirement in the task is done, then reply with the one-line summary.",
+    "last_call": "Round cap reached — this is the last call. Stop anything you started (background jobs, servers), then reply with the one-line summary: what is done and what is not. No further work.",
+    "last_call_rounds": 4,
+    "nudge_policy": "once, only after a narrated or blank ending; otherwise abandoned",
+    "last_call_grace_ms": 180000,
+    "prompt_sha": "39413706",
+    "rounds_cap": 128,
+    "wire_tools": [
+      "read",
+      "edit",
+      "write",
+      "bash",
+      "grep",
+      "sgrep",
+      "glob",
+      "tree",
+      "outline",
+      "changes",
+      "read_artifact",
+      "job",
+      "preview",
+      "web_search",
+      "todo",
+      "session_search",
+      "consult",
+      "agent"
+    ],
+    "app_prompt": "# Phoenix Elixir app benchmark\n\nJobyKit is already installed. The app you build is the artifact being\nbenchmarked: a modern demo landing site for a fictional product of your\nchoice. It is not a tool for running benchmarks; no benchmark-themed\nfeatures or copy.\n\n## Setup\n\n1. In the current working directory run `mix joby_kit.new benchapp`, then work inside the `benchapp` directory it creates. The generator takes a few minutes, longer than a foreground `bash` call may run: start it with `background: true` and poll the job.\n2. Remove the stock JobyKit demo content: the generator's `simple_nav` header and \"built with\" footer in `lib/benchapp_web/components/layouts.ex`, and the welcome content of HomeLive in `lib/benchapp_web/live/home_live.ex`. Keep the `/design` and `/custom-designs` pages.\n\n## Requirements\n\nMobile and desktop views, and working light and dark themes, throughout.\n\n3. A top navigation bar in `Layouts.app` with id `main-nav` that marks the current page's link with `aria-current=\"page\"`, has a menu that works at phone widths behind a toggle button with id `nav-toggle`, and a theme toggle with id `theme-toggle` usable at both widths.\n4. HomeLive as a landing page with a hero.\n5. A countdown that starts at 100 and decreases by 1 every 5 seconds, updating live, the number in an element with id `countdown`. The five-second tick holds in every environment, including test — the hidden tests wait for it; do not park or stub the timer in configuration.\n6. A newsletter signup form with id `signup-form` and one email input. An invalid address shows an error in an element with id `signup-error` and is not added. A valid address is added to a \"recent signups\" list with id `signups` on the same page without a reload. The same address submitted twice shows the error and is not added again. In-memory is fine; no database.\n7. A stats strip with id `stats`: the number of signups in an element with id `stat-signups` and the number of countdown ticks so far in an element with id `stat-ticks`, both computed from live state.\n8. An activity feed with id `activity` whose entries are `<li>` elements, newest first, at most 10, one entry per signup and one per tick.\n9. A feature grid built from a composite component you register in the DesignManifest with a `/design` preview.\n10. A second page at `/about`, linked from the nav, on the same layout.\n\n## Tests\n\n11. Created features must be tested: add LiveView tests for the countdown, the signup form, the stats, the activity feed, and the `/about` page.\n\n## Constraints\n\n- The dev server must run on port 4099; the `PORT` environment variable is already set to 4099. Do not use any other port.\n- Do not stop or kill processes you did not start.\n- When your own tests and `mix precommit` pass, reply with a one-line summary. Do not re-verify: a green suite and a green precommit are the finish line.\n",
+    "hidden_tests_sha": "6ed2e858"
+  },
+  "finished_utc": "2026-09-11T13:49:30Z",
+  "helm_dirty": false,
+  "helm_sha": "bcf1e7d",
+  "started_utc": "2026-09-11T13:49:30Z",
+  "app_prompt": "# Phoenix Elixir app benchmark\n\nJobyKit is already installed. The app you build is the artifact being\nbenchmarked: a modern demo landing site for a fictional product of your\nchoice. It is not a tool for running benchmarks; no benchmark-themed\nfeatures or copy.\n\n## Setup\n\n1. In the current working directory run `mix joby_kit.new benchapp`, then work inside the `benchapp` directory it creates. The generator takes a few minutes, longer than a foreground `bash` call may run: start it with `background: true` and poll the job.\n2. Remove the stock JobyKit demo content: the generator's `simple_nav` header and \"built with\" footer in `lib/benchapp_web/components/layouts.ex`, and the welcome content of HomeLive in `lib/benchapp_web/live/home_live.ex`. Keep the `/design` and `/custom-designs` pages.\n\n## Requirements\n\nMobile and desktop views, and working light and dark themes, throughout.\n\n3. A top navigation bar in `Layouts.app` with id `main-nav` that marks the current page's link with `aria-current=\"page\"`, has a menu that works at phone widths behind a toggle button with id `nav-toggle`, and a theme toggle with id `theme-toggle` usable at both widths.\n4. HomeLive as a landing page with a hero.\n5. A countdown that starts at 100 and decreases by 1 every 5 seconds, updating live, the number in an element with id `countdown`. The five-second tick holds in every environment, including test — the hidden tests wait for it; do not park or stub the timer in configuration.\n6. A newsletter signup form with id `signup-form` and one email input. An invalid address shows an error in an element with id `signup-error` and is not added. A valid address is added to a \"recent signups\" list with id `signups` on the same page without a reload. The same address submitted twice shows the error and is not added again. In-memory is fine; no database.\n7. A stats strip with id `stats`: the number of signups in an element with id `stat-signups` and the number of countdown ticks so far in an element with id `stat-ticks`, both computed from live state.\n8. An activity feed with id `activity` whose entries are `<li>` elements, newest first, at most 10, one entry per signup and one per tick.\n9. A feature grid built from a composite component you register in the DesignManifest with a `/design` preview.\n10. A second page at `/about`, linked from the nav, on the same layout.\n\n## Tests\n\n11. Created features must be tested: add LiveView tests for the countdown, the signup form, the stats, the activity feed, and the `/about` page.\n\n## Constraints\n\n- The dev server must run on port 4099; the `PORT` environment variable is already set to 4099. Do not use any other port.\n- Do not stop or kill processes you did not start.\n- When your own tests and `mix precommit` pass, reply with a one-line summary. Do not re-verify: a green suite and a green precommit are the finish line.\n"
+}

@@ -1,0 +1,8 @@
+{
+  "app": "benchapp",
+  "base_sha": "28a73603c1a3",
+  "design_sha": "deed3a8c",
+  "joby_kit_version": "0.3.3",
+  "prepared_utc": "2026-09-11T08:30:29Z",
+  "tests": 4
+}

@@ -1,0 +1,4 @@
+phoenix app bench: deepseek-ai/DeepSeek-V4-Flash-Vision-Exp:fp8 as dsv4-flash-vision-exp, effort low, root /Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline
+on helm_dev@jobybook — watch it in that helm's conn
+run phoenix_app-36290 started
+run phoenix_app-36290 finished: %{label: "dsv4-flash-vision-exp", kind: "phoenix_app"}

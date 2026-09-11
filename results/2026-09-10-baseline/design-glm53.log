@@ -1,0 +1,14 @@
+design bench: Mia-AiLab/GLM-5.3-Flash-EXL3-TR3-4bpw:exl3 as glm53-flash-exl3, effort low, root /Users/jody/dgx-spark-model-bench/results/2026-09-10-baseline
+on helm_dev@jobybook — watch it in that helm's conn
+run design-21827 started
+run design-21827 finished: %{
+  label: "glm53-flash-exl3",
+  kind: "design",
+  summary: %{
+    rounds: 106,
+    outcome: "done",
+    wall_ms: 1121552,
+    gates_passed: 18,
+    gates_total: 19
+  }
+}

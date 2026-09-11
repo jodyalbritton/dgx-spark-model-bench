@@ -1,0 +1,125 @@
+/* See the Tailwind configuration guide for advanced usage
+   https://tailwindcss.com/docs/configuration */
+
+@import "tailwindcss" source(none);
+@import "phoenix-colocated/benchapp/colocated.css";
+@source "../css";
+@source "../js";
+@source "../../lib/benchapp_web";
+/* Required for Tailwind to automatically pick up changes in colocated CSS files in dev */
+@source "../../_build/dev/phoenix-colocated/benchapp/*/";
+@source "../../deps/joby_kit/lib";
+
+/* A Tailwind plugin that makes "hero-#{ICON}" classes available.
+   The heroicons installation itself is managed by your mix.exs */
+@plugin "../vendor/heroicons";
+
+/* daisyUI Tailwind Plugin. */
+@plugin "daisyui/packages/bundle/daisyui" {
+  themes: false;
+}
+
+/* JobyCorp themes: a cool page, graphite ink, and one signal-teal accent.
+
+  light — a cool white page, graphite ink
+  dark  — the instrument at night, deep blue-slate (never black)          */
+@plugin "daisyui/packages/bundle/daisyui-theme" {
+  name: "dark";
+  default: false;
+  prefersdark: true;
+  color-scheme: "dark";
+  --color-base-100: oklch(20% 0.018 255);
+  --color-base-200: oklch(24% 0.02 255);
+  --color-base-300: oklch(31% 0.022 255);
+  --color-base-content: oklch(92% 0.008 230);
+  --color-primary: oklch(78% 0.12 195);
+  --color-primary-content: oklch(18% 0.03 195);
+  --color-secondary: oklch(70% 0.13 195);
+  --color-secondary-content: oklch(18% 0.03 195);
+  --color-accent: oklch(70% 0.13 195);
+  --color-accent-content: oklch(18% 0.03 195);
+  --color-neutral: oklch(92% 0.008 230);
+  --color-neutral-content: oklch(20% 0.018 255);
+  --color-info: oklch(58% 0.158 241.966);
+  --color-info-content: oklch(97% 0.013 236.62);
+  --color-success: oklch(60% 0.118 184.704);
+  --color-success-content: oklch(98% 0.014 180.72);
+  --color-warning: oklch(66% 0.179 58.318);
+  --color-warning-content: oklch(98% 0.022 95.277);
+  --color-error: oklch(58% 0.253 17.585);
+  --color-error-content: oklch(96% 0.015 12.422);
+  --radius-selector: 0.375rem;
+  --radius-field: 0.375rem;
+  --radius-box: 0.5rem;
+  --size-selector: 0.21875rem;
+  --size-field: 0.21875rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@plugin "daisyui/packages/bundle/daisyui-theme" {
+  name: "light";
+  default: true;
+  prefersdark: false;
+  color-scheme: "light";
+  --color-base-100: oklch(98% 0.004 230);
+  --color-base-200: oklch(95% 0.006 230);
+  --color-base-300: oklch(88% 0.008 230);
+  --color-base-content: oklch(23% 0.014 250);
+  --color-primary: oklch(48% 0.11 195);
+  --color-primary-content: oklch(97% 0.01 195);
+  --color-secondary: oklch(62% 0.13 195);
+  --color-secondary-content: oklch(20% 0.03 195);
+  --color-accent: oklch(62% 0.13 195);
+  --color-accent-content: oklch(20% 0.03 195);
+  --color-neutral: oklch(30% 0.012 250);
+  --color-neutral-content: oklch(96% 0.004 230);
+  --color-info: oklch(62% 0.214 259.815);
+  --color-info-content: oklch(97% 0.014 254.604);
+  --color-success: oklch(70% 0.14 182.503);
+  --color-success-content: oklch(98% 0.014 180.72);
+  --color-warning: oklch(66% 0.179 58.318);
+  --color-warning-content: oklch(98% 0.022 95.277);
+  --color-error: oklch(58% 0.253 17.585);
+  --color-error-content: oklch(96% 0.015 12.422);
+  --radius-selector: 0.375rem;
+  --radius-field: 0.375rem;
+  --radius-box: 0.5rem;
+  --size-selector: 0.21875rem;
+  --size-field: 0.21875rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+/* Add variants based on LiveView classes */
+@custom-variant phx-click-loading (.phx-click-loading&, .phx-click-loading &);
+@custom-variant phx-submit-loading (.phx-submit-loading&, .phx-submit-loading &);
+@custom-variant phx-change-loading (.phx-change-loading&, .phx-change-loading &);
+
+/* Use the data attribute for dark mode  */
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+/* Make LiveView wrapper divs transparent for layout */
+[data-phx-session], [data-phx-teleported-src] { display: contents }
+
+/* The plotting-paper surface — the record card's grid. Used on the
+   record card and nothing else. A faint grid of the trace colour in
+   24 px cells, on the base-200 panel. */
+.record-paper {
+  background-color: var(--color-base-200);
+  background-image:
+    repeating-linear-gradient(
+      to right,
+      color-mix(in oklch, var(--color-secondary) 12%, transparent) 0 1px,
+      transparent 1px 24px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      color-mix(in oklch, var(--color-secondary) 12%, transparent) 0 1px,
+      transparent 1px 24px
+    );
+}
+
+/* This file is for your main application CSS */

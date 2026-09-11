@@ -3,11 +3,12 @@
 **GLM-5.3-Flash · Qwen3.8-Flash-Next · DeepSeek-V4-Flash, doing real coding
 work with tools**
 
-Run 2026-09-05 to 09-07 on a pair of DGX Sparks: the same task three
-times per model — at the lowest reasoning effort, at the highest, and
-once more at the lowest on a harness that hands the models their own eyes
-and a browser they can drive. This is a first look; a wider set of
-benchmarks pushing all three harder is in progress.
+The baseline round, `2026-09-10-baseline`, run on 2026-09-11 UTC on a pair
+of DGX Sparks: every model through the same five benches on one harness,
+at reasoning effort `low`, one session per task, three runs per model for
+throughput. This round supersedes the earlier ones, which stay under
+`results/` as history: the harness they ran on changed in ways that make
+their rows non-comparable, and nothing here is quoted from them.
 
 ## What was measured, and why it is different
 
@@ -17,9 +18,11 @@ work is a hundred tool calls: read the repo, plan, edit, build, run the
 tests, start the server, look at the page, fix what is wrong, and know when
 to stop.
 
-So each model here drove an agent loop with 21 native tools (file read,
-edit, write, bash, grep, tree, background jobs, a headless browser preview)
-through two kinds of work, graded entirely by machines:
+So each model here drove an agent loop with 18 native tools on the wire
+(file read, edit, write, bash, grep, structural grep, glob, tree, outline,
+background and server jobs, a headless browser it can look at and drive,
+a todo list) through four kinds of work, graded entirely by machines, and
+one raw-throughput bench:
 
 - **17 bug-fix tasks.** Each is an Elixir module whose documentation is the
   specification and whose body has at least one deliberate bug: from a
@@ -27,497 +30,330 @@ through two kinds of work, graded entirely by machines:
   LRU cache, to signed integer division, shell-safe echo, and a module that
   ships a visible test which contradicts its own spec. Hidden ExUnit tests
   grade the result.
-- **One application.** Generate a Phoenix LiveView app from a template,
-  strip the demo content, then build a fictional product's landing site to
-  a written contract: responsive nav with a phone menu and a theme toggle,
-  a hero, a live server-driven countdown, a newsletter form with validation
+- **A Phoenix application.** Generate a LiveView app from a template, strip
+  the demo content, then build a fictional product's landing site to a
+  written contract: responsive nav with a phone menu and a theme toggle, a
+  hero, a live server-driven countdown, a newsletter form with validation
   and duplicate detection, a live stats strip, an activity feed capped at
   ten entries, a feature grid built from a registered design-system
   component, an `/about` page, and LiveView tests for all of it. 19 checks:
-  it compiles, its own tests pass, lint passes, five hidden LiveView tests
-  pass, it boots on the assigned port, and a headless browser confirms the
-  phone menu, the dark theme, and that the countdown actually ticks.
+  it compiles, its own tests pass, lint passes, hidden LiveView tests pass,
+  it boots on the assigned port, and a headless browser confirms the phone
+  menu, the dark theme, and that the countdown actually ticks.
+- **A JavaScript application.** The same landing-site contract on a
+  generated Vite + React + TypeScript app, graded by six checks: it
+  builds, it typechecks, the demo is gone, components live in their own
+  files, a hidden vitest suite of 14 tests passes, and the model's own
+  tests pass.
+- **A design brief.** The JobyCorp website, three pages in both themes at
+  both widths, from one brief and one design direction (`design/DESIGN.md`)
+  on a byte-identical base. 19 mechanical gates: compile, tests, lint, demo
+  gone, routes, current-page marking, no overflow at 390 px, WCAG AA
+  contrast on every text element in both themes, icons resolve, copy free
+  of kit and task words, the theme pair in place, a registered composite
+  used on two pages, boots, mobile nav, theme toggle, dark theme. A blind
+  rubric review ranks the sets; it has not yet been run on this round.
+- **Throughput.** Decode, prefill and time to first token on real output
+  kinds, thinking off, three runs per model, with the published benchmark
+  cells run verbatim beside them. `THROUGHPUT.md`.
 
 The agent loop keeps each model's reasoning and returns it on the
 following tool calls within a turn, as the vendors specify for tool use.
-Each model ran the whole thing twice on the same harness: once at
-reasoning effort `low`, the one grade every chat template honours
-literally, and once at its maximum (`max` for GLM and DeepSeek; Qwen's
-template tops out at `xhigh`, so that is what it received). The `max` runs
-had a larger round budget (150 rounds and 90 minutes against 128 and 60)
-and one extra sentence in the prompt: when your own tests and `mix
-precommit` pass, reply; do not re-verify. One run per model per effort. No
-LLM judge anywhere.
-
-**A third run, on a second harness.** After those two, the agent loop
-changed in ways that matter to a model at work: tool results arrive
-verbatim under a window-scaled ceiling instead of paraphrased by a
-summarising tier, images ride the model's own wire so it can look at a
-screenshot with its own eyes, the browser gained hands (click, type,
-scroll, wait, evaluate, viewport, colour scheme), a dev server became a
-supervised job with a "listening" note and a `wait`, destructive-looking
-shell commands need an approval an unattended seat cannot give, and every
-request ends with a countdown of the remaining budget. Each model ran the
-task once more at `low` on that harness. Those rows answer a different
-question — when you give a model tools, does it use them — and they are
-kept in their own section and their own table, because they are not a
-continuation of the first two.
+Tool results arrive verbatim under a window-scaled ceiling; images ride
+the model's own wire; every request ends with a countdown of the remaining
+budget. `reasoning_effort: low` was sent to all three. No LLM judge
+anywhere.
 
 **Hardware and builds.** Two DGX Sparks, tensor-parallel 2 over the
 ConnectX link, one model at a time.
 
-| model | quant / engine | context |
-|---|---|---:|
-| GLM-5.3-Flash | EXL3 4 bpw, custom vLLM-fork image, dflash speculative decoding | 524k |
-| Qwen3.8-Flash-Next | NVFP4, vLLM, MTP speculative decoding | 1M |
-| DeepSeek-V4-Flash-Vision-Exp | fp8, `dspark-vllm-gx10`, dspark speculative decoding | 1M |
+| model | quant / engine | draft positions | context |
+|---|---|---:|---:|
+| GLM-5.3-Flash | EXL3 4 bpw, custom vLLM-fork image, dflash speculative decoding | 7 | 524k |
+| Qwen3.8-Flash-Next | NVFP4, vLLM, MTP speculative decoding | 3 | 1M |
+| DeepSeek-V4-Flash-Vision-Exp | fp8, `dspark-vllm-gx10`, dspark speculative decoding | 6 | 1M |
 
 ## The results
 
-| | GLM `low` | GLM `max` | Qwen `low` | Qwen `xhigh` | DeepSeek `low` | DeepSeek `max` |
-|---|---:|---:|---:|---:|---:|---:|
-| bug fixes passed | 17/17 | 17/17 ¹ | 16/17 | 16/17 | 17/17 | 17/17 |
-| bug-fix rounds / wall | 114 / 654 s | 92 / 1,372 s | 82 / 465 s | 120 / 932 s | 71 / 496 s | 92 / 906 s |
-| application checks | 19/19 | 19/19 | 19/19 | 19/19 | 19/19 | 19/19 |
-| app rounds | 93 | **90** | 102 | 152 (cap) ² | 77 | 137 |
-| app wall | **18.4 min** | 39.0 min | 27.6 min | 62.7 min | 24.0 min | 44.6 min |
-| app output tokens (text + reasoning) | **20k** | 49k | 59k | 141k | 51k | 98k |
-| of which reasoning | 5.9k | 31k | 38k | 69k | 28k | 59k |
-| app prompt tokens not served from cache | 193k | 199k | 342k | 677k | **97k** | 162k |
-| tests the model wrote | 9 | 21 | 18 | **43** | 10 | 17 |
-| registered composites | 2 | 2 | 2 | **7** | 2 | 3 |
-| failed tool calls | 9 | **3** | 2 | 4 | 5 | 22 |
-| lint warnings | 0 | 0 | 0 | 0 | 0 | 0 |
+| | GLM-5.3-Flash | Qwen3.8-Flash-Next | DeepSeek-V4-Flash |
+|---|---:|---:|---:|
+| bug fixes passed | **17/17** | **17/17** | 16/17 |
+| bug fixes, wall | 8.4 min | 13.2 min | **8.1 min** |
+| Phoenix app checks | **19/19** | **19/19** | **19/19** |
+| Phoenix app rounds · wall | 90 · **17.0 min** | 103 · 32.9 min | 104 · 28.4 min |
+| Phoenix app: tests green at → done | R71 → R90 | R101 → R103 | R103 → R104 |
+| JavaScript app checks | 4/6 | **6/6** | 4/6 |
+| JavaScript app rounds · wall | 42 · 7.6 min | 30 · **6.2 min** | 33 · 6.7 min |
+| design gates | **18/19** | **18/19** | 17/19 |
+| design rounds · wall | 106 · **18.7 min** | 85 · 29.0 min | 95 · 26.3 min |
+| Phoenix app output tokens (text + reasoning) | **18.8k** | 67.2k | 64.7k |
+| of which reasoning | 6.6k (35 %) | 44.0k (66 %) | 38.6k (60 %) |
+| Phoenix app prompt tokens not served from cache | 246k | 479k | **162k** |
+| tests the model wrote (Phoenix app) | 7 | 10 | **13** |
+| browser looks (`preview` calls, Phoenix app) | 10 | 29 | **31** |
+| failed tool calls (Phoenix · JS · design) | 3 · 0 · 5 | **1 · 0 · 0** | 2 · 0 · 3 |
+| decode, prose to a natural stop, thinking off | 26 tok/s | **47 tok/s** | 37 tok/s |
+| decode per round on the Phoenix app, median | 27 tok/s | 43 tok/s | **50 tok/s** |
+| end-to-end tok/s per round, Phoenix app, median | 18 | 30 | **40** |
 
-¹ One of GLM's 17 `max` passes is awaiting a clean re-run after a harness
-staging fix; the other 16 are clean. ² Qwen finished the app around round
-110, then spent the rest of its budget building its own browser
-verification; it hit the cap and wrote its summary in the two "last call"
-rounds the harness allows.
-
-All six runs completed the application to the full contract. That alone
-puts these models in a different class from most local models; a year ago
-none of this ran on desk hardware. **Effort did not change a single graded
-score.** What it changed is how much each model built around the contract,
-how it worked, and what it cost: roughly twice the wall and two to three
-times the output tokens for everyone.
+All three completed the Phoenix application to the full contract, and all
+three passed every design gate but one or two. The JavaScript app is the
+one bench that separated them on correctness: Qwen passed everything, and
+GLM and DeepSeek each shipped with one hidden test and one of their own
+tests failing.
 
 ## Who is fastest, and why
 
-**GLM finished the application first at both efforts: 18 minutes at
-`low` against 24 and 28, and 39 at `max` against 45 and 63.** It did not
-take the fewest rounds at `low`. It said the least. Time in an agent loop
-is prefill plus generation per round, times rounds, and GLM's output over
-the whole task was 20k tokens against 51k and 59k. At `low` it hardly
-reasons at all, so each round is a short tool call and a short result. It
-is fast the way a terse colleague is fast.
+**GLM finished first on every long task**: the Phoenix app in 17 minutes
+against 28 and 33, the design site in 19 against 26 and 29. It did not
+take the fewest rounds. It said the least: 18.8k output tokens on the app
+against 65k and 67k, a median of 68 tokens a round against 194 and 227.
+Time in an agent loop is prefill plus generation per round, times rounds,
+and GLM's rounds are short because its `low` is close to no reasoning at
+all: 1.7k reasoning tokens across all seventeen bug fixes, 35 % of its
+output on the app. It is fast the way a terse colleague is fast, and it is
+fast in spite of its engine, which is the slowest of the three by every
+raw measure.
 
-At `max` GLM is the one model whose round count did not grow (93 → 90). It
-spent its extra effort on a single planning pass and on getting edits
-right the first time: failed tool calls fell from 9 to 3. Its rounds got
-slower (6 s → 11 s at the median) because each one now thinks, and the
-wall doubled, but it stayed the fastest complete result and used half the
-output tokens of the others at the same effort.
+**Qwen was the slowest to finish the two long tasks and the fastest on the
+JavaScript app.** It thinks on every round, at length, and its reasoning
+rides along in the context for the rest of the turn: 66 % of its app
+output is reasoning, its median round adds 3.6k new prompt tokens, and it
+sent 479k uncached prompt tokens over the app, three times DeepSeek's. Its
+slowest round, the planning pass at round 30, ran six minutes and 14.9k
+tokens. On the JavaScript app the same habit cost nothing: 30 rounds, six
+minutes, every check green.
 
-**DeepSeek took the fewest rounds at `low`** (77) and the fewest bug-fix
-rounds (71). It reads, plans once, and edits; it also spent twelve of its
-77 rounds on a self-inflicted detour, running the project generator in the
-foreground twice and getting killed at the shell timeout both times before
-backgrounding it. Without that it would have been within a few minutes of
-GLM.
+**DeepSeek is the fastest per round and spends its time on rounds.** A
+98 % prefix-cache hit rate, 653 new prompt tokens a round at the median,
+1.2 s to first token, and the highest end-to-end rate of the three at 40
+tok/s. Its 28 minutes on the app are 104 rounds, 31 of them looking at its
+own page in the browser.
 
-At `max` DeepSeek's per-round cost did not move (6.5 s median, 98.8% cache
-hits at a context that reached 158k tokens), but its rounds nearly
-doubled to 137. Two planning blocks of 31k and 25k characters came before
-its first file write on round 50 (round 24 at `low`); fifteen rounds went
-to polling background jobs; twelve `todo` calls failed on ids that did not
-exist. The wall doubled because the rounds did.
-
-**Qwen was the slowest to finish at both efforts** because it thinks on
-every round, at length, and because its own reasoning rides along in the
-context for the rest of the turn: its prompt per round was 70k tokens at
-`low` (against DeepSeek's 57k and GLM's 41k) and 147k at `xhigh`, peaking
-at 223k. On the bug fixes it was the fastest of the three at `low`, tied
-with DeepSeek at four to five rounds per task. At `xhigh` it was the one
-model to hit the round cap, and not because the app was unfinished: it
-was done by about round 110, then spent thirty rounds installing puppeteer
-and driving its own signup form through a browser rig of its own making,
-because it never ran `mix precommit` and so the stopping instruction never
-fired.
-
-Raw engine speed, measured separately on the same loads with a synthetic
-prompt, points the other way from the finish times and is worth knowing:
+Raw engine speed, from `THROUGHPUT.md` (three runs per model, thinking
+off, one stream):
 
 | | GLM | Qwen | DeepSeek |
 |---|---:|---:|---:|
-| prefill throughput | 1.1k tok/s | **2.7k tok/s** | 1.8k tok/s |
-| decode, single stream | 45–58 tok/s | **55–65 tok/s** | 48–73 tok/s |
-| time to first token, 150k-token prompt | 138 s | **61 s** | 92 s |
+| prefill, 13k tokens uncached | 1.0k tok/s | **2.9k tok/s** | 1.5k tok/s |
+| time to first token, 13k uncached | 13.6 s | **4.8 s** | 8.4 s |
+| decode, prose to a natural stop | 26 tok/s | **47 tok/s** | 37 tok/s |
+| decode per round on the Phoenix app | 27 tok/s | 43 tok/s | **50 tok/s** |
 
-**Qwen's NVFP4 build is the fastest engine on this hardware**, by more
-than two to one over GLM's EXL3 build on prefill, which is what an agent
-loop spends most of its time doing. What those figures turn into inside a
-working session, round by round, is on `REALWORLD.md`. GLM's finish-line speed comes from
-brevity, not from the engine, and would shrink on tasks with much longer
-contexts. Decode is a near tie for all three at the Spark's bandwidth
-ceiling.
+**Qwen's NVFP4 build is the fastest engine on this hardware**, by three to
+one over GLM's EXL3 build on prefill and 1.8× on decode. DeepSeek's decode
+on agent work runs a third above its prose figure because agent rounds are
+mostly code and tool JSON, which its draft head predicts better than prose.
+What those figures turn into inside a working session, round by round, is
+on `REALWORLD.md`. GLM's finish-line speed comes from brevity, not from the
+engine, and shrinks on tasks with more context.
 
 ## Who is the thinker
 
-All three are reasoning models. They use the capability in three distinct
-ways, visible in a per-round record of what each said versus what it
-thought.
+All three are reasoning models, and `low` does not turn thinking off on
+this cluster for any of them. It turns it down by different amounts.
 
-| on the application | GLM `low` | GLM `max` | Qwen `low` | Qwen `xhigh` | DeepSeek `low` | DeepSeek `max` |
-|---|---:|---:|---:|---:|---:|---:|
-| rounds with any reasoning | 33 of 93 | 61 of 90 | **102 of 102** | **152 of 152** | 53 of 77 | 81 of 137 |
-| total reasoning, characters | 23k | 122k | 152k | **266k** | 113k | 237k |
-| largest single reasoning block | 6k | 38k | 43k | **46k** | 16k | 31k |
-| visible text over the whole task | 1.1k | 3.4k | 3.8k | 0.8k | 4.4k | 0.7k |
+| at `low` | GLM | Qwen | DeepSeek |
+|---|---:|---:|---:|
+| reasoning share of output, Phoenix app | 35 % | **66 %** | 60 % |
+| reasoning share of output, design | 19 % | **58 %** | 56 % |
+| reasoning share of output, JavaScript app | 14 % | 29 % | **30 %** |
+| reasoning tokens over the 17 bug fixes | **1.7k** | 17.1k | 9.5k |
+| slowest round on the Phoenix app | R12: 82 s, 2.2k tokens | R30: **360 s, 14.9k** | R59: 205 s, 7.2k |
 
-**Qwen is the thinker at any setting.** It reasons on every round, its
-visible output is a sentence or nothing, and it plans in one enormous
-block: at `low`, after 28 rounds of reading, a 43,000-character reasoning
-pass laying out the entire application, then 70 rounds of edits against it
-without ever re-planning. At `xhigh` the plan block is the same size and
-the total reasoning is 1.75× larger, spread over 50 more rounds, and the
-visible text shrinks to 827 characters across the whole task. Everything
-Qwen knows lives in its reasoning; an agent harness that does not return
-reasoning to it would be throwing away its working memory.
+**Qwen is the thinker at any setting.** Its visible output is a sentence
+or nothing, and it plans in one enormous block: round 30 of the app is a
+six-minute, 14.9k-token pass laying out the whole application. Everything
+Qwen knows lives in its reasoning; a harness that does not return
+reasoning within the turn would be throwing away its working memory.
 
-**DeepSeek thinks once, then acts, and at `max` it thinks twice as long
-before acting.** On 13 of the 17 bug fixes at `low` it reasoned on exactly
-one round. On the application it wrote a 16k-character plan, a 9k block to
-design the main page, and then edited with no reasoning on most rounds,
-announcing each step in a short visible sentence. At `max` the same shape
-holds with the volume doubled: two planning blocks of 31k and 25k before
-the first write, more rounds of second-guessing (its "wait / actually /
-hmm" density is about 27 per 10k characters of reasoning at either effort,
-half again the other two's; `max` doubled the volume, not the density),
-and almost no visible narration. At `low` it is the easiest of the three
-to follow in a transcript; at `max` it is as silent as Qwen.
+**DeepSeek thinks in a few large episodes and narrates the rest.** Two
+planning blocks on the app (rounds 11 and 59, 6.0k and 7.2k tokens), short
+visible sentences between, and 60 % of its output reasoning overall. On
+the bug fixes it reasoned one to three thousand tokens on the four it
+found hard and under five hundred on the rest.
 
-**GLM barely thinks at `low` and thinks in a few large episodes at
-`max`.** At `low`: a 6k plan on round 9, then reasoning only on diagnosis
-rounds (an edit anchor that missed, a killed command, a huge tool output)
-and none on edits. GLM's template collapses `low` to almost nothing, so
-`low` is a lighter setting for GLM than for the other two, and that is a
-large part of why it was fast. At `max`: one 38k-character pass on round
-15 that read the kit sources and planned everything, a second block to
-design the page, and then reasoning on 61 of 90 rounds with a median of
-56 tokens. Its reasoning per round at `max` is still a fifth of Qwen's.
-The pattern is fewer, better-prepared moves rather than more of them.
+**GLM's `low` is nearly off on small tasks and on for large ones.** Twelve of
+its seventeen bug fixes carry under fifty reasoning tokens. On the app it
+reasoned on the diagnosis rounds and the plan, a third of its output. That
+is a large part of why it is fast, and it is a lighter setting than the
+other two received.
 
 ## Who has the best quality
 
 ### Bug fixes
 
-GLM and DeepSeek went 17/17 at both efforts. Qwen missed the same fixture
-both times: it requires removing exactly one trailing newline, and Qwen
-used `String.trim_trailing`, which removes all of them; the spec's own
-example (`"x\n\n" => "x\n"`) is the failing test. At `low` its reasoning on
-that task was 315 tokens, its lightest of the run; at `xhigh` it reasoned
-for 1,037 tokens, asked itself "removes only ONE?", and answered wrong
-again. Two efforts, same answer: a trait, and the fixture exists to catch
-it.
+GLM and Qwen went 17/17. DeepSeek missed `safe_echo_exact`, the fixture
+that asks for shell-safe echo with exactly one trailing newline: it
+declared the task done at round 4 with the hidden tests failing, the same
+early declaration it made on that fixture in an earlier round. Qwen had
+missed that same fixture in every previous round; this time it passed it,
+in 16 rounds, its longest task of the run.
 
-Effort did not fix anything on the bug fixes and it did not break
-anything either. It made them slower for all three (wall up 1.4× to 2.1×)
-because every round thinks, and it landed unevenly on small tasks: GLM
-spent 4.2k reasoning tokens and 216 s on a one-regex fix it had solved in
-16 s at `low`; DeepSeek spent 5.1k tokens and 11 rounds on the
-shell-escaping fixture exploring escape behaviour before writing the
-quoting; Qwen spent 4.6k tokens and 232 s on the LRU cache it had solved in
-20 s. Where GLM benefited was on the fixtures where `low` had left it
-running things blind: its two 16-round trial-and-error fixes became 4 and
-5 rounds.
+Where the three spent their time says how they work. GLM fixed the median
+task in 5 rounds and 23 seconds with almost no reasoning; its longest was
+the interval merge at 11 rounds, found by running things. DeepSeek fixed
+the median task in 4 rounds and was fastest overall. Qwen reasoned for
+7.6k tokens and nearly four minutes on the same interval merge that GLM
+ran through, and took ten rounds and four failed tool calls on the pricing
+fixture, but its answers held.
 
-Passing hidden tests is the floor. Reading all 51 drafts:
+### The Phoenix application
 
-- Where Elixir has an idiom, all three found it: `Agent.get_and_update`
-  for the atomic rate limiter, pattern-matched heads, identical ring-buffer
-  and slug fixes.
-- Where they diverged, Qwen tended to reach the more idiomatic form:
-  `Integer.floor_div` for signed division where GLM and DeepSeek corrected
-  `div`/`rem` by hand; a shell-free `System.cmd` where the others quoted
-  input into a shell.
-- All three followed the documentation over the lying visible test in the
-  fixture built to check that. Qwen alone explained in its summary why the
-  test was wrong.
-- GLM finds bugs by running things. It took 114 rounds across the 17
-  fixtures against 71 and 82, and one fix took 16 rounds, but the fixes
-  were right and its summaries described the bug accurately.
+Nineteen of nineteen for everyone, so the differences are in engineering
+and in what happened after the tests went green.
 
-### The application
+- **DeepSeek wrote the most tests (13)** and one registered composite, and
+  looked at its page 31 times: after its tests went green at round 103 it
+  replied on 104.
+- **Qwen wrote 10 tests and two composites**, looked 29 times, and went
+  green at round 101 and done at 103. One failed tool call in 140.
+- **GLM wrote 7 tests and two composites**, looked 10 times, went green at
+  round 71, and spent 19 more rounds polishing before it replied. Two of
+  its three failed tool calls were `sed` edits through bash that the edit
+  tool would have made cleanly.
 
-Nineteen of nineteen for everyone at both efforts, so the differences are
-in engineering and in taste.
+### The JavaScript application
 
-At `low`:
+The first outing of this bench, and the one place the scores separate.
 
-- **Qwen wrote the most tests (18) and the most idiomatic LiveView**: the
-  only implementation to use a `stream` for the activity feed with explicit
-  `stream_delete` to hold the ten-entry cap, empty states on every list,
-  duplicate detection, the kit's theme toggle reused rather than rebuilt.
-- **DeepSeek's is the most conventional**: assigns-based lists, a clean
-  separation of sections, two registered composites (a feature grid and a
-  stat card) with `/design` previews, ten tests.
-- **GLM's is the leanest**: nine tests, two composites, a countdown that
-  reschedules unconditionally (harmless), and one leftover `max(x, 0)` in a
-  fix that can never bind. Its edit tool missed its anchor several times
-  and it recovered each time.
+- **Qwen: 6/6.** 14 of 14 hidden tests, 23 of 23 of its own, six
+  components in their own files, 30 rounds, six minutes.
+- **GLM: 4/6.** 13 of 14 hidden tests: the signup form's invalid-address
+  error never rendered. 25 of 26 of its own tests, though its summary
+  reported all passing.
+- **DeepSeek: 4/6.** 13 of 14 hidden tests: the activity feed added one
+  entry per signup where the contract asks for one per signup and one per
+  tick, so the test expecting two found one. 23 of 24 of its own tests.
 
-At maximum effort, what each model added:
+Two models, two different failing tests, and both replied "done" with a
+test of their own red. That is the failure mode to watch for on a stack
+the models know less well: the Elixir fixtures caught none of it.
 
-- **Qwen: 43 tests and 7 registered composites**, more than double anyone
-  else, plus a browser verification rig it built and ran itself. The most
-  thorough engineering of the six runs, at the highest cost.
-- **GLM: 21 tests**, the nav lifted into its own component module, and a
-  tenth of the tool failures it had at `low`. Its `max` app has no leftover
-  oddities; the `low` app's blank icon and dead `max(x, 0)` are gone.
-- **DeepSeek: 17 tests and a third composite**, and a custom daisyUI theme.
-  It also made 22 failed tool calls against 5 at `low`, most of them the
-  `todo` tool, and read outside its sandbox once. More thorough, less
-  disciplined.
+### The design site
 
-### The pages
-
-Described from the harness's own screenshots (desktop and phone, light and
-dark). Which page is better is a matter of taste and this report does not
-rank them; a design-only round with a shared brief and blind judging is
-planned for that.
-
-At `low`:
-
-- **GLM's "Solstice"**, a desk lamp, is the one that reads as a product
-  rather than a demo of the component kit. The countdown is reframed as
-  "early-bird places remaining, one spot opens up every five seconds",
-  the only copy of the three that makes the five-second tick make sense.
-  Six lamp-specific feature cards, empty states everywhere, one blank icon
-  from a misspelled icon name.
-- **DeepSeek's "Lumen"** is a spacious, conventional marketing page:
-  full-width bands, a big countdown, a waitlist section, product copy
-  throughout, one missing empty state.
-- **Qwen's "Lumen"** is the most compact and the most engineered: the
-  countdown, form, signups, and activity feed all live in one card beside
-  the hero, and it works well on a phone. Its feature copy describes the
-  component kit itself rather than a product, the one place it read the
-  brief as an engineer instead of as a marketer.
-
-At maximum effort every page acquired an identity. The `low` pages look
-like the template with the demo content swapped; the `max` pages each
-chose a register and carried it through copy, icons, and layout:
-
-- **GLM's "Windrose"**, offline trail maps: an illustrated trail-map hero
-  card, the countdown as "early-access keys remaining" with a progress bar,
-  empty states on both lists, a closing call to action, no broken elements.
-- **Qwen's "Lodestar"**, data pipelines on a launch schedule: a monospace
-  flight-deck theme, the countdown as "manifest closes in 100 beats", a
-  seats-left panel, illustrated empty states, six numbered feature panels,
-  a boarding-procedure list, a closing "final call". The densest page of
-  the six and twice the height of the others on a phone.
-- **DeepSeek's "Hearth"**, a family's shared lists: a custom warm
-  red-and-amber theme, a two-tone headline, the form inside a tinted band,
-  six features with the first highlighted. The same missing empty state
-  under "Recent signups" as at `low`, and no closing call to action.
-
-Three of the six pages are named "Lumen" or a variant of it; all three
-`max` pages are named something else.
-
-### Low against max, side by side
-
-Above-the-fold desktop captures, light theme, taken by the harness after
-each run. Full-page captures, phone captures, and dark theme are under
-each round's `screenshots/`.
-
-<table>
-<tr><th></th><th>effort <code>low</code></th><th>effort <code>max</code> (<code>xhigh</code> for Qwen)</th></tr>
-<tr><td><b>GLM-5.3-Flash</b><br>Solstice → Windrose</td>
-<td><a href="results/2026-09-05-r2/screenshots/glm53-flash-exl3-full-light.png"><img src="results/2026-09-05-r2/screenshots/glm53-flash-exl3-desktop-light.png" alt="GLM at low: Solstice" width="440"></a></td>
-<td><a href="results/2026-09-05-r3/screenshots/glm53-flash-exl3-full-light.png"><img src="results/2026-09-05-r3/screenshots/glm53-flash-exl3-desktop-light.png" alt="GLM at max: Windrose" width="440"></a></td></tr>
-<tr><td><b>Qwen3.8-Flash-Next</b><br>Lumen → Lodestar</td>
-<td><a href="results/2026-09-05-r2/screenshots/qwen38-flash-next-nvfp4-full-light.png"><img src="results/2026-09-05-r2/screenshots/qwen38-flash-next-nvfp4-desktop-light.png" alt="Qwen at low: Lumen" width="440"></a></td>
-<td><a href="results/2026-09-05-r3/screenshots/qwen38-flash-next-nvfp4-full-light.png"><img src="results/2026-09-05-r3/screenshots/qwen38-flash-next-nvfp4-desktop-light.png" alt="Qwen at xhigh: Lodestar" width="440"></a></td></tr>
-<tr><td><b>DeepSeek-V4-Flash</b><br>Lumen → Hearth</td>
-<td><a href="results/2026-09-05-r2/screenshots/dsv4-flash-vision-exp-full-light.png"><img src="results/2026-09-05-r2/screenshots/dsv4-flash-vision-exp-desktop-light.png" alt="DeepSeek at low: Lumen" width="440"></a></td>
-<td><a href="results/2026-09-05-r3/screenshots/dsv4-flash-vision-exp-full-light.png"><img src="results/2026-09-05-r3/screenshots/dsv4-flash-vision-exp-desktop-light.png" alt="DeepSeek at max: Hearth" width="440"></a></td></tr>
-</table>
-
-Click any capture for the full page.
-
-## When you give them tools, do they use them?
-
-The third run put a browser on the wire that each model could drive and
-look at with its own eyes, and gave it a supervised dev server and
-verbatim file contents. Same task, same `low` effort, one run each.
-
-| round 6, effort `low`, second harness | GLM-5.3-Flash | Qwen3.8-Flash-Next | DeepSeek-V4-Flash |
+| | GLM | Qwen | DeepSeek |
 |---|---:|---:|---:|
-| bug fixes | 16/17 | 16/17 | **17/17** |
-| application checks | **19/19** | 16/19 | **19/19** |
-| app rounds / wall | **62 / 14.1 min** | 105 / 35.8 min | 105 / 34.5 min |
-| first write → tests green → done | **12 → 60 → 62** | 25 → 92 → 105 | 23 → 103 → 105 |
-| browser calls (`preview`) | **0** | 12 | 17 |
-| supervised server jobs | 4 | 11 | 6 |
-| failed tool calls per 100 | **1.4** | 2.3 | 2.9 |
-| time spent inside tools, share of wall | 5.1% | **1.0%** | 2.5% |
-| visual defects on the shipped page | 4 | **0** | **0** |
-| copy that names the kit or invents a number | 1 | 2 | **0** |
+| gates | 18/19 | 18/19 | 17/19 |
+| the missed gate | theme toggle absent at 390 px | table headers at 4.24:1 in the light theme | no composite registered, so none reused |
+| composites registered · reused | **10 · 10** | 6 · 7 | 0 · 0 |
+| tests added | 3 | **7** | 4 |
+| rounds · wall | 106 · **18.7 min** | 85 · 29.0 min | 95 · 26.3 min |
+| browser looks | 20 | 27 | **32** |
 
-**DeepSeek used them as intended, and it shows on the page.** After the
-build it spent fifteen rounds looking at its own site, fixing what it saw,
-then went green and stopped. Both of its lists carry an empty state for the
-first time in four rounds of this task; the hero is denser and the page is
-shorter with less dead space. It cost ten minutes more than the same model
-took on the previous harness, for the same 19/19.
+GLM built the most component-driven site and lost the mobile theme
+toggle. Qwen's miss is the kit's default table-header colour, the same
+4.24:1 that cost GLM a gate in the previous design round. DeepSeek built
+the pages without registering a single composite, which the brief asks for
+and two gates check. Above the fold the three sets follow the design
+direction closely and look alike: the record card on plotting paper, the
+teal accent, the two voices. Which is best is a rubric question, and the
+blind review of this round has not been run; the previous round's review
+is under `results/2026-09-06-design/` and does not transfer.
 
-**GLM never picked them up, and shipped the fastest complete app in the
-whole benchmark.** Sixty-two rounds, fourteen minutes, 17.5k output
-tokens, green at round 60, done at 62, one failed tool call in seventy-four,
-zero browser calls. It also shipped four things a single look would have
-caught: an icon name that does not exist in the installed set (a blank tile),
-two headings sitting over empty lists with no empty state, and desktop nav
-links set four pixels apart so they read as one run of words. All nineteen
-checks pass, because no check looks at any of that. This is the clearest
-evidence in the benchmark for what eyes buy: seventeen looks, zero visual
-defects; zero looks, four.
+## The pages
 
-**Qwen picked them up late and put them down when it read the clock.**
-Seven browser rounds after its tests first went green, two of which led to
-an edit; then its reasoning at round 94 says "33 of 60 min used; visual
-verification is a nice-to-have", and it went for the summary. Its page has
-no visual defects. Its three lost checks are a decision made during the
-build and invisible to any screenshot: it set the countdown interval to one
-hour in the test configuration so its own tests could step the timer by
-hand, and the hidden tests, which wait for the real five-second tick, saw a
-countdown that never moved. The live site ticks. It changed the behaviour
-under test, which is the kind of thing a reviewer rejects and a checklist
-should name.
+Desktop captures, light theme, taken by the harness after each run. The
+Phoenix landing sites link to their full-page captures; the design home
+pages are full-page already. Phone captures and dark theme are under
+`results/2026-09-10-baseline/screenshots/`.
 
 <table>
-<tr><th>GLM — Fernline</th><th>Qwen — Cadence</th><th>DeepSeek — Aster</th></tr>
+<tr><th>GLM — Lumina</th><th>Qwen — Lumen</th><th>DeepSeek — Nimbus</th></tr>
 <tr>
-<td><a href="results/2026-09-07/screenshots/glm53-flash-exl3-full-light.png"><img src="results/2026-09-07/screenshots/glm53-flash-exl3-desktop-light.png" alt="GLM round 6: Fernline" width="290"></a></td>
-<td><a href="results/2026-09-07/screenshots/qwen38-flash-next-nvfp4-full-light.png"><img src="results/2026-09-07/screenshots/qwen38-flash-next-nvfp4-desktop-light.png" alt="Qwen round 6: Cadence" width="290"></a></td>
-<td><a href="results/2026-09-07/screenshots/dsv4-flash-vision-exp-full-light.png"><img src="results/2026-09-07/screenshots/dsv4-flash-vision-exp-desktop-light.png" alt="DeepSeek round 6: Aster" width="290"></a></td>
+<td><a href="results/2026-09-10-baseline/screenshots/glm53-flash-exl3-full-light.png"><img src="results/2026-09-10-baseline/screenshots/glm53-flash-exl3-desktop-light.png" alt="GLM: Lumina" width="290"></a></td>
+<td><a href="results/2026-09-10-baseline/screenshots/qwen38-flash-next-nvfp4-full-light.png"><img src="results/2026-09-10-baseline/screenshots/qwen38-flash-next-nvfp4-desktop-light.png" alt="Qwen: Lumen" width="290"></a></td>
+<td><a href="results/2026-09-10-baseline/screenshots/dsv4-flash-vision-exp-full-light.png"><img src="results/2026-09-10-baseline/screenshots/dsv4-flash-vision-exp-desktop-light.png" alt="DeepSeek: Nimbus" width="290"></a></td>
 </tr>
 </table>
 
-Two things this run did not change. The bug-fix sheet moved by one in each
-direction and for reasons that have nothing to do with tools: GLM, thinking
-almost not at all at `low`, rewrote a concurrent rate limiter's exhausted
-branch so it reset the counter to zero and the cap stopped holding, a
-fixture it had passed before; Qwen missed the same trailing-newline fixture
-it has now missed at three settings in a row. And the throughput per round
-barely moved even though contexts nearly doubled, because the prefix cache
-absorbed the extra reading — the numbers are in `REALWORLD.md`.
+GLM's Lumina is a smart desk lamp with a centred hero and six feature
+cards; the sixth card's icon tile is empty in the capture, and the two
+list headings sit over empty lists with no empty state, the same defects
+GLM shipped on this task in the previous round. Qwen's Lumen is an overnight engineering brief,
+with the countdown in a card beside the hero, a stats strip, and the
+waitlist and live feed side by side. DeepSeek's Nimbus is a product
+analytics pitch with the countdown, signups and ticks in one card next to
+the headline and a six-card feature grid. The JavaScript apps are Nimbus
+(GLM), Pulse (Qwen) and Loop Studio (DeepSeek).
+
+<table>
+<tr><th>GLM — JobyCorp</th><th>Qwen — JobyCorp</th><th>DeepSeek — JobyCorp</th></tr>
+<tr>
+<td><a href="results/2026-09-10-baseline/screenshots/glm53-flash-exl3-home-light-desktop.png"><img src="results/2026-09-10-baseline/screenshots/glm53-flash-exl3-home-light-desktop.png" alt="GLM design: home" width="290"></a></td>
+<td><a href="results/2026-09-10-baseline/screenshots/qwen38-flash-next-nvfp4-home-light-desktop.png"><img src="results/2026-09-10-baseline/screenshots/qwen38-flash-next-nvfp4-home-light-desktop.png" alt="Qwen design: home" width="290"></a></td>
+<td><a href="results/2026-09-10-baseline/screenshots/dsv4-flash-vision-exp-home-light-desktop.png"><img src="results/2026-09-10-baseline/screenshots/dsv4-flash-vision-exp-home-light-desktop.png" alt="DeepSeek design: home" width="290"></a></td>
+</tr>
+</table>
 
 ## What it feels like to use each one
 
-**DeepSeek-V4-Flash is the one you can leave alone, at `low`.** It reads
-enough, writes one plan, and executes it in short visible steps, using the
-background-job tool for the server, a todo list for its checklist, and the
-browser preview to look at its own page before it says it is done. It
-finishes in one line. Its 98% prefix-cache hit rate makes it the cheapest
-per task in prompt compute by a factor of two to three. Its faults are
-small: it will sometimes run a long command in the foreground and get
-killed, and it writes fewer tests than Qwen. At `max` it is a different
-experience: twice as long before the first file appears, a transcript
-that goes quiet, more polling and more retries, and a better-furnished
-result (more tests, a custom theme) that took twice as long to arrive.
-`max` did not make DeepSeek wrong anywhere; it made it slower and less
-tidy for a modest gain. Given a browser it can drive, it is also the only
-one of the three that reliably stops to look at what it built.
+**DeepSeek-V4-Flash is the one you can leave alone.** It reads enough,
+plans in two blocks, executes in short visible steps, uses the background
+job for the server and the todo list for its checklist, and looks at its
+page more than the others. It is the cheapest per task in prompt compute
+by two to three times and the fastest per round. Its fault is declaring
+done early: it did so on the one bug fix it missed and on a JavaScript app
+with a red test of its own, and it built the design site without the
+composite the brief asks for.
 
-**Qwen3.8-Flash-Next is the thorough one, and `xhigh` makes it more so.**
-Watching it work is watching almost nothing: the transcript shows a
-sentence per round or a blank, because everything it knows is in its
-reasoning. What comes out the other end is the best-tested, most idiomatic
-code of the three, and at `xhigh` it is the best-tested code of the six
-runs by a wide margin: 43 tests, 7 composites, and a browser rig it built
-to check its own form. It costs the most at either effort: the most
-rounds, the most reasoning, the largest context, and at `xhigh` the only
-run to reach the round cap, not because the app was unfinished but because
-it kept verifying past the finish line. It also has the fastest engine on
-this hardware, which matters if you serve more than one seat, and which is
-why its 147k-token rounds still ran at 36 tok/s end to end. Watch it for
-shortcuts rather than for mistakes: given a checklist it cannot see, it
-will occasionally make its own tests easier rather than make the feature
-right.
+**Qwen3.8-Flash-Next is the careful one.** Watching it work is watching
+almost nothing, because everything it knows is in its reasoning. What comes
+out is the cleanest scorecard of the three: 17/17 on the fixtures
+including the one it used to miss, 6/6 on the JavaScript app, one failed
+tool call in 279. It costs the most wall on long tasks and three times
+DeepSeek's prompt compute, on the fastest engine here, which is why its
+rounds still run at 30 tok/s end to end with 104k tokens of context.
 
-**GLM-5.3-Flash is the sprinter, and at `max` it is the most efficient
-of the three.** At `low` it finishes first, emits a third of the tokens,
-and fixes bugs by running things rather than by deliberating; its thinking
-is nearly off and its speed lives entirely in brevity, because its engine
-is the slowest of the three per token on this hardware. At `max` it is
-still first, still on half the tokens of the others, and now with a tenth
-of the tool failures, twice the tests, and a page with a strong identity.
-Effort made GLM better at the same cost ratio it made the others slower.
-Two caveats. Sample size: GLM has one run at `max` on record, and the
-first attempt at `max`, before the stopping instruction was added to the
-prompt, ran to the round cap re-verifying a finished app. And speed has a
-price — given a browser and a page to check, GLM did not open it, and the
-page it shipped has the defects to prove it.
+**GLM-5.3-Flash is the sprinter.** First to finish every long task on a
+third of the tokens, fixes bugs by running things, and registers more
+composites than anyone. Its engine is the slowest per token on this
+hardware and its `low` is lighter than the others'. Its mistakes are the
+ones a look would catch: a blank icon, a missing mobile theme toggle, a
+signup error that never renders. It looked at its pages this round, ten
+and twenty times, and shipped them anyway.
 
 ## Which one to run
 
 For two Sparks and one person at the keyboard:
 
-- **Default: DeepSeek-V4-Flash at `low`.** Complete, cheap, easy to follow,
-  the fewest rounds. Leave it at `low`; `max` doubles its time for a
-  modest gain and makes it harder to follow.
-- **If you want the most tests and the most idiomatic code, and your
-  harness returns reasoning within the turn: Qwen3.8-Flash-Next.** Budget
-  about 20% more wall time and two to three times the prompt compute at
-  `low`; at `xhigh` budget double that again and give it a clear finish
-  line, or it will keep verifying. Also the pick for concurrent users; its
-  engine has the best prefill and concurrency here.
+- **Default: DeepSeek-V4-Flash at `low`.** Complete on the Phoenix app,
+  cheapest, fastest per round, easiest to follow, and the one that checks
+  its own page. Read its "done" as a claim: run the tests yourself.
+- **If correctness on an unfamiliar stack matters, or your harness
+  returns reasoning within the turn: Qwen3.8-Flash-Next.** The only clean
+  sheet on the JavaScript app and the fixtures. Budget the most wall on
+  long tasks and the most prompt compute. Also the pick for concurrent
+  users; its engine has the best prefill and the highest decode here.
 - **If you want the fastest complete answer at the lowest output cost:
-  GLM-5.3-Flash.** At `low` it is the cheapest run on the board — fourteen
-  minutes for a complete application on the current harness; at `max` it
-  is the run with the fewest mistakes and still the fastest at that
-  effort. Check that thinking is enabled in your serving config; its
-  template does not turn it on from `reasoning_effort` alone, and its
-  `low` is lighter than the other two's. If the work has a visual result,
-  review it yourself: GLM will not.
-
-**On effort generally:** on this task it bought thoroughness and identity,
-not correctness, at about twice the wall and two to three times the
-tokens. If the checklist is the goal, `low` is enough for all three. If the
-tests and the page are the goal, `max` is worth it for GLM, worth it for
-Qwen with a stopping rule, and a coin flip for DeepSeek.
-
-**On tools generally:** giving a model eyes and hands changes what it
-catches, not what it can build. It cost DeepSeek ten minutes and bought a
-page with no visual defects; it cost GLM nothing because GLM declined the
-offer; it cost Qwen seven rounds it then decided it could not afford. If
-you care about the thing being right on screen and you cannot review it
-yourself, that difference is the whole decision.
+  GLM-5.3-Flash.** Seventeen minutes for a complete application, nineteen
+  for the design site, on a third of the tokens. If the work has a visual
+  result, review it yourself.
 
 ## Caveats
 
-- One run per model per effort per harness. Run-to-run variance is real
-  (Qwen's fixture miss; DeepSeek's generator detour) and nothing here has
-  error bars.
-- The third run is on a different harness from the first two. Its rows are
-  comparable across the three models, not against the `low` and `max`
-  tables above.
+- One run per model per agent bench; only throughput has repeats. The
+  round-to-round variance seen in earlier rounds (the same fixture missed
+  three times, then passed) is real, and the agent rows have no error bars.
+- `low` only. Earlier rounds ran each model at its maximum effort on an
+  older harness; those rows are history, not part of this comparison.
+- Qwen's four agent rows ran on helm `c535e08` with a report-only edit
+  uncommitted; GLM's and DeepSeek's on `bcf1e7d`, clean. The benches are
+  identical between the two.
+- The design rubric review has not been run on this round, so the design
+  rows are gates only.
 - Different quantizations (4-bit EXL3, NVFP4, fp8) on different engine
   builds. Raw speed is partly the stack.
-- `low` means less for GLM than for the others, and `max` means different
-  things to each template (Qwen's ceiling is `xhigh`). The two efforts are
-  each model's own floor and ceiling, not a shared scale.
-- The `max` runs had a larger round budget and a stopping sentence in the
-  prompt that the `low` runs did not; both were needed for the `max` runs
-  to end cleanly and neither changed a score.
-- The tasks are Elixir and Phoenix. Rankings on other stacks may differ.
+- The tasks are Elixir and Phoenix, plus one React and Vite app. Rankings
+  on other stacks may differ.
 
 ## Data
 
-Everything is in this folder: `design/CODING_BENCH.md` for the prompts,
-tools, oracle and checklist as run; `results/2026-09-05-r2/` (the `low`
-runs), `results/2026-09-05-r3/` (the `max` runs) and `results/2026-09-07/`
-(the second harness) for the raw rows, the generated apps, the
-screenshots, the per-round reasoning records, and each round's own
-`REPORT.md`; `REALWORLD.md` for what a session's throughput looks like
-round by round; `design/TESTPLAN.md` for the protocol.
+Everything is in this folder: `results/2026-09-10-baseline/` for the raw
+rows (`raw/`), the rendered `RESULTS.md`, the run log, the generated apps
+(`work/`), the screenshots, the per-round reasoning sidecars and the
+per-round ledgers (`raw/rounds/`); `design/CODING_BENCH.md` and
+`design/DESIGN_BENCH.md` for the prompts, tools, oracle and gates as run;
+`THROUGHPUT.md` for raw decode, prefill and time to first token;
+`REALWORLD.md` for what a session's throughput looks like round by round;
+`design/TESTPLAN.md` for the protocol.
