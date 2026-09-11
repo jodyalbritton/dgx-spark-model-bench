@@ -137,7 +137,8 @@ Sizes 256 / 2,048 / 8,192 / 32,768 / 65,536 / 102,400 / 153,600 tokens at
 c=1. Thinking off, `temperature 0.6`, `top_p 0.95`, fixed 128-token output
 (`min_tokens = max_tokens = 128`, `ignore_eos`). TTFT = first streamed token
 (content or reasoning). Prefill tok/s = prompt tokens / TTFT. Decode tok/s =
-128 / (end − first token). The reasoning probe (301 question, greedy,
+127 / (end − first token) — completion less the first token, over the
+window after it (before 2026-09-10 the script divided all 128, 0.8 % high). The reasoning probe (301 question, greedy,
 thinking on) stays as the smoke test. One request per size at c=1 is enough
 for prefill and TTFT, which were stable to a few percent across sizes.
 
