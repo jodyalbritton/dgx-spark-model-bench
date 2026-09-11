@@ -1,0 +1,496 @@
+[debug] QUERY OK source="mcp_servers" db=0.3ms queue=0.4ms idle=22.0ms
+SELECT m0."id", m0."name", m0."url", m0."token", m0."enabled", m0."approval_default", m0."timeout_ms", m0."project_id", m0."instructions", m0."excluded_tools", m0."inserted_at", m0."updated_at" FROM "mcp_servers" AS m0 WHERE (m0."enabled") ORDER BY m0."inserted_at" []
+[90m↳ Helm.MCP.reload/0, at: lib/helm/mcp.ex:69[0m
+[debug] QUERY OK source="project_procs" db=0.2ms queue=0.3ms idle=22.0ms
+SELECT p0."id", p0."project_id", p0."name", p0."command", p0."env", p0."cwd", p0."auto_start", p0."os_pid", p0."inserted_at", p0."updated_at" FROM "project_procs" AS p0 WHERE (NOT (p0."os_pid" IS NULL)) []
+[90m↳ Helm.Procs.sweep_orphans/0, at: lib/helm/procs.ex:35[0m
+throughput bench: Mia-AiLab/GLM-5.3-Flash-EXL3-TR3-4bpw:exl3 as glm53-flash-exl3-r1, effort default, root /Users/jody/benchmarks/results/2026-09-10-baseline
+[debug] QUERY OK source="session_jobs" db=0.3ms queue=0.4ms idle=33.4ms
+SELECT s0."id", s0."session_id", s0."num", s0."command", s0."status", s0."exit_status", s0."os_pid", s0."kind", s0."port", s0."listening_at", s0."inserted_at", s0."updated_at" FROM "session_jobs" AS s0 WHERE (s0."status" = 'running') []
+[90m↳ Helm.Shell.sweep_orphans/0, at: lib/helm/shell.ex:143[0m
+[debug] QUERY OK source="project_procs" db=0.5ms queue=0.4ms idle=38.9ms
+SELECT p0."id", p0."project_id", p0."name", p0."command", p0."env", p0."cwd", p0."auto_start", p0."os_pid", p0."inserted_at", p0."updated_at", p1."id", p1."name", p1."root", p1."description", p1."env", p1."default_policy", p1."preview_url", p1."archived_at", p1."inserted_at", p1."updated_at" FROM "project_procs" AS p0 INNER JOIN "projects" AS p1 ON p1."id" = p0."project_id" WHERE (p0."auto_start" AND (p1."archived_at" IS NULL)) []
+[90m↳ Helm.Procs.start_auto/0, at: lib/helm/procs.ex:186[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms queue=0.3ms idle=63.0ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.4ms idle=65.9ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[info] throughput bench: synthetic 1/3 (1/25)
+[debug] QUERY OK source="gateway_settings" db=1.2ms idle=1371.5ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.8ms idle=874.5ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=530.2ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.9ms idle=530.8ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1265.3ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.9ms idle=1266.1ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[info] throughput bench: json_free 1/3 (2/25)
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1323.4ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.9ms idle=1324.0ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.9ms idle=1361.3ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.9ms idle=1362.6ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1859.6ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1860.4ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[info] throughput bench: prose 1/3 (3/25)
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1920.1ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1920.8ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1959.2ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1959.8ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1065.8ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.1ms idle=1066.3ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[info] throughput bench: json 1/3 (4/25)
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1120.2ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1120.9ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1157.4ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1158.1ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1707.0ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1707.7ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[info] throughput bench: recipe 1/5 (5/25)
+[debug] QUERY OK source="gateway_settings" db=0.8ms idle=1759.6ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.1ms idle=1760.6ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1799.6ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.1ms idle=1800.3ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1527.0ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1527.8ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[info] throughput bench: ingest 1/3 (6/25)
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1585.7ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.1ms idle=1586.2ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1621.0ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.1ms idle=1621.6ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=512.3ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.1ms idle=512.7ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[info] throughput bench: spark_bench 1/5 (7/25)
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=581.2ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.1ms idle=581.8ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=614.8ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.1ms idle=615.2ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1658.1ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1658.6ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[info] throughput bench: synthetic 2/3 (8/25)
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1730.5ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1731.1ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.1ms idle=1770.7ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.1ms idle=1771.1ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1408.5ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.4ms idle=1409.4ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[info] throughput bench: json 2/3 (9/25)
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1469.3ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1470.0ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1506.4ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=940.8ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1189.7ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1190.4ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[info] throughput bench: json_free 2/3 (10/25)
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1246.3ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1246.8ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms queue=0.1ms idle=1280.1ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1280.7ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1887.1ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1887.8ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[info] throughput bench: ingest 2/3 (11/25)
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1944.7ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1945.4ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1308.0ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=983.7ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=807.9ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=808.6ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[info] throughput bench: recipe 2/5 (12/25)
+[debug] QUERY OK source="gateway_settings" db=0.3ms queue=0.1ms idle=869.5ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=870.3ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=905.2ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=905.8ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.4ms idle=1192.0ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1192.8ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[info] throughput bench: prose 2/3 (13/25)
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1239.5ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.1ms idle=1240.1ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1275.4ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.1ms idle=1276.1ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1213.5ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1214.1ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[info] throughput bench: spark_bench 2/5 (14/25)
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1279.6ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.1ms idle=1280.1ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1319.8ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1320.4ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1366.2ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1367.0ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[info] throughput bench: json_free 3/3 (15/25)
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1413.9ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1414.5ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.1ms idle=1448.3ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.0ms idle=1448.6ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1084.8ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1085.4ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[info] throughput bench: ingest 3/3 (16/25)
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1143.6ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1144.2ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=279.6ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.1ms idle=181.9ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1911.1ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1911.9ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[info] throughput bench: recipe 3/5 (17/25)
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1148.3ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.1ms idle=1003.3ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1014.6ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1015.4ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1286.4ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1287.1ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[info] throughput bench: synthetic 3/3 (18/25)
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=345.2ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=345.8ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=382.2ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=382.8ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=245.2ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=245.9ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[info] throughput bench: json 3/3 (19/25)
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=307.1ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=307.7ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=344.2ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=344.9ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1910.6ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms queue=0.1ms idle=1793.6ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[info] throughput bench: spark_bench 3/5 (20/25)
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=967.5ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=968.1ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1005.0ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1005.6ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1877.3ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.1ms idle=1877.8ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[info] throughput bench: prose 3/3 (21/25)
+[debug] QUERY OK source="gateway_settings" db=0.1ms idle=1925.9ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.1ms idle=1926.2ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.1ms idle=1964.0ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.1ms idle=1964.3ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1608.2ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1608.9ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[info] throughput bench: spark_bench 4/5 (22/25)
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1665.7ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1666.3ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1701.0ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1701.8ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1484.1ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.1ms idle=1484.7ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[info] throughput bench: recipe 4/5 (23/25)
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1535.7ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1536.3ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1571.6ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1572.2ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1178.2ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.1ms idle=397.3ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[info] throughput bench: recipe 5/5 (24/25)
+[debug] QUERY OK source="gateway_settings" db=0.4ms idle=447.3ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=447.9ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=482.9ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=483.5ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.4ms idle=1835.4ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1836.3ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[info] throughput bench: spark_bench 5/5 (25/25)
+[debug] QUERY OK source="gateway_settings" db=0.3ms idle=1896.5ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1897.1ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.3ms queue=0.1ms idle=1938.7ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1939.4ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1000.5ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[debug] QUERY OK source="gateway_settings" db=0.2ms idle=1001.1ms
+SELECT g0."id", g0."singleton", g0."base_url", g0."api_key", g0."main", g0."digest", g0."utility", g0."vision", g0."consult", g0."effort", g0."inserted_at", g0."updated_at" FROM "gateway_settings" AS g0 []
+[90m↳ Helm.Gateway.get_settings/0, at: lib/helm/gateway.ex:18[0m
+[info] throughput bench — glm53-flash-exl3-r1 (Mia-AiLab/GLM-5.3-Flash-EXL3-TR3-4bpw:exl3): decode tok/s by arm: ingest 29.84, json 25.35, json_free 24.9, prose 25.93, recipe 32.01, spark_bench 54.86, synthetic 31.97; structured/prose 0.978, synthetic/prose 1.233, recipe/prose 1.234, spark_bench/prose 2.116
+[info] throughput bench glm53-flash-exl3-r1: wrote /Users/jody/benchmarks/results/2026-09-10-baseline/raw/throughput-glm53-flash-exl3-r1.json

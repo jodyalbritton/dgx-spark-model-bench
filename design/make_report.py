@@ -3,7 +3,7 @@
 
 usage: make_report.py [round_dir]   default: <benchmarks>/results/current
 """
-import glob, json, os, sys
+import glob, json, os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROUND = os.path.abspath(sys.argv[1]) if len(sys.argv) > 1 else os.path.join(ROOT, "results", "current")
@@ -17,7 +17,7 @@ def load():
     runs = {}
     for f in sorted(glob.glob(f"{RAW}/*.json")):
         base = os.path.basename(f)
-        if base.startswith(("coding-", "design-")) or base.endswith(".regrade.json"): continue  # helm benches load below
+        if base.startswith(("coding-", "fixtures-", "phoenix-", "design-", "throughput-", "js_app-")) or base.endswith(".regrade.json"): continue  # helm benches load below
         r = json.load(open(f))
         if str(r.get("kind", "")).startswith("coding"):
             continue  # coding rows and their re-grades render in coding_section()
@@ -25,11 +25,57 @@ def load():
     return [runs[k] for k in ORDER if k in runs] + [r for k, r in runs.items() if k not in ORDER]
 
 
+# T35: the coding bench split into Fixtures and PhoenixApp, each able to run
+# alone and write its own record. A round may therefore arrive as one combined
+# coding-<label>.json (every round 2026-09-04 to 2026-09-09), as the two halves
+# separately, or as a combined record with one half re-run standalone beside it.
+# All three render as one row. Standalone records win where they overlap: if a
+# half was re-run on its own it is the newer grade.
+def merge_split(runs):
+    def row(label):
+        return runs.setdefault(label, {"label": label, "fixtures": [], "app": None, "summary": {}})
+
+    for f in sorted(glob.glob(f"{RAW}/fixtures-*.json")):
+        if f.endswith(".regrade.json"): continue
+        r = json.load(open(f)); t = row(r["label"])
+        t["fixtures"] = r.get("fixtures", [])
+        t.setdefault("harness", {}).update({
+            "fixture_rounds_cap": (r.get("harness") or {}).get("rounds_cap"),
+            "fixture_deadline_ms": (r.get("harness") or {}).get("deadline_ms"),
+            "warm_fixture": (r.get("harness") or {}).get("warm_fixture"),
+            "fixture_prompt": (r.get("harness") or {}).get("prompt"),
+        })
+        for k in ("model", "helm_sha", "helm_dirty", "started_utc", "finished_utc"):
+            t.setdefault(k, r.get(k))
+        t["summary"] = {**(t.get("summary") or {}), **{k: v for k, v in (r.get("summary") or {}).items()}}
+
+    for f in sorted(glob.glob(f"{RAW}/phoenix-*.json")):
+        if f.endswith(".regrade.json"): continue
+        r = json.load(open(f)); t = row(r["label"])
+        t["app"] = r.get("app")
+        h = r.get("harness") or {}
+        t.setdefault("harness", {}).update({
+            "app_rounds_cap": h.get("rounds_cap"), "app_deadline_ms": h.get("deadline_ms"),
+            "port": h.get("port"), "memory": h.get("memory"), "tools": h.get("tools"),
+            "effort": h.get("effort"), "wire_tools": h.get("wire_tools"),
+            "prompt_sha": h.get("prompt_sha"), "hidden_tests_sha": h.get("hidden_tests_sha"),
+            "app_prompt": h.get("app_prompt"),
+        })
+        for k in ("model", "helm_sha", "helm_dirty", "started_utc", "finished_utc"):
+            t.setdefault(k, r.get(k))
+        app = r.get("app") or {}
+        t["summary"] = {**(t.get("summary") or {}), **{
+            "app_checks_passed": app.get("checks_passed"), "app_checks_total": app.get("checks_total"),
+            "app_wall_ms": app.get("wall_ms"), "app_outcome": app.get("outcome")}}
+    return runs
+
+
 def load_coding():
     runs = {}
     for f in sorted(glob.glob(f"{RAW}/coding-*.json")):
         if f.endswith(".regrade.json"): continue  # sibling re-grade files overlay the row below
         r = json.load(open(f)); runs[r["label"]] = r
+    merge_split(runs)
     # A re-grade is the same app under the current oracle. When one exists it *is*
     # the score: the run-time grade was the harness's mistake, not the model's, so
     # the row carries the re-graded checks/scores (rounds, wall, tools stay the
@@ -45,6 +91,195 @@ def load_coding():
                         screenshots=a.get("screenshots") or r["app"].get("screenshots"))
         r["summary"]["app_checks_passed"] = a["checks_passed"]; r["summary"]["app_checks_total"] = a["checks_total"]
     return [runs[k] for k in ORDER if k in runs] + [r for k, r in runs.items() if k not in ORDER]
+
+
+# T35: the throughput bench's records, one canonical file per model label.
+def load_throughput():
+    runs = {}
+    for f in sorted(glob.glob(f"{RAW}/throughput-*.json")):
+        with open(f) as source:
+            r = json.load(source)
+        # Archived reruns retain their label. Only the canonical record
+        # may supply that label's report row, regardless of sort order.
+        if os.path.basename(f) != f"throughput-{r['label']}.json":
+            continue
+        runs[r["label"]] = r
+    return [runs[k] for k in ORDER if k in runs] + [r for k, r in runs.items() if k not in ORDER]
+
+
+def _tp_stats(cases, arm, key):
+    v = sorted(c[key] for c in cases if c.get("ok") and c.get("arm") == arm and c.get(key) is not None)
+    if not v: return None, None, None
+    return v[len(v) // 2], v[0], v[-1]
+
+
+def _tp_acc(cases, arm):
+    v = sorted(
+        c["acceptance"]["acceptance_rate"]
+        for c in cases
+        if c.get("ok") and c.get("arm") == arm
+        and (c.get("acceptance") or {}).get("reported")
+    )
+    if not v: return None, 0
+    return v[len(v) // 2], len(v)
+
+
+def _tp_sum(cases, arm, key):
+    v = [c[key] for c in cases if c.get("ok") and c.get("arm") == arm and c.get(key) is not None]
+    return sum(v) if v else None
+
+
+def _run_groups(runs):
+    """Records of one model: `<model>-r<N>` labels are that model's runs, in N order;
+    a bare label is a model with one run."""
+    groups = {}
+    for r in runs:
+        m = re.match(r"^(.*)-r(\d+)$", r["label"])
+        base, n = (m.group(1), int(m.group(2))) if m else (r["label"], None)
+        groups.setdefault(base, []).append((n, r))
+    for base in groups:
+        groups[base].sort(key=lambda t: (t[0] is None, t[0] or 0))
+    ordered = [b for b in ORDER if b in groups] + [b for b in groups if b not in ORDER]
+    return [(b, groups[b]) for b in ordered]
+
+
+def _spread(vals):
+    v = [x for x in vals if x is not None]
+    if len(v) < 2 or min(v) <= 0: return None
+    return (max(v) - min(v)) / min(v)
+
+
+def per_run_tables(L, runs, arms):
+    """One table per model and metric: arms down, runs across, the spread of the
+    run medians at the right. Only when some model has more than one record."""
+    groups = _run_groups(runs)
+    if not any(len(g) > 1 for _, g in groups): return
+    L.append("\n### Per run\n")
+    L.append("One column per record of a model (`<model>-r<N>`); a cell is that record's median over the arm's "
+             "counted cases, the same figure as the per-arm table below. **spread** = (max − min) / min of the "
+             "run medians; blank where fewer than two runs have a figure. Rows sort by spread, steadiest first. "
+             "**TTFT ms** is the median over all of the arm's cases, so an arm that alternates cached and uncached "
+             "prompts (ingest) shows the median of both kinds; **prefill tok/s** counts only its uncached cases at "
+             "or above the floor, so the arms that send short prompts are absent from that table.\n")
+    metrics = [("decode tok/s", "decode_tok_s", 1), ("TTFT ms", "ttft_ms", 0),
+               ("prefill tok/s", "prefill_tok_s", 0), ("acceptance", None, 3)]
+    for base, g in groups:
+        cols = [f"r{n}" if n is not None else "run" for n, _ in g]
+        for title, key, d in metrics:
+            rows = []
+            for arm in arms:
+                vals = []
+                for _, r in g:
+                    cases = r.get("cases") or []
+                    v = _tp_acc(cases, arm)[0] if key is None else _tp_stats(cases, arm, key)[0]
+                    vals.append(v)
+                if all(v is None for v in vals): continue
+                rows.append((arm, vals, _spread(vals)))
+            if not rows: continue
+            rows.sort(key=lambda t: (t[2] is None, t[2] or 0))
+            L.append(f"#### {base} — {title}\n")
+            L.append("| arm | " + " | ".join(cols) + " | spread |")
+            L.append("|---|" + "---:|" * (len(cols) + 1))
+            for arm, vals, sp in rows:
+                L.append(f"| {arm} | " + " | ".join(fmt(v, d) for v in vals)
+                         + f" | {f'{sp * 100:.0f}%' if sp is not None else '—'} |")
+            L.append("")
+
+
+def throughput_section(L):
+    """The throughput bench's records, as recorded. Definitions of the columns,
+    then the numbers; no reading of them — that happens elsewhere, later."""
+    runs = load_throughput()
+    if not runs: return
+
+    ARMS = ["prose", "ingest", "json", "json_free", "synthetic", "recipe", "spark_bench"]
+
+    L.append("\n## Throughput (helm agent)\n")
+    L.append("Harness: `Helm.Evals.Throughput` through helm and airo. Arms: **prose**, **ingest** (the pinned corpus, "
+             "summarised), **json** (schema enforced), **json_free** (same body, no schema), **synthetic** (repeated "
+             "filler, `ignore_eos`), **recipe** (sparkDash DecodeBench ×1 prose cell, verbatim) and **spark_bench** "
+             "(`priv/bench/spark_bench.py` first cell, verbatim). Every constant, prompt and sampling value is in "
+             "each record's `harness` block.\n")
+    L.append("Column definitions. **decode tok/s** = (completion tokens − 1) / (last generated delta − first generated "
+             "delta); the case's `window_ms`. **prefill tok/s** = prompt tokens / TTFT, only for cases with no "
+             "prefix-cache hit and a prompt at or above the harness's `prefill_floor_tokens`; other cases are blank and "
+             "not counted in **n**. **acceptance** = accepted draft tokens / draft tokens offered for that case, a delta "
+             "between two reads of `/v1/serving?speculative=1`; **(n)** is the cases that got one. **shared slot** = cases "
+             "whose decode steps + accepted tokens differ from their completion count by more than the harness's "
+             "`gap_tolerance` (another client generated on the deployment during the case). **hit cap** = cases whose "
+             "completion reached `max_tokens`. **cached** = cases with a prefix-cache hit. Medians are over the arm's "
+             "counted cases; ranges are min–max.\n")
+
+    L.append("### Records\n")
+    L.append("| record | model | helm SHA | dirty | started (UTC) | finished (UTC) | warm-up ms | cases | rejected | thinking leaks | json parse failures |")
+    L.append("|---|---|---|---|---|---|---:|---:|---:|---:|---:|")
+    for r in runs:
+        filename = f"throughput-{r['label']}.json"
+        s_ = r.get("summary") or {}
+        w = r.get("warmup") or {}
+        L.append(f"| [{filename}](raw/{filename}) | {r.get('model', '—')} | {r.get('helm_sha', '—')} | "
+                 f"{r.get('helm_dirty', '—')} | {r.get('started_utc') or '—'} | {r.get('finished_utc') or 'unfinished'} | "
+                 f"{w.get('duration_ms') if w.get('duration_ms') is not None else '—'} | "
+                 f"{len(r.get('cases') or [])} | {len(r.get('rejected') or [])} | "
+                 f"{s_.get('thinking_leaked', '—')} | {s_.get('json_parse_failures', '—')} |")
+
+    h = runs[0].get("harness") or {}
+    c = h.get("ingest_corpus") or {}
+    L.append(f"\nHarness constants (first record): temperature {h.get('temperature')}, max_tokens {h.get('max_tokens')}, "
+             f"repeats {h.get('repeats')} (cells {h.get('cell_repeats', '—')}), prefill floor {h.get('prefill_floor_tokens')} tokens, "
+             f"gap tolerance {h.get('gap_tolerance', '—')}, ingest corpus rev {c.get('revid','?')} ({c.get('chars','?')} chars), "
+             f"decode window: {h.get('decode_window', 'first delta to stream end')}.\n")
+
+    per_run_tables(L, runs, ARMS)
+
+    L.append("### Ratios of arm medians (from each record's `summary`)\n")
+    L.append("| model | structured / prose | guided / free | synthetic / prose | recipe / prose | spark_bench / prose |")
+    L.append("|---|---:|---:|---:|---:|---:|")
+    for r in runs:
+        s_ = r.get("summary") or {}
+        L.append(f"| {r['label']} | {fmt(s_.get('structured_over_prose'), 3)} | "
+                 f"{fmt(s_.get('guided_over_free'), 3)} | {fmt(s_.get('synthetic_over_prose'), 3)} | "
+                 f"{fmt(s_.get('recipe_over_prose'), 3)} | {fmt(s_.get('spark_bench_over_prose'), 3)} |")
+
+    L.append("\n### Per arm\n")
+    L.append("| model | arm | n | decode tok/s | decode range | acceptance (n) | shared slot | hit cap | cached | "
+             "TTFT ms (median) | prefill tok/s (n) | prompt Σ | cached Σ | uncached Σ | completion Σ |")
+    L.append("|---|---|---:|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|")
+
+    for r in runs:
+        cases = r.get("cases") or []
+        for arm in ARMS:
+            rows = [x for x in cases if x.get("ok") and x.get("arm") == arm]
+            if not rows: continue
+            d_med, d_lo, d_hi = _tp_stats(cases, arm, "decode_tok_s")
+            t_med, _, _ = _tp_stats(cases, arm, "ttft_ms")
+            p_med, _, _ = _tp_stats(cases, arm, "prefill_tok_s")
+            p_n = sum(1 for x in rows if x.get("prefill_tok_s") is not None)
+            acc, acc_n = _tp_acc(cases, arm)
+            rng = f"{fmt(d_lo)}–{fmt(d_hi)}" if d_lo is not None else "—"
+            L.append(
+                f"| {r['label']} | {arm} | {len(rows)} | {fmt(d_med)} | {rng} | {fmt(acc, 3)} ({acc_n}) | "
+                f"{sum(1 for x in rows if x.get('shared_slot'))} | {sum(1 for x in rows if x.get('hit_cap'))} | "
+                f"{sum(1 for x in rows if x.get('cache_hit') or (x.get('cached_tokens') or 0) > 0)} | "
+                f"{t_med if t_med is not None else '—'} | {fmt(p_med)} ({p_n}) | "
+                f"{_tp_sum(cases, arm, 'prompt_tokens') or '—':,} | "
+                f"{_tp_sum(cases, arm, 'cached_tokens') or 0:,} | "
+                f"{_tp_sum(cases, arm, 'uncached_prompt_tokens') or '—':,} | "
+                f"{_tp_sum(cases, arm, 'completion_tokens') or '—':,} |"
+            )
+
+    rejected = [(r, x) for r in runs for x in (r.get("rejected") or [])]
+    if rejected:
+        L.append("\n### Rejected attempts (re-run; not counted above)\n")
+        L.append("| model | arm | seq | acceptance gap | decode tok/s | TTFT ms | why |")
+        L.append("|---|---|---:|---:|---:|---:|---|")
+        for r, x in rejected:
+            L.append(f"| {r['label']} | {x.get('arm')} | {x.get('seq')} | {x.get('acceptance_gap', '—')} | "
+                     f"{fmt(x.get('decode_tok_s'))} | {x.get('ttft_ms', '—')} | {x.get('rejected_why', '—')} |")
+
+    L.append("\nRaw JSON per record, one row per case (decode, TTFT, window, prompt/cached/completion tokens, the "
+             "acceptance delta with draft and accepted counts, `acceptance_gap`, `bracket_ms`, `cache_intent`), the "
+             "warm-up, and any rejected attempts: `raw/throughput-<label>.json`.\n")
 
 
 def load_design():
@@ -94,8 +329,8 @@ def coding_section(L):
             L.append(f"- **{r['label']}** — helm `{r.get('helm_sha','?')}`, pre-harness run (no `harness` block)")
             continue
         L.append(f"- **{r['label']}** — helm `{r.get('helm_sha','?')}`{' (dirty tree)' if r.get('helm_dirty') else ''}, prompt `{h.get('prompt_sha', '?')}`, "
-                 f"round caps {h['fixture_rounds_cap']} (fixture) / {h['app_rounds_cap']} (app), "
-                 f"deadlines {secs(h['fixture_deadline_ms'])}/{secs(h['app_deadline_ms'])} s, effort {h.get('effort', 'not set (template default)')}, PORT={h['port']}, memory {h['memory']}, tools {h['tools']}, "
+                 f"round caps {h.get('fixture_rounds_cap', '—')} (fixture) / {h.get('app_rounds_cap', '—')} (app), "
+                 f"deadlines {secs(h.get('fixture_deadline_ms'))}/{secs(h.get('app_deadline_ms'))} s, effort {h.get('effort', 'not set (template default)')}, PORT={h.get('port', '—')}, memory {h.get('memory', '—')}, tools {h.get('tools', '—')}, "
                  f"{len(h.get('wire_tools', []))} tools on the wire, warm fixture {h.get('warm_fixture', 'none')}, "
                  f"{r['started_utc']} → {r.get('finished_utc') or '(running)'}")
     L.append("")
@@ -132,8 +367,8 @@ def coding_section(L):
             L.append(note)
     L.append("")
     L.append("### Speed\n")
-    L.append("| model | fixtures wall (s) | median fixture (s) | app wall (s) | app rounds | green at | app tool calls | tool time (s) | files touched | app TTFT (s) | app completion tok/s |")
-    L.append("|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|")
+    L.append("| model | fixtures wall (s) | median fixture (s) | app wall (s) | app rounds | green at | app tool calls | tool time (s) | files touched | app TTFT (s) | app end-to-end tok/s | app decode tok/s (median round) |")
+    L.append("|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|")
     for r in runs:
         fx = r["fixtures"]; app = r.get("app") or {}
         walls = sorted(f["wall_ms"] for f in fx)
@@ -144,7 +379,7 @@ def coding_section(L):
         diff = app.get("diff") or {}
         touched = f"{diff['files']} (+{diff.get('insertions', 0)}/−{diff.get('deletions', 0)})" if diff.get("files") is not None else "n/a"
         L.append(f"| {r['label']} | {secs(r['summary']['fixtures_wall_ms'])} | {secs(med)} | {secs(app.get('wall_ms'))} | "
-                 f"{app.get('rounds', '—')} | {green} | {app.get('tool_calls', '—')} | {tool_time} | {touched} | {secs(app.get('ttft_ms'))} | {fmt(app.get('completion_tok_s'))} |")
+                 f"{app.get('rounds', '—')} | {green} | {app.get('tool_calls', '—')} | {tool_time} | {touched} | {secs(app.get('ttft_ms'))} | {fmt(app.get('completion_tok_s'))} | {fmt(app.get('decode_tok_s'))} |")
     L.append("")
     L.append("### Spend (tokens)\n")
     L.append("| model | fixtures uncached prompt | fixtures completion | fixtures reasoning | app prompt | app cached | app uncached prompt | app completion | app reasoning |")
@@ -296,7 +531,7 @@ def main():
     L.append("Harness: `spark_bench.py` run on sparky against the head node over loopback. "
              "Decode rows use thinking off, `temperature 0.6`, fixed 128-token output (`min_tokens=max_tokens=128`, `ignore_eos`). "
              "TTFT = first streamed token (content or reasoning). Prefill tok/s = prompt tokens / TTFT. "
-             "Decode tok/s = 128 / (end − first token). Prompts are unique per request (no prefix-cache hits). "
+             "Decode tok/s = (completion tokens − 1) / (stream end − first token). Prompts are unique per request (no prefix-cache hits). "
              "Reasoning probe: greedy (`temperature 0`), thinking on, one question, correctness checked against the known answer.\n")
     L.append("## Runs\n")
     for r in runs:
@@ -350,6 +585,7 @@ def main():
     # finish before Phase A in a round (TESTPLAN §6: no round-specific
     # strings here; notes live in the per-run JSON `notes` field)
     coding_section(L)
+    throughput_section(L)
     design_section(L)
     notes = [(r["label"], r["notes"]) for r in runs if r.get("notes")]
     if notes:
